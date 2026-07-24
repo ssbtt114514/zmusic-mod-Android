@@ -471,8 +471,6 @@ jobs:
     needs:
       - build
       - changelog
-      - marketplace-dry-run
-      - release-mirrors-dry-run
     if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry-run == false) }}
     permissions:
       contents: write

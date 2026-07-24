@@ -12,6 +12,10 @@
 - 修复 Forge 版在 SCP Lockdown 滑动门等模组触发空声音事件时，可能因读取声音分类导致客户端崩溃的问题。
 - 修复 Fabric 版在收到空声音实例时可能触发同类崩溃的问题。
 - 重构稳定版发布流程，支持 GitHub Releases、Modrinth、CurseForge、Codeberg 和 CNB 使用同一份发布产物与更新日志。
+- 新增 Android 平台纯 Java 音频播放器（JLayer MP3 解码 + OpenAL 后端），替代 JNI native 实现。
+- 新增 Android 运行时检测（Dalvik/ART/FCL 启动器），自动选择 MediaPlayer 或 JLayer 后端。
+- 修复 JLayer 解码器使用错误导致播放无声音的问题（decodeFrame 返回值被丢弃，PCM 数据为空）。
+- 新增模组全链路详细日志输出（平台检测、网络包处理、HTTP 连接、解码播放、状态回调）。
 
 English:
 
@@ -25,3 +29,7 @@ English:
 - Fixed a Forge client crash when mods such as SCP Lockdown sliding doors emit a sound event with a null sound instance.
 - Fixed the same class of Fabric crash when a null sound instance is passed to the sound hook.
 - Reworked stable release publishing so GitHub Releases, Modrinth, CurseForge, Codeberg, and CNB use the same artifacts and release notes.
+- Added Android pure-Java audio player (JLayer MP3 decoder + OpenAL backend) replacing the JNI native implementation.
+- Added Android runtime detection (Dalvik/ART/FCL launcher) with automatic MediaPlayer or JLayer backend selection.
+- Fixed silent playback caused by incorrect JLayer decoder usage (decodeFrame return value was discarded, resulting in empty PCM data).
+- Added detailed end-to-end mod logging (platform detection, packet handling, HTTP connection, decode/playback, state callbacks).
