@@ -193,9 +193,22 @@ jobs:
             -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"
       - name: Build ${{ matrix.loader }} ${{ matrix.mc-version }}
         run: |
-          ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
-            -Pzmusic.project="${{ matrix.project }}" \
-            -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"
+          # 最多重试 3 次，应对 CI 中 maven 仓库偶发读取超时
+          for attempt in 1 2 3; do
+            echo "::group::Build attempt $attempt"
+            if ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
+              -Pzmusic.project="${{ matrix.project }}" \
+              -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            if [ "$attempt" -lt 3 ]; then
+              echo "Build attempt $attempt failed, retrying in 10s..."
+              sleep 10
+            fi
+          done
+          exit 1
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:

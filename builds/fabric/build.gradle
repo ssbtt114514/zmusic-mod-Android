@@ -21,6 +21,10 @@ allprojects {
             name = 'AliYunCentral'
             url = 'https://maven.aliyun.com/repository/central'
         }
+        maven {
+            name = 'HuaweiCloud'
+            url = 'https://mirrors.huaweicloud.com/repository/maven/'
+        }
         mavenCentral()
         maven {
             name = 'Fabric'
