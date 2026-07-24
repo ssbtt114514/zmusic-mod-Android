@@ -66,6 +66,9 @@ subprojects {
     group = "me.zhenxin"
     version = "3.7.1"
 
+    // 产物命名：zmusic-forge-1.20.1 -> zmusic-android-forge-1.20.1
+    base.archivesName = project.name.replace("zmusic-", "zmusic-android-")
+
     pluginManager.withPlugin("net.minecraftforge.gradle") {
         repositories {
             project.minecraft.mavenizer(it)

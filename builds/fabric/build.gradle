@@ -43,6 +43,9 @@ subprojects {
     group = "me.zhenxin"
     version = "3.7.1"
 
+    // 产物命名：zmusic-fabric-1.20.1 -> zmusic-android-fabric-1.20.1
+    base.archivesName = project.name.replace("zmusic-", "zmusic-android-")
+
     dependencies {
         compileOnly("org.projectlombok:lombok:1.18.46")
         annotationProcessor("org.projectlombok:lombok:1.18.46")

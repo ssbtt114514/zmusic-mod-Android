@@ -3,14 +3,15 @@ name: Stable Build
 on:
   workflow_dispatch:
     inputs:
-      dry-run:
-        description: Validate builds and marketplace metadata without creating releases or publishing files
+      version:
+        description: Release version (e.g. 3.7.1). A tag v<version> will be created and the release published under it.
         required: true
-        default: true
+        type: string
+      dry-run:
+        description: Validate builds without creating release or tag (skips publishing)
+        required: false
+        default: false
         type: boolean
-  push:
-    tags:
-      - 'v*'
 
 jobs:
   changelog:
@@ -22,23 +23,49 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Resolve release tag
+        id: tag
+        run: |
+          version="${{ inputs.version }}"
+          if [ -z "$version" ]; then
+            # Fallback for non-manual triggers (e.g. tag push). Use ref name without leading 'v'.
+            if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+              version="${GITHUB_REF_NAME#v}"
+            else
+              version="0.0.0-untagged"
+            fi
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
       - name: Extract release notes
+        env:
+          RELEASE_TAG: ${{ steps.tag.outputs.tag }}
         run: |
           set -euo pipefail
 
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
             scripts/extract-changelog.sh "${GITHUB_REF_NAME}" > release-notes.md
           else
-            latest_tag="$(git describe --tags --abbrev=0 HEAD 2>/dev/null || true)"
-            {
-              printf 'Dry-run release notes for `%s`.\n\n' "${GITHUB_REF_NAME}"
-              printf 'No tag was provided, so this dry-run uses commit subjects after the latest tag.\n\n'
-              if [ -n "$latest_tag" ]; then
-                git log --pretty='- %s' "${latest_tag}..HEAD"
-              else
-                git log --pretty='- %s'
-              fi
-            } > release-notes.md
+            # Manual dispatch: use CHANGELOG.md section for the version, or fall back to commit log
+            version="${{ steps.tag.outputs.version }}"
+            if grep -q "^## v${version}\$" CHANGELOG.md; then
+              # Extract section between this version header and the next '## ' header
+              awk -v ver="## v${version}" '
+                $0 == ver { found=1; next }
+                found && /^## / { exit }
+                found { print }
+              ' CHANGELOG.md > release-notes.md
+            else
+              latest_tag="$(git describe --tags --abbrev=0 HEAD 2>/dev/null || true)"
+              {
+                printf 'Release notes for `%s`.\n\n' "v${version}"
+                if [ -n "$latest_tag" ]; then
+                  git log --pretty='- %s' "${latest_tag}..HEAD"
+                else
+                  git log --pretty='- %s'
+                fi
+              } > release-notes.md
+            fi
           fi
 
           if [ ! -s release-notes.md ]; then
@@ -471,11 +498,20 @@ jobs:
     needs:
       - build
       - changelog
-    if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry-run == false) }}
+    if: ${{ inputs.dry-run != true && (github.ref_type == 'tag' || github.event_name == 'workflow_dispatch') }}
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v6
+      - name: Resolve release tag
+        id: tag
+        run: |
+          version="${{ inputs.version }}"
+          if [ -z "$version" ]; then
+            version="${GITHUB_REF_NAME#v}"
+          fi
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Download Artifacts
         uses: actions/download-artifact@v7
         with:
@@ -485,10 +521,16 @@ jobs:
         with:
           name: release-notes
           path: release-notes
+      - name: Create tag
+        run: |
+          git tag "${{ steps.tag.outputs.tag }}" 2>/dev/null || true
+          git push origin "${{ steps.tag.outputs.tag }}" 2>/dev/null || true
       - name: Release
         id: release
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ZMusic Android ${{ steps.tag.outputs.version }}
           body_path: release-notes/release-notes.md
           files: artifacts/**/*.jar
 
@@ -498,8 +540,7 @@ jobs:
     needs:
       - release
       - changelog
-      - marketplace-dry-run
-    if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry-run == false) }}
+    if: ${{ inputs.dry-run != true && (github.ref_type == 'tag' || github.event_name == 'workflow_dispatch') }}
     strategy:
       fail-fast: false
       max-parallel: 4
@@ -669,8 +710,8 @@ jobs:
           MOD_LOADER: ${{ matrix.mod-loader }}
           MC_VERSION: ${{ matrix.target-version }}
           MC_VERSIONS: ${{ matrix.supported-versions }}
-          RELEASE_VERSION: ${{ github.ref_name }}
-          RELEASE_NAME: ZMusic ${{ github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
+          RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
+          RELEASE_NAME: ZMusic Android ${{ inputs.version || github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
@@ -694,8 +735,7 @@ jobs:
     needs:
       - release
       - changelog
-      - release-mirrors-dry-run
-    if: ${{ github.ref_type == 'tag' && (github.event_name != 'workflow_dispatch' || inputs.dry-run == false) }}
+    if: ${{ inputs.dry-run != true && (github.ref_type == 'tag' || github.event_name == 'workflow_dispatch') }}
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -711,9 +751,9 @@ jobs:
           path: release-notes
       - name: Publish to Codeberg and CNB
         env:
-          RELEASE_VERSION: ${{ github.ref_name }}
-          RELEASE_TAG: ${{ github.ref_name }}
-          RELEASE_NAME: ZMusic ${{ github.ref_name }}
+          RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
+          RELEASE_TAG: v${{ inputs.version || github.ref_name }}
+          RELEASE_NAME: ZMusic Android ${{ inputs.version || github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
