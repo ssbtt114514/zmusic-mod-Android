@@ -1,0 +1,87 @@
+plugins {
+    id("fabric-loom") version "1.13.3" apply false
+    id("net.fabricmc.fabric-loom") version "1.16.2" apply false
+}
+
+ext {
+    modDescription = "Powerful Music System"
+}
+
+def isFabricProject(Project p) {
+    return p.name ==~ /zmusic-fabric-\d+.*/
+}
+
+allprojects {
+    repositories {
+        maven {
+            name = 'AliYunPublic'
+            url = 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            name = 'AliYunCentral'
+            url = 'https://maven.aliyun.com/repository/central'
+        }
+        mavenCentral()
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases/"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group = "me.zhenxin"
+    version = "3.7.1"
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:1.18.46")
+        annotationProcessor("org.projectlombok:lombok:1.18.46")
+    }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        if (project.name != "zmusic-core") {
+            from(project(":zmusic-core").sourceSets.main.output)
+            // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
+            from {
+                configurations.runtimeClasspath.collect {
+                    if (it.name.contains("jlayer") || it.name.contains("tritonus")) {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                }
+            }
+        }
+
+        from("${rootDir}/../../LICENSE")
+    }
+
+    processResources {
+        inputs.property "version", project.version
+        inputs.property "description", rootProject.modDescription
+
+        if (isFabricProject(project)) {
+            from(project(":zmusic-core").sourceSets.main.resources) {
+                include("icon.png")
+            }
+        }
+
+        filesMatching("fabric.mod.json") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}

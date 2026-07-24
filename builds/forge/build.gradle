@@ -1,0 +1,132 @@
+ext {
+    modDescription = "Powerful Music System"
+}
+
+def ensureValidZip(File file) {
+    if (!file.exists() || file.length() == 0) {
+        return false
+    }
+    try {
+        new java.util.zip.ZipFile(file).close()
+        return true
+    } catch (java.util.zip.ZipException ignored) {
+        return false
+    }
+}
+
+def repairLegacyForgeToolCache() {
+    def specialSource = new File(
+            gradle.gradleUserHomeDir,
+            "caches/minecraftforge/forgegradle/mavenizer/caches/maven/mcp-tools/net/md-5/SpecialSource/1.8.3/SpecialSource-1.8.3-shaded.jar"
+    )
+    if (ensureValidZip(specialSource)) {
+        return
+    }
+
+    specialSource.parentFile.mkdirs()
+    logger.lifecycle("Repairing Forge Mavenizer cache: ${specialSource.name}")
+    ant.get(
+            src: "https://repo.maven.apache.org/maven2/net/md-5/SpecialSource/1.8.3/SpecialSource-1.8.3-shaded.jar",
+            dest: specialSource
+    )
+    new File(specialSource.parentFile, "${specialSource.name}.sha1").text = "54cae54ef5426ef16660eb8bb3bf95d05be3fecd"
+}
+
+repairLegacyForgeToolCache()
+
+def isForgeProject(Project p) {
+    return p.name ==~ /zmusic-forge-\d+.*/
+}
+
+allprojects {
+    repositories {
+        maven {
+            name = 'AliYunPublic'
+            url = 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            name = 'AliYunCentral'
+            url = 'https://maven.aliyun.com/repository/central'
+        }
+        mavenCentral()
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases/"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group = "me.zhenxin"
+    version = "3.7.1"
+
+    pluginManager.withPlugin("net.minecraftforge.gradle") {
+        repositories {
+            project.minecraft.mavenizer(it)
+            maven project.fg.forgeMaven
+            maven project.fg.minecraftLibsMaven
+        }
+    }
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:1.18.46")
+        annotationProcessor("org.projectlombok:lombok:1.18.46")
+    }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        if (project.name != "zmusic-core") {
+            from(project(":zmusic-core").sourceSets.main.output)
+            // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
+            from {
+                configurations.runtimeClasspath.collect {
+                    if (it.name.contains("jlayer") || it.name.contains("tritonus")) {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                }
+            }
+        }
+
+        from("${rootDir}/../../LICENSE")
+
+        if (isForgeProject(project)) {
+            manifest {
+                attributes([
+                        "Specification-Title"     : "zmusic",
+                        "Specification-Vendor"    : "ZhenXin",
+                        "Specification-Version"   : "1",
+                        "Implementation-Title"    : "ZMusic",
+                        "Implementation-Version"  : project.version,
+                        "Implementation-Vendor"   : "ZhenXin",
+                        "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                ])
+            }
+        }
+    }
+
+    processResources {
+        inputs.property "version", project.version
+        inputs.property "description", rootProject.modDescription
+
+        if (isForgeProject(project)) {
+            from(project(":zmusic-core").sourceSets.main.resources) {
+                include("icon.png")
+            }
+        }
+
+        filesMatching("META-INF/mods.toml") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}

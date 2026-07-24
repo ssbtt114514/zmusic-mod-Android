@@ -1,0 +1,26 @@
+//file:noinspection GroovyMissingReturnStatement
+//file:noinspection VulnerableLibrariesLocal
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    compileOnly 'org.apache.logging.log4j:log4j-api:2.26.0'
+    // JLayer: 纯 Java MP3 解码器，无平台依赖，在 Android FCL 和桌面 JVM 上均可工作
+    implementation 'javazoom:jlayer:1.0.1'
+    // LWJGL OpenAL: 运行时由 Minecraft 提供，编译时需要
+    compileOnly 'org.lwjgl:lwjgl-openal:3.3.4'
+}
+
+// 将 JLayer 类打包进 zmusic-core.jar，使最终模组 jar 自包含
+jar {
+    from {
+        configurations.runtimeClasspath.collect {
+            if (it.name.contains("jlayer")) {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+    }
+}

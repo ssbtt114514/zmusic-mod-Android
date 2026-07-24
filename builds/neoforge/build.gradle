@@ -1,0 +1,86 @@
+plugins {
+    id("net.neoforged.gradle.userdev") version "7.1.38" apply false
+}
+
+ext {
+    modDescription = "Powerful Music System"
+}
+
+def isNeoForgeProject(Project p) {
+    return p.name ==~ /zmusic-neoforge-\d+.*/
+}
+
+allprojects {
+    repositories {
+        maven {
+            name = 'AliYunPublic'
+            url = 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            name = 'AliYunCentral'
+            url = 'https://maven.aliyun.com/repository/central'
+        }
+        mavenCentral()
+        maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases/'
+        }
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases/"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group = "me.zhenxin"
+    version = "3.7.1"
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:1.18.46")
+        annotationProcessor("org.projectlombok:lombok:1.18.46")
+    }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        if (project.name != "zmusic-core") {
+            from(project(":zmusic-core").sourceSets.main.output)
+            // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
+            from {
+                configurations.runtimeClasspath.collect {
+                    if (it.name.contains("jlayer") || it.name.contains("tritonus")) {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                }
+            }
+        }
+
+        from("${rootDir}/../../LICENSE")
+    }
+
+    processResources {
+        inputs.property "version", project.version
+        inputs.property "description", rootProject.modDescription
+
+        if (isNeoForgeProject(project)) {
+            from(project(":zmusic-core").sourceSets.main.resources) {
+                include("icon.png")
+            }
+        }
+
+        filesMatching("META-INF/neoforge.mods.toml") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}

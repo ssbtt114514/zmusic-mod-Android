@@ -1,0 +1,110 @@
+//https://github.com/FabricMC/fabric-loom/issues/1036
+plugins {
+    id("fabric-loom") version "1.13.3" apply false
+}
+
+def gitCommitHash = {
+    def cmd = "git rev-parse --short HEAD"
+    try {
+        def ver = cmd.execute().text.trim()
+        if (ver == "") return ""
+        return "+" + ver
+    } catch (Exception e) {
+        e.printStackTrace()
+        return ""
+    }
+}
+
+ext {
+    modDescription = "Powerful Music System"
+}
+
+def isLeafPlatformProject(Project p) {
+    return p.name ==~ /zmusic-(fabric|forge|neoforge)-\d+.*/
+}
+
+allprojects {
+    repositories {
+        maven {
+            name = 'AliYunPublic'
+            url = 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            name = 'AliYunCentral'
+            url = 'https://maven.aliyun.com/repository/central'
+        }
+        mavenCentral()
+        maven {
+            name = 'Jitpack'
+            url = 'https://jitpack.io'
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases/"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    group = "me.zhenxin"
+    version = "3.7.1"
+
+    dependencies {
+        compileOnly("org.projectlombok:lombok:1.18.46")
+        annotationProcessor("org.projectlombok:lombok:1.18.46")
+    }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        from {
+            //noinspection GroovyMissingReturnStatement
+            configurations.runtimeClasspath.collect {
+                if (project.name != "zmusic-core") {
+                    if (it.name.contains("zmusic-core")) {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                    // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
+                    if (it.name.contains("jlayer") || it.name.contains("tritonus")) {
+                        it.isDirectory() ? it : zipTree(it)
+                    }
+                }
+            }
+        }
+
+        from("${rootDir}/LICENSE")
+    }
+
+    processResources {
+        inputs.property "version", project.version
+        inputs.property "description", rootProject.modDescription
+
+        if (isLeafPlatformProject(project)) {
+            from(project(":zmusic-core").sourceSets.main.resources) {
+                include("icon.png")
+            }
+        }
+
+        filesMatching("fabric.mod.json") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+
+        filesMatching("META-INF/mods.toml") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+
+        filesMatching("META-INF/neoforge.mods.toml") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+
+        filesMatching("mcmod.info") {
+            expand "version": project.version, "description": rootProject.modDescription
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}
