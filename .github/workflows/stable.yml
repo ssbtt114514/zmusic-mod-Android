@@ -257,10 +257,12 @@ jobs:
       - name: Build ${{ matrix.loader }} ${{ matrix.target-version }}
         run: |
           # 最多重试 3 次，应对 CI 中 maven 仓库偶发读取超时
+          # 将 workflow 输入的版本号传给 Gradle，作为模组内部版本号（fabric.mod.json / mods.toml 中的 version）
           for attempt in 1 2 3; do
             echo "::group::Build attempt $attempt"
             if ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
               -Pzmusic.project="${{ matrix.project }}" \
+              -Pzmusic.version="${{ inputs.version }}" \
               -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
               echo "::endgroup::"
               exit 0

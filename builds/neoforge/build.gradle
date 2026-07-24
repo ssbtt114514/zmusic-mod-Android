@@ -44,7 +44,8 @@ subprojects {
     apply plugin: 'java-library'
 
     group = "me.zhenxin"
-    version = "3.7.1"
+    // 模组版本号：优先从 -Pzmusic.version 读取（CI 发布时由 workflow 输入传入），否则回退到默认
+    version = project.hasProperty('zmusic.version') ? project.getProperty('zmusic.version') : '3.7.1'
 
     // 产物命名：zmusic-neoforge-1.21.1 -> zmusic-android-neoforge-1.21.1
     base.archivesName = project.name.replace("zmusic-", "zmusic-android-")
