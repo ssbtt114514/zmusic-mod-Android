@@ -1,6 +1,8 @@
 package me.zhenxin.zmusic.event;
 
 import lombok.extern.log4j.Log4j2;
+import me.zhenxin.zmusic.ZMusic;
+import me.zhenxin.zmusic.playback.InfoParser;
 
 /**
  * 客户端事件
@@ -36,6 +38,20 @@ public class ClientEvent {
                 log.info("PacketEvent.onStop returned");
             } catch (Throwable t) {
                 log.error("PacketEvent.onStop threw exception", t);
+            }
+        } else if (message.startsWith("[Info]")) {
+            String data = message.substring("[Info]".length());
+            try {
+                PacketEvent.onInfo(data);
+            } catch (Throwable t) {
+                log.error("PacketEvent.onInfo threw exception", t);
+            }
+        } else if (message.startsWith("[Lyric]")) {
+            String data = message.substring("[Lyric]".length());
+            try {
+                PacketEvent.onLyric(data);
+            } catch (Throwable t) {
+                log.error("PacketEvent.onLyric threw exception", t);
             }
         } else {
             log.warn("Ignored unknown ZMusic packet message: {}", message);

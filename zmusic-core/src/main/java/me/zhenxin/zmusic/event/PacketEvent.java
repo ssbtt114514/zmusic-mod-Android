@@ -2,6 +2,9 @@ package me.zhenxin.zmusic.event;
 
 import lombok.extern.log4j.Log4j2;
 import me.zhenxin.zmusic.ZMusic;
+import me.zhenxin.zmusic.history.HistoryManager;
+import me.zhenxin.zmusic.playback.InfoParser;
+import me.zhenxin.zmusic.playback.NowPlaying;
 
 
 /**
@@ -33,6 +36,26 @@ class PacketEvent {
             log.warn("Failed to parse play URL: {}", e.getMessage());
         }
 
+        // 保存上一首歌的歌词
+        NowPlaying np = ZMusic.getNowPlaying();
+        if (np != null && !np.getName().isEmpty()) {
+            HistoryManager hm = ZMusic.getHistoryManager();
+            if (hm != null) {
+                hm.saveLyrics(np.getName());
+            }
+        }
+        // 记录新 URL，重置播放信息（歌名等 [Info] 推送后再填）
+        if (np != null) {
+            String prevName = np.getName();
+            np.reset();
+            np.setUrl(data);
+            np.setPlayStartTime(System.currentTimeMillis());
+            // 保留歌名供 saveLyrics 已在上面处理；这里已 reset
+            if (!prevName.isEmpty()) {
+                log.info("Switching song: prev={}, new url={}", prevName, data);
+            }
+        }
+
         if (ZMusic.getSoundManager() == null) {
             log.warn("ZMusic SoundManager is not initialized, skip stopping vanilla music");
         } else {
@@ -55,6 +78,14 @@ class PacketEvent {
 
     public static void onStop() {
         log.info("PacketEvent.onStop: stopping ZMusic playback");
+        // 停止时保存当前歌词
+        NowPlaying np = ZMusic.getNowPlaying();
+        if (np != null && !np.getName().isEmpty()) {
+            HistoryManager hm = ZMusic.getHistoryManager();
+            if (hm != null) {
+                hm.saveLyrics(np.getName());
+            }
+        }
         if (ZMusic.getPlayer() == null) {
             log.warn("ZMusic player is not initialized, abort stop");
             return;
@@ -64,11 +95,35 @@ class PacketEvent {
     }
 
     public static void onLyric(String data) {
-        // TODO: 歌词
+        NowPlaying np = ZMusic.getNowPlaying();
+        if (np == null) {
+            return;
+        }
+        String line = InfoParser.parseLyric(data);
+        if (line.isEmpty()) {
+            return;
+        }
+        np.setCurrentLyric(line);
+        // 累积到历史歌词
+        HistoryManager hm = ZMusic.getHistoryManager();
+        if (hm != null && !np.getName().isEmpty()) {
+            hm.appendLyric(np.getName(), line);
+        }
     }
 
     public static void onInfo(String data) {
-        // TODO: 信息
+        NowPlaying np = ZMusic.getNowPlaying();
+        if (np == null) {
+            return;
+        }
+        boolean isNewSong = InfoParser.parseInfo(data, np);
+        if (isNewSong && !np.getName().isEmpty()) {
+            HistoryManager hm = ZMusic.getHistoryManager();
+            if (hm != null) {
+                hm.addSong(np.getName(), np.getUrl(), np.getPlatform());
+                log.info("New song added to history: {} - platform={}", np.getName(), np.getPlatform());
+            }
+        }
     }
 
     public static void onImg(String data) {

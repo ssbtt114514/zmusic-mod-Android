@@ -664,8 +664,49 @@ public class ZMusicPlayer {
             log.info("OpenAL: HTTP headers: Content-Type={}, Content-Length={}, Content-Encoding={}",
                 contentType, contentLength, contentEncoding);
 
-            audioStream = connection.getInputStream();
-            log.info("OpenAL: InputStream obtained, available={}", audioStream.available());
+            // 完整下载 MP3 到内存，避免流式播放因网络波动中断
+            // 好处：1) 播放期间不再依赖网络；2) seek/循环更流畅；3) 避免 Android FCL 网络栈不稳定
+            // 代价：需等待完整下载后才开始播放，大文件占用内存（典型 4 分钟 MP3 约 4-6MB）
+            InputStream httpStream = connection.getInputStream();
+            long downloadStart = System.currentTimeMillis();
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(
+                contentLength > 0 ? contentLength : 64 * 1024);
+            byte[] chunk = new byte[16 * 1024];
+            int totalRead = 0;
+            int lastProgressPct = -1;
+            while (!stopped) {
+                int n = httpStream.read(chunk);
+                if (n < 0) break;
+                if (n == 0) continue;
+                baos.write(chunk, 0, n);
+                totalRead += n;
+                if (contentLength > 0) {
+                    int pct = totalRead * 100 / contentLength;
+                    if (pct >= lastProgressPct + 20) {
+                        log.info("OpenAL: downloading MP3... {}% ({} / {} KB)",
+                            pct, totalRead / 1024, contentLength / 1024);
+                        lastProgressPct = pct;
+                    }
+                }
+            }
+            httpStream.close();
+            long downloadElapsed = System.currentTimeMillis() - downloadStart;
+            byte[] mp3Data = baos.toByteArray();
+            baos.close();
+            log.info("OpenAL: MP3 fully downloaded to memory: {} KB in {}ms ({} bytes)",
+                mp3Data.length / 1024, downloadElapsed, mp3Data.length);
+
+            if (stopped) {
+                log.info("OpenAL: stopped during download, aborting playback");
+                return;
+            }
+            if (mp3Data.length == 0) {
+                log.error("OpenAL: downloaded MP3 data is empty");
+                throw new Exception("Downloaded MP3 data is empty for " + url);
+            }
+
+            audioStream = new java.io.ByteArrayInputStream(mp3Data);
+            log.info("OpenAL: ByteArrayInputStream created, available={}", audioStream.available());
 
             playThread = new Thread(() -> {
                 log.info("OpenAL: playback thread started");

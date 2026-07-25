@@ -12,6 +12,8 @@ dependencies {
     implementation 'javazoom:jlayer:1.0.1'
     // LWJGL OpenAL: 运行时由 Minecraft 提供，编译时需要
     compileOnly 'org.lwjgl:lwjgl-openal:3.3.4'
+    // Gson: 运行时由 Minecraft 提供，编译时需要（用于历史记录/配置 JSON 读写）
+    compileOnly 'com.google.code.gson:gson:2.10.1'
 }
 
 // 将 JLayer 类打包进 zmusic-core.jar，使最终模组 jar 自包含

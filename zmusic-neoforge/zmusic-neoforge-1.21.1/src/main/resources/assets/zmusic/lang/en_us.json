@@ -1,0 +1,24 @@
+{
+  "key.categories.zmusic": "AMusic",
+  "key.zmusic.open_settings": "Open Settings",
+  "key.zmusic.volume_up": "Volume Up",
+  "key.zmusic.volume_down": "Volume Down",
+  "key.zmusic.mute_toggle": "Toggle Mute",
+  "key.zmusic.previous": "Previous",
+  "key.zmusic.next": "Next",
+  "key.zmusic.pause": "Pause",
+  "key.zmusic.history": "View History",
+  "key.zmusic.favorite": "View Favorites",
+  "key.zmusic.playlist": "View Playlists",
+  "key.zmusic.volume_position": "Adjust Volume Bar Position",
+
+  "zmusic.settings.title": "AMusic Settings",
+  "zmusic.settings.tab.audio": "Audio",
+  "zmusic.settings.tab.commands": "Commands",
+  "zmusic.settings.tab.hotkeys": "Hotkeys",
+  "zmusic.settings.volume": "Volume",
+
+  "zmusic.history.title": "AMusic History",
+  "zmusic.favorite.title": "AMusic Favorites",
+  "zmusic.playlist.title": "AMusic Playlists"
+}

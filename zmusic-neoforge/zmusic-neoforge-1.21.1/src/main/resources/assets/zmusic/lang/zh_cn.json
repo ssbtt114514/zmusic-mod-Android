@@ -1,0 +1,24 @@
+{
+  "key.categories.zmusic": "AMusic",
+  "key.zmusic.open_settings": "打开设置",
+  "key.zmusic.volume_up": "音量增大",
+  "key.zmusic.volume_down": "音量减小",
+  "key.zmusic.mute_toggle": "静音切换",
+  "key.zmusic.previous": "上一首",
+  "key.zmusic.next": "下一首",
+  "key.zmusic.pause": "暂停",
+  "key.zmusic.history": "查看历史记录",
+  "key.zmusic.favorite": "查看收藏",
+  "key.zmusic.playlist": "查看歌单",
+  "key.zmusic.volume_position": "调整音量条位置",
+
+  "zmusic.settings.title": "AMusic 设置",
+  "zmusic.settings.tab.audio": "音频",
+  "zmusic.settings.tab.commands": "快捷指令",
+  "zmusic.settings.tab.hotkeys": "快捷键",
+  "zmusic.settings.volume": "音量",
+
+  "zmusic.history.title": "AMusic 历史记录",
+  "zmusic.favorite.title": "AMusic 收藏",
+  "zmusic.playlist.title": "AMusic 歌单"
+}
