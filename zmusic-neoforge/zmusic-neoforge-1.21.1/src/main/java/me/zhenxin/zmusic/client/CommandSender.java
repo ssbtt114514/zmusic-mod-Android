@@ -5,6 +5,7 @@ import me.zhenxin.zmusic.ZMusic;
 import me.zhenxin.zmusic.config.ZMusicConfig;
 import me.zhenxin.zmusic.history.HistoryEntry;
 import me.zhenxin.zmusic.history.HistoryManager;
+import me.zhenxin.zmusic.playlist.PlaylistPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
@@ -31,9 +32,23 @@ public final class CommandSender {
     }
 
     /**
-     * 发送上一首命令（历史记录中更早的一首）。
+     * 发送上一首命令。
+     *
+     * <p>优先级：</p>
+     * <ol>
+     *   <li>歌单模式：若 {@link PlaylistPlayer} 处于活动状态，调用 {@link PlaylistPlayer#previous()}</li>
+     *   <li>历史模式：从历史记录中取上一首</li>
+     * </ol>
      */
     public static void sendPrevious() {
+        // 歌单模式：歌单活动时由 PlaylistPlayer 处理上一首
+        PlaylistPlayer pp = ZMusic.getPlaylistPlayer();
+        if (pp != null && pp.isActive()) {
+            log.info("Playlist active, using playlist previous");
+            pp.previous();
+            return;
+        }
+        // 历史模式：从历史记录中取上一首
         HistoryManager hm = ZMusic.getHistoryManager();
         if (hm == null) {
             log.warn("History manager not initialized, cannot go previous");
@@ -48,9 +63,23 @@ public final class CommandSender {
     }
 
     /**
-     * 发送下一首命令（历史记录中更新的一首）。
+     * 发送下一首命令。
+     *
+     * <p>优先级：</p>
+     * <ol>
+     *   <li>歌单模式：若 {@link PlaylistPlayer} 处于活动状态，调用 {@link PlaylistPlayer#next()}</li>
+     *   <li>历史模式：从历史记录中取下一首</li>
+     * </ol>
      */
     public static void sendNext() {
+        // 歌单模式：歌单活动时由 PlaylistPlayer 处理下一首
+        PlaylistPlayer pp = ZMusic.getPlaylistPlayer();
+        if (pp != null && pp.isActive()) {
+            log.info("Playlist active, using playlist next");
+            pp.next();
+            return;
+        }
+        // 历史模式：从历史记录中取下一首
         HistoryManager hm = ZMusic.getHistoryManager();
         if (hm == null) {
             log.warn("History manager not initialized, cannot go next");
@@ -72,12 +101,30 @@ public final class CommandSender {
     }
 
     /**
-     * 发送点歌命令。
+     * 发送点歌命令（默认由模组发起，开启自动点击播放）。
+     *
+     * <p>命令格式：</p>
+     * <ul>
+     *   <li>公开点歌：{@code /zm music 平台 歌名}（全服公开）</li>
+     *   <li>非公开点歌：{@code /zm search 平台 歌名}（仅自己搜索播放，不公开到全服）</li>
+     * </ul>
      *
      * @param platform 平台
      * @param songName 歌名
      */
     public static void sendPlayCommand(String platform, String songName) {
+        sendPlayCommand(platform, songName, true);
+    }
+
+    /**
+     * 发送点歌命令。
+     *
+     * @param platform 平台
+     * @param songName 歌名
+     * @param modInitiated 是否由模组发起（true：开启自动点击播放；
+     *                     false：玩家手动触发，不开启自动点击）
+     */
+    public static void sendPlayCommand(String platform, String songName, boolean modInitiated) {
         ZMusicConfig config = ZMusic.getConfig();
         String plat = (platform == null || platform.isEmpty()) ? "163" : platform;
         // 平台中文别名映射到命令参数
@@ -86,9 +133,12 @@ public final class CommandSender {
         if (config != null && config.isPublicPlay()) {
             cmd = "zm music " + platArg + " " + songName;
         } else {
-            cmd = "zm " + platArg + " " + songName;
+            // 非公开：使用 search 子命令（仅自己播放）
+            cmd = "zm search " + platArg + " " + songName;
         }
         sendCommand(cmd);
+        // 通知聊天链接监听器：仅模组发起时才开启自动点击窗口
+        me.zhenxin.zmusic.client.ChatLinkListener.onPlayCommandSent(modInitiated);
     }
 
     /**

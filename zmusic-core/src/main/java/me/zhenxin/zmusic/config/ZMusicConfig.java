@@ -3,6 +3,7 @@ package me.zhenxin.zmusic.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.log4j.Log4j2;
+import me.zhenxin.zmusic.playlist.PlayOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +72,26 @@ public class ZMusicConfig {
         data.volumeOverlayY = y;
     }
 
+    /**
+     * 播放模式（持久化，避免重置）。
+     */
+    public PlayOrder getPlayOrder() {
+        if (data.playOrder == null) data.playOrder = PlayOrder.SEQUENCE;
+        return data.playOrder;
+    }
+    public void setPlayOrder(PlayOrder order) {
+        data.playOrder = order == null ? PlayOrder.SEQUENCE : order;
+    }
+
+    /**
+     * 是否使用流式传输模式（边下边播）。
+     *
+     * <p>false（默认）：完整下载 MP3 到内存后播放，网络稳定但需等待下载完成；
+     * true：直接流式读取播放，启动快但网络波动可能导致 underrun。</p>
+     */
+    public boolean isStreamingMode() { return data.streamingMode; }
+    public void setStreamingMode(boolean streamingMode) { data.streamingMode = streamingMode; }
+
     public void load() {
         try {
             if (configFile.exists()) {
@@ -123,5 +144,9 @@ public class ZMusicConfig {
         float volumeOverlayX = 0.5f;
         /** 音量条垂直相对位置 0.0~1.0 */
         float volumeOverlayY = 0.85f;
+        /** 播放模式（顺序/随机/列表循环/单曲循环） */
+        PlayOrder playOrder = PlayOrder.SEQUENCE;
+        /** 是否使用流式传输模式（边下边播），默认 false 完整下载后播放 */
+        boolean streamingMode = false;
     }
 }

@@ -5,7 +5,7 @@ import me.zhenxin.zmusic.ZMusic;
 import me.zhenxin.zmusic.ZMusicPlayer;
 import me.zhenxin.zmusic.client.CommandSender;
 import me.zhenxin.zmusic.client.ZMusicKeys;
-import me.zhenxin.zmusic.client.gui.FavoriteScreen;
+import me.zhenxin.zmusic.client.ChatLinkListener;
 import me.zhenxin.zmusic.client.gui.HistoryScreen;
 import me.zhenxin.zmusic.client.gui.PlaylistScreen;
 import me.zhenxin.zmusic.client.gui.SettingsScreen;
@@ -32,8 +32,9 @@ public class NeoForgeEvent {
     public static final VolumeOverlay volumeOverlay = new VolumeOverlay();
 
     public NeoForgeEvent() {
-        // 注册音量条 overlay 的事件处理
+        // 注册 overlay 与聊天监听器的事件处理
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.register(volumeOverlay);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.register(ChatLinkListener.INSTANCE);
     }
 
     @SubscribeEvent
@@ -70,7 +71,6 @@ public class NeoForgeEvent {
         // 按键检测（仅在游戏内消费，避免在 GUI 内触发）
         handleKeyWhile(ZMusicKeys.OPEN_SETTINGS, () -> mc.setScreen(SettingsScreen.build(mc.screen)));
         handleKeyWhile(ZMusicKeys.HISTORY, () -> mc.setScreen(new HistoryScreen()));
-        handleKeyWhile(ZMusicKeys.FAVORITE, () -> mc.setScreen(new FavoriteScreen()));
         handleKeyWhile(ZMusicKeys.PLAYLIST, () -> mc.setScreen(new PlaylistScreen()));
         handleKeyWhile(ZMusicKeys.PAUSE, CommandSender::sendPause);
         handleKeyWhile(ZMusicKeys.PREVIOUS, CommandSender::sendPrevious);
@@ -82,9 +82,10 @@ public class NeoForgeEvent {
 
         // 音量同步到播放器（静音时为 0，否则取配置音量）
         ZMusicConfig config = ZMusic.getConfig();
-        if (config != null && ZMusic.getPlayer() != null) {
+        ZMusicPlayer player = ZMusic.getPlayer();
+        if (config != null && player != null) {
             float v = config.isMuted() ? 0f : config.getVolume();
-            ZMusic.getPlayer().setVolume(v);
+            player.setVolume(v);
         }
     }
 

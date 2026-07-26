@@ -11,6 +11,7 @@
   "key.zmusic.favorite": "查看收藏",
   "key.zmusic.playlist": "查看歌单",
   "key.zmusic.volume_position": "调整音量条位置",
+  "key.zmusic.playback_hud_position": "调整播放控制条位置",
 
   "zmusic.settings.title": "AMusic 设置",
   "zmusic.settings.tab.audio": "音频",

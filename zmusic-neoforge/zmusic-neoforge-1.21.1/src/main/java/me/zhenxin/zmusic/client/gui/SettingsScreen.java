@@ -66,7 +66,7 @@ public class SettingsScreen {
             // 公开点歌开关
             audioCat.addEntry(entryBuilder.startBooleanToggle(Component.literal("公开点歌 (/zm music)"), config.isPublicPlay())
                     .setDefaultValue(true)
-                    .setTooltip(Component.literal("开启时使用 /zm music 平台 歌名，关闭时使用 /zm 平台 歌名"))
+                    .setTooltip(Component.literal("开启时使用 /zm music 平台 歌名（全服公开），关闭时使用 /zm search 平台 歌名（仅自己播放）"))
                     .setSaveConsumer(config::setPublicPlay)
                     .build());
 
@@ -76,6 +76,13 @@ public class SettingsScreen {
                     .setDefaultValue("163")
                     .setSelections(platforms)
                     .setSaveConsumer(config::setPlatform)
+                    .build());
+
+            // 流式传输模式开关
+            audioCat.addEntry(entryBuilder.startBooleanToggle(Component.literal("流式传输（边下边播）"), config.isStreamingMode())
+                    .setDefaultValue(false)
+                    .setTooltip(Component.literal("开启时直接流式播放 MP3（启动快，但网络波动可能卡顿）；关闭时完整下载后播放（稳定，但需等待下载）"))
+                    .setSaveConsumer(config::setStreamingMode)
                     .build());
 
             // 音量条位置（显示当前坐标，提示通过快捷键调整）
@@ -119,8 +126,6 @@ public class SettingsScreen {
         hotkeyCat.addEntry(entryBuilder.startTextDescription(Component.literal("暂停: " + keyName(ZMusicKeys.PAUSE)))
                 .build());
         hotkeyCat.addEntry(entryBuilder.startTextDescription(Component.literal("查看历史记录: " + keyName(ZMusicKeys.HISTORY)))
-                .build());
-        hotkeyCat.addEntry(entryBuilder.startTextDescription(Component.literal("查看收藏: " + keyName(ZMusicKeys.FAVORITE)))
                 .build());
         hotkeyCat.addEntry(entryBuilder.startTextDescription(Component.literal("查看歌单: " + keyName(ZMusicKeys.PLAYLIST)))
                 .build());

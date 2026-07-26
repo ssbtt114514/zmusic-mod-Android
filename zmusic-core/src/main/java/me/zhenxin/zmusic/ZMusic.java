@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import me.zhenxin.zmusic.config.ZMusicConfig;
-import me.zhenxin.zmusic.favorite.FavoriteManager;
+import me.zhenxin.zmusic.history.HistoryEntry;
 import me.zhenxin.zmusic.history.HistoryManager;
 import me.zhenxin.zmusic.manager.SoundManager;
 import me.zhenxin.zmusic.playback.NowPlaying;
+import me.zhenxin.zmusic.playlist.Playlist;
 import me.zhenxin.zmusic.playlist.PlaylistManager;
 import me.zhenxin.zmusic.playlist.PlaylistPlayer;
 
@@ -41,9 +42,6 @@ public class ZMusic {
     /** 历史记录管理器 */
     @Getter
     private static HistoryManager historyManager;
-    /** 收藏管理器 */
-    @Getter
-    private static FavoriteManager favoriteManager;
     /** 歌单管理器 */
     @Getter
     private static PlaylistManager playlistManager;
@@ -86,8 +84,9 @@ public class ZMusic {
             try {
                 config = new ZMusicConfig(configDir);
                 historyManager = new HistoryManager(configDir);
-                favoriteManager = new FavoriteManager(configDir);
                 playlistManager = new PlaylistManager(configDir);
+                // 迁移旧版 favorite.json 到歌单「收藏」
+                migrateFavoritesToPlaylist();
                 log.info("ZMusic config dir: {}", configDir);
             } catch (Throwable t) {
                 log.warn("Failed to init ZMusic config/history: {}", t.getMessage(), t);
@@ -110,6 +109,15 @@ public class ZMusic {
                     default: stateName = "UNKNOWN(" + state + ")"; break;
                 }
                 log.info("ZMusic player state changed: {} ({})", stateName, state);
+                // 当播放器状态变为 STOPPED（MP3 播放完毕或服务器 [Stop] 包）时，
+                // 触发歌单下一首。handlePlayerStopped 会区分自然结束和外部停止，
+                // 并在歌单活动时自动计算并播放下一首。
+                if (state == ZMusicPlayer.STATE_STOPPED) {
+                    PlaylistPlayer pp = playlistPlayer;
+                    if (pp != null) {
+                        pp.handlePlayerStopped();
+                    }
+                }
             }
 
             @Override
@@ -147,6 +155,45 @@ public class ZMusic {
         if (player != null) {
             player.destroy();
             player = null;
+        }
+    }
+
+    /**
+     * 迁移旧版 favorite.json 到歌单「收藏」。
+     *
+     * <p>如果存在旧版 {@code config/AMusic/favorite.json} 且歌单「收藏」不存在，
+     * 则将收藏列表导入为名为「收藏」的歌单，然后将旧文件重命名为 .bak 避免重复迁移。</p>
+     */
+    private static void migrateFavoritesToPlaylist() {
+        if (configDir == null || playlistManager == null) return;
+        try {
+            File favoriteFile = new File(new File(configDir, "AMusic"), "favorite.json");
+            if (!favoriteFile.exists()) return;
+            // 已有「收藏」歌单则不覆盖
+            if (playlistManager.loadPlaylist("收藏") != null) {
+                log.info("Favorites migration skipped: playlist「收藏」already exists");
+                return;
+            }
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            com.google.gson.reflect.TypeToken<java.util.List<HistoryEntry>> type =
+                    new com.google.gson.reflect.TypeToken<java.util.List<HistoryEntry>>() {};
+            String json = new String(java.nio.file.Files.readAllBytes(favoriteFile.toPath()),
+                    java.nio.charset.StandardCharsets.UTF_8);
+            java.util.List<HistoryEntry> favorites = gson.fromJson(json, type.getType());
+            if (favorites == null) favorites = new java.util.ArrayList<>();
+            Playlist pl = new Playlist("收藏");
+            for (HistoryEntry e : favorites) {
+                pl.addSong(e);
+            }
+            playlistManager.savePlaylist(pl);
+            // 重命名旧文件避免重复迁移
+            File bak = new File(favoriteFile.getParentFile(), "favorite.json.bak");
+            if (!favoriteFile.renameTo(bak)) {
+                favoriteFile.delete();
+            }
+            log.info("Favorites migrated to playlist「收藏」: {} songs", favorites.size());
+        } catch (Exception e) {
+            log.warn("Favorites migration failed: {}", e.getMessage());
         }
     }
 

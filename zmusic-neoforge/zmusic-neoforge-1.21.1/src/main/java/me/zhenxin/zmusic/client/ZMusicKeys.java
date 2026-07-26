@@ -78,14 +78,6 @@ public final class ZMusicKeys {
             "key.categories.zmusic"
     );
 
-    /** 查看收藏 */
-    public static final KeyMapping FAVORITE = new KeyMapping(
-            "key.zmusic.favorite",
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_F8,
-            "key.categories.zmusic"
-    );
-
     /** 查看歌单 */
     public static final KeyMapping PLAYLIST = new KeyMapping(
             "key.zmusic.playlist",
@@ -108,6 +100,6 @@ public final class ZMusicKeys {
     /** 所有按键映射，用于注册。 */
     public static final KeyMapping[] ALL = {
             OPEN_SETTINGS, VOLUME_UP, VOLUME_DOWN, MUTE_TOGGLE,
-            PREVIOUS, NEXT, PAUSE, HISTORY, FAVORITE, PLAYLIST, VOLUME_POSITION
+            PREVIOUS, NEXT, PAUSE, HISTORY, PLAYLIST, VOLUME_POSITION
     };
 }

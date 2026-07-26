@@ -39,6 +39,10 @@ public class PlaylistPlayer {
 
     private volatile Playlist activePlaylist;
     private volatile int currentIndex = -1;
+    /** 待播放的下一首索引（>= 0 时表示有挂起的播放请求，等播放器空闲时触发）。
+     *  用于 LOOP/RANDOM/SINGLE 模式：歌曲自然结束后不立即播放下一首，
+     *  而是等播放器真正停止后由 tick 触发。这样播完的歌曲仍为"当前歌曲"。 */
+    private volatile int pendingNextIndex = -1;
     private volatile PlayCallback callback;
     private final Random random = new Random();
 
@@ -91,6 +95,7 @@ public class PlaylistPlayer {
             idx = 0;
         }
         this.currentIndex = idx;
+        this.pendingNextIndex = -1;
         playCurrent();
     }
 
@@ -100,6 +105,7 @@ public class PlaylistPlayer {
     public void stop() {
         activePlaylist = null;
         currentIndex = -1;
+        pendingNextIndex = -1;
     }
 
     /**
@@ -107,6 +113,7 @@ public class PlaylistPlayer {
      */
     public void next() {
         if (!isActive()) return;
+        pendingNextIndex = -1;
         currentIndex = computeNextIndex(false);
         if (currentIndex >= 0) {
             playCurrent();
@@ -120,6 +127,7 @@ public class PlaylistPlayer {
      */
     public void previous() {
         if (!isActive()) return;
+        pendingNextIndex = -1;
         int size = activePlaylist.size();
         if (size == 0) {
             stop();
@@ -132,24 +140,78 @@ public class PlaylistPlayer {
     /**
      * 当前歌曲播放结束时的回调（由 ZMusicPlayer onTrackEnded 触发）。
      *
-     * <p>根据播放顺序决定下一首动作：</p>
-     * <ul>
-     *   <li>SINGLE - 重新播放当前歌曲</li>
-     *   <li>RANDOM - 随机选择下一首</li>
-     *   <li>LOOP - 循环到下一首（末尾回到开头）</li>
-     *   <li>SEQUENCE - 顺序播放下一首，末尾则停止</li>
-     * </ul>
+     * <p>所有播放模式统一行为：设置 pendingNextIndex 但不立即播放，也不推进 currentIndex。
+     * 实际播放由 {@link #tryPlayIfIdle()} 在播放器状态变为 STOPPED 时触发
+     *（由 ZMusic.onStateChanged 回调调用）。</p>
+     *
+     * <p>这样播完的歌曲在下一首实际开始前仍为"当前歌曲"（currentIndex 不变），
+     * 满足"如果一首歌播放完了，那么这首歌是当前的，不是上一首"的需求。</p>
+     *
+     * <p>SEQUENCE 模式下如果已到末尾，则停止歌单播放。</p>
      */
     public void onTrackEnded() {
         if (!isActive()) return;
+        PlayOrder order = activePlaylist.getPlayOrder();
+        if (order == null) order = PlayOrder.SEQUENCE;
+
         int next = computeNextIndex(true);
         if (next < 0) {
             log.info("Playlist finished (SEQUENCE mode reached end)");
             stop();
             return;
         }
+        // 仅设置待播索引，不推进 currentIndex
+        // tryPlayIfIdle 会在播放器 STOPPED 时由状态回调触发
+        pendingNextIndex = next;
+        log.info("Track ended, pending next index: {} (mode={}, current={})",
+                pendingNextIndex, order, currentIndex);
+    }
+
+    /**
+     * 尝试在播放器空闲时播放待播歌曲。
+     *
+     * <p>由 ZMusic.onStateChanged 回调调用：当播放器状态变为 STOPPED（MP3 播放完毕）时，
+     * 如果有待播歌曲则推进 currentIndex 并播放。</p>
+     *
+     * @return true 表示触发了播放
+     */
+    public boolean tryPlayIfIdle() {
+        if (!isActive() || pendingNextIndex < 0) return false;
+        int next = pendingNextIndex;
+        pendingNextIndex = -1;
         currentIndex = next;
+        log.info("Playlist idle-triggered play: index={} (mode={})", currentIndex,
+                activePlaylist != null ? activePlaylist.getPlayOrder() : "?");
         playCurrent();
+        return true;
+    }
+
+    /**
+     * 播放器停止时的统一处理（由 ZMusic.onStateChanged 回调调用）。
+     *
+     * <p>当播放器状态变为 STOPPED 时，如果歌单活动且没有待播歌曲，
+     * 视为当前歌曲结束，计算并播放下一首。</p>
+     *
+     * <p>这处理了两种情况：</p>
+     * <ul>
+     *   <li>JLayerBackend 自然结束：先调用 onTrackEnded 设置 pendingNextIndex，
+     *       然后状态变化触发本方法，直接 tryPlayIfIdle</li>
+     *   <li>服务器 [Stop] 包导致停止：onTrackEnded 未被调用，pendingNextIndex &lt; 0，
+     *       本方法先调用 onTrackEnded 计算下一首，再 tryPlayIfIdle</li>
+     * </ul>
+     *
+     * <p>用户手动停止（调用 {@link #stop()}）时 isActive() 返回 false，本方法直接返回，
+     * 不会触发下一首。</p>
+     */
+    public void handlePlayerStopped() {
+        if (!isActive()) return;
+        if (pendingNextIndex < 0) {
+            // onTrackEnded 未被调用（可能是服务器 [Stop] 包导致），
+            // 主动计算下一首
+            log.info("Player stopped without onTrackEnded, computing next index");
+            onTrackEnded();
+        }
+        tryPlayIfIdle();
     }
 
     /**

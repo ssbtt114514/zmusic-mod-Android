@@ -1,6 +1,7 @@
 package me.zhenxin.zmusic;
 
 import lombok.extern.log4j.Log4j2;
+import me.zhenxin.zmusic.ZMusic;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
@@ -625,6 +626,11 @@ public class ZMusicPlayer {
         private volatile float alVolume = 1.0f;
         private volatile boolean alInitialized = false;
 
+        // 本地 MP3 总时长（毫秒），从首帧比特率 + 文件大小估算
+        private volatile long durationMs = 0;
+        // 播放起始时间戳（用于估算已播放时长）
+        private volatile long playStartTime = 0;
+
         // 每帧解码的 PCM 缓冲区大小（样本数）
         private static final int BUFFER_SIZE = 4096;
 
@@ -664,49 +670,73 @@ public class ZMusicPlayer {
             log.info("OpenAL: HTTP headers: Content-Type={}, Content-Length={}, Content-Encoding={}",
                 contentType, contentLength, contentEncoding);
 
-            // 完整下载 MP3 到内存，避免流式播放因网络波动中断
-            // 好处：1) 播放期间不再依赖网络；2) seek/循环更流畅；3) 避免 Android FCL 网络栈不稳定
-            // 代价：需等待完整下载后才开始播放，大文件占用内存（典型 4 分钟 MP3 约 4-6MB）
-            InputStream httpStream = connection.getInputStream();
-            long downloadStart = System.currentTimeMillis();
-            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(
-                contentLength > 0 ? contentLength : 64 * 1024);
-            byte[] chunk = new byte[16 * 1024];
-            int totalRead = 0;
-            int lastProgressPct = -1;
-            while (!stopped) {
-                int n = httpStream.read(chunk);
-                if (n < 0) break;
-                if (n == 0) continue;
-                baos.write(chunk, 0, n);
-                totalRead += n;
-                if (contentLength > 0) {
-                    int pct = totalRead * 100 / contentLength;
-                    if (pct >= lastProgressPct + 20) {
-                        log.info("OpenAL: downloading MP3... {}% ({} / {} KB)",
-                            pct, totalRead / 1024, contentLength / 1024);
-                        lastProgressPct = pct;
+            // 读取配置决定使用下载模式还是流式模式
+            boolean streamingMode = false;
+            me.zhenxin.zmusic.config.ZMusicConfig cfg = ZMusic.getConfig();
+            if (cfg != null) {
+                streamingMode = cfg.isStreamingMode();
+            }
+            log.info("OpenAL: playback mode: {}", streamingMode ? "STREAMING (边下边播)" : "DOWNLOAD (完整下载)");
+
+            if (streamingMode) {
+                // 流式模式：直接使用 HTTP InputStream，边下边播
+                // 优点：启动快，无需等待完整下载
+                // 缺点：网络波动可能导致 underrun，无法精确估算时长
+                audioStream = connection.getInputStream();
+                log.info("OpenAL: streaming mode, using HTTP InputStream directly");
+                // 流式模式下无法精确获取文件大小，时长估算设为 0（由 [Info] 包提供）
+                durationMs = 0;
+                playStartTime = System.currentTimeMillis();
+            } else {
+                // 下载模式：完整下载 MP3 到内存，避免流式播放因网络波动中断
+                // 好处：1) 播放期间不再依赖网络；2) seek/循环更流畅；3) 避免 Android FCL 网络栈不稳定
+                // 代价：需等待完整下载后才开始播放，大文件占用内存（典型 4 分钟 MP3 约 4-6MB）
+                InputStream httpStream = connection.getInputStream();
+                long downloadStart = System.currentTimeMillis();
+                java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(
+                    contentLength > 0 ? contentLength : 64 * 1024);
+                byte[] chunk = new byte[16 * 1024];
+                int totalRead = 0;
+                int lastProgressPct = -1;
+                while (!stopped) {
+                    int n = httpStream.read(chunk);
+                    if (n < 0) break;
+                    if (n == 0) continue;
+                    baos.write(chunk, 0, n);
+                    totalRead += n;
+                    if (contentLength > 0) {
+                        int pct = totalRead * 100 / contentLength;
+                        if (pct >= lastProgressPct + 20) {
+                            log.info("OpenAL: downloading MP3... {}% ({} / {} KB)",
+                                pct, totalRead / 1024, contentLength / 1024);
+                            lastProgressPct = pct;
+                        }
                     }
                 }
-            }
-            httpStream.close();
-            long downloadElapsed = System.currentTimeMillis() - downloadStart;
-            byte[] mp3Data = baos.toByteArray();
-            baos.close();
-            log.info("OpenAL: MP3 fully downloaded to memory: {} KB in {}ms ({} bytes)",
-                mp3Data.length / 1024, downloadElapsed, mp3Data.length);
+                httpStream.close();
+                long downloadElapsed = System.currentTimeMillis() - downloadStart;
+                byte[] mp3Data = baos.toByteArray();
+                baos.close();
+                log.info("OpenAL: MP3 fully downloaded to memory: {} KB in {}ms ({} bytes)",
+                    mp3Data.length / 1024, downloadElapsed, mp3Data.length);
 
-            if (stopped) {
-                log.info("OpenAL: stopped during download, aborting playback");
-                return;
-            }
-            if (mp3Data.length == 0) {
-                log.error("OpenAL: downloaded MP3 data is empty");
-                throw new Exception("Downloaded MP3 data is empty for " + url);
-            }
+                if (stopped) {
+                    log.info("OpenAL: stopped during download, aborting playback");
+                    return;
+                }
+                if (mp3Data.length == 0) {
+                    log.error("OpenAL: downloaded MP3 data is empty");
+                    throw new Exception("Downloaded MP3 data is empty for " + url);
+                }
 
-            audioStream = new java.io.ByteArrayInputStream(mp3Data);
-            log.info("OpenAL: ByteArrayInputStream created, available={}", audioStream.available());
+                audioStream = new java.io.ByteArrayInputStream(mp3Data);
+                log.info("OpenAL: ByteArrayInputStream created, available={}", audioStream.available());
+
+                // 估算 MP3 总时长：读取首帧比特率，用文件大小计算
+                durationMs = estimateMp3Duration(mp3Data);
+                log.info("OpenAL: estimated MP3 duration: {}ms", durationMs);
+                playStartTime = System.currentTimeMillis();
+            }
 
             playThread = new Thread(() -> {
                 log.info("OpenAL: playback thread started");
@@ -733,7 +763,13 @@ public class ZMusicPlayer {
         }
 
         private void decodeAndPlay() throws Exception {
-            log.info("OpenAL: decodeAndPlay started, stream available={}", audioStream != null && audioStream.available() > 0);
+            int avail = -1;
+            try {
+                if (audioStream != null) avail = audioStream.available();
+            } catch (Exception ignored) {
+                // 流式模式下 available() 可能阻塞或抛异常，忽略
+            }
+            log.info("OpenAL: decodeAndPlay started, stream available={}", avail);
             javazoom.jl.decoder.Bitstream bitstream = new javazoom.jl.decoder.Bitstream(audioStream);
             Decoder decoder = new Decoder();
             log.info("OpenAL: JLayer Bitstream and Decoder created");
@@ -1008,6 +1044,8 @@ public class ZMusicPlayer {
                 }
             }
             playThread = null;
+            durationMs = 0;
+            playStartTime = 0;
             cleanupAlResources();
             cleanupResources();
         }
@@ -1041,20 +1079,63 @@ public class ZMusicPlayer {
 
         @Override
         public long getPosition() {
+            // 优先使用 OpenAL 的 AL_SEC_OFFSET（精确的已播放时长）
             if (alInitialized && alSource != -1) {
                 try {
                     float sec = org.lwjgl.openal.AL10.alGetSourcef(alSource, org.lwjgl.openal.AL11.AL_SEC_OFFSET);
-                    return (long) (sec * 1000);
+                    if (sec > 0) {
+                        return (long) (sec * 1000);
+                    }
                 } catch (Exception e) {
-                    return 0;
+                    // ignore
                 }
+            }
+            // 回退：用播放起始时间估算
+            if (playStartTime > 0) {
+                long elapsed = System.currentTimeMillis() - playStartTime;
+                if (durationMs > 0 && elapsed > durationMs) elapsed = durationMs;
+                return elapsed;
             }
             return 0;
         }
 
         @Override
         public long getDuration() {
-            return 0;
+            return durationMs;
+        }
+
+        /**
+         * 估算 MP3 总时长（毫秒）。
+         *
+         * <p>方法：读取首帧比特率，用文件大小估算。
+         * 公式：时长 = 文件大小 * 8 / 比特率 * 1000。
+         * 对 CBR MP3 准确，对 VBR MP3 为近似值。</p>
+         *
+         * @param mp3Data MP3 文件字节数组
+         * @return 估算的总时长（毫秒），失败返回 0
+         */
+        private long estimateMp3Duration(byte[] mp3Data) {
+            try {
+                java.io.ByteArrayInputStream probe = new java.io.ByteArrayInputStream(mp3Data);
+                javazoom.jl.decoder.Bitstream bs = new javazoom.jl.decoder.Bitstream(probe);
+                Header header = bs.readFrame();
+                if (header == null) {
+                    bs.close();
+                    return 0;
+                }
+                // 获取比特率（bps）
+                int bitrate = header.bitrate();
+                bs.close();
+                if (bitrate <= 0) return 0;
+                // 时长(ms) = 文件大小(byte) * 8 / 比特率(bit/s) * 1000
+                long duration = (long) ((double) mp3Data.length * 8 / bitrate * 1000);
+                log.info("OpenAL: duration estimate: file={}KB, bitrate={}kbps, duration={}ms",
+                    mp3Data.length / 1024, bitrate / 1000, duration);
+                return duration;
+            } catch (Exception e) {
+                log.warn("OpenAL: failed to estimate MP3 duration: {}", e.getMessage());
+                return 0;
+            }
         }
 
         @Override
