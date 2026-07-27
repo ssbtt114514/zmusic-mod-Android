@@ -42,3 +42,7 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+# server plugin (not part of the mod)
+Amusic_plugin/
+*.zip

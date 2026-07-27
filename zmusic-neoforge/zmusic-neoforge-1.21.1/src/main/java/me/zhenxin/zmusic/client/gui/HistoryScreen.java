@@ -5,8 +5,6 @@ import me.zhenxin.zmusic.ZMusic;
 import me.zhenxin.zmusic.client.CommandSender;
 import me.zhenxin.zmusic.history.HistoryEntry;
 import me.zhenxin.zmusic.history.HistoryManager;
-import me.zhenxin.zmusic.playlist.Playlist;
-import me.zhenxin.zmusic.playlist.PlaylistManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -91,23 +89,12 @@ public class HistoryScreen extends Screen {
     }
 
     /**
-     * 添加到「收藏」歌单。
+     * 打开歌单选择界面，将歌曲添加到玩家选择的歌单。
      *
      * @param entry 历史条目
      */
     private void favoriteEntry(HistoryEntry entry) {
-        PlaylistManager pm = ZMusic.getPlaylistManager();
-        if (pm == null) return;
-        // 确保「收藏」歌单存在
-        Playlist pl = pm.loadPlaylist("收藏");
-        if (pl == null) {
-            pm.createPlaylist("收藏");
-            pl = pm.loadPlaylist("收藏");
-        }
-        if (pl != null) {
-            pl.addSong(new HistoryEntry(entry.getName(), entry.getUrl(), entry.getPlatform(), System.currentTimeMillis() / 1000));
-            pm.savePlaylist(pl);
-        }
+        Minecraft.getInstance().setScreen(new SelectPlaylistScreen(entry, this));
     }
 
     /**

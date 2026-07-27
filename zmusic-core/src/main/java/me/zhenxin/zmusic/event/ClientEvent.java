@@ -3,6 +3,7 @@ package me.zhenxin.zmusic.event;
 import lombok.extern.log4j.Log4j2;
 import me.zhenxin.zmusic.ZMusic;
 import me.zhenxin.zmusic.playback.InfoParser;
+import me.zhenxin.zmusic.playlist.PlaylistNetClient;
 
 /**
  * 客户端事件
@@ -52,6 +53,13 @@ public class ClientEvent {
                 PacketEvent.onLyric(data);
             } catch (Throwable t) {
                 log.error("PacketEvent.onLyric threw exception", t);
+            }
+        } else if (message.startsWith("[PLListResp]") || message.startsWith("[PLData]") || message.startsWith("[PLResult]")) {
+            // 歌单网络相关数据包
+            try {
+                PlaylistNetClient.getInstance().onPacket(message);
+            } catch (Throwable t) {
+                log.error("PlaylistNetClient.onPacket threw exception", t);
             }
         } else {
             log.warn("Ignored unknown ZMusic packet message: {}", message);

@@ -16,7 +16,7 @@ def gitCommitHash = {
 }
 
 ext {
-    modDescription = "Powerful Music System"
+    modDescription = "Music Player"
 }
 
 def isLeafPlatformProject(Project p) {

@@ -3,7 +3,7 @@ plugins {
 }
 
 ext {
-    modDescription = "Powerful Music System"
+    modDescription = "Music Player"
 }
 
 def isNeoForgeProject(Project p) {

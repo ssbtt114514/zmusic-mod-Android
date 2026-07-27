@@ -7,6 +7,7 @@ import me.zhenxin.zmusic.event.NeoForgeEvent;
 import me.zhenxin.zmusic.manager.SoundManagerImpl;
 import me.zhenxin.zmusic.network.ZMusicPayload;
 import me.zhenxin.zmusic.playlist.PlaylistPlayer;
+import me.zhenxin.zmusic.history.HistoryEntry;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -43,7 +44,7 @@ public class ZMusicNeoForgeMod {
         ZMusic.setConfigDir(configDir);
         ZMusic.setSoundManager(new SoundManagerImpl());
         ZMusic.onEnable();
-        // 设置歌单播放回调：通过 CommandSender 发送点歌命令
+        // 设置歌单播放回调：通过 CommandSender 发送点歌命令到服务器
         PlaylistPlayer pp = ZMusic.getPlaylistPlayer();
         if (pp != null) {
             pp.setCallback(entry ->
@@ -53,9 +54,10 @@ public class ZMusicNeoForgeMod {
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        // 使用 playBidirectional 注册双向通道，避免同一 channel 注册两次
         event.registrar("1")
                 .optional()
-                .playToClient(ZMusicPayload.TYPE, ZMusicPayload.STREAM_CODEC, this::handlePayload);
+                .playBidirectional(ZMusicPayload.TYPE, ZMusicPayload.STREAM_CODEC, this::handlePayload);
     }
 
     private void registerKeys(RegisterKeyMappingsEvent event) {

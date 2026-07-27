@@ -74,6 +74,10 @@ public class PlaylistScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal("停止播放"), b -> stopPlaylist())
                 .bounds(20 + halfW + 190, this.height - 50, 80, 18).build());
 
+        // 在线歌单按钮
+        addRenderableWidget(Button.builder(Component.literal("在线歌单"), b -> openOnlinePlaylists())
+                .bounds(20 + halfW + 280, this.height - 50, 80, 18).build());
+
         // 关闭按钮
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
                 .bounds(this.width / 2 - 50, this.height - 24, 100, 18).build());
@@ -170,6 +174,13 @@ public class PlaylistScreen extends Screen {
         HistoryEntry entry = new HistoryEntry(np.getName(), np.getUrl(), np.getPlatform(), System.currentTimeMillis());
         pm.addSong(selectedPlaylist, entry);
         songList.refresh();
+    }
+
+    /**
+     * 打开在线歌单界面。
+     */
+    private void openOnlinePlaylists() {
+        Minecraft.getInstance().setScreen(new OnlinePlaylistScreen());
     }
 
     private void cyclePlayOrder() {
@@ -301,13 +312,7 @@ public class PlaylistScreen extends Screen {
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 // 只响应左键
                 if (button != 0) return true;
-                int btnY = 11; // 相对于 entry top 的 Y
-                // 通过 Y 坐标判断是否点击了按钮行
-                // mouseY 是屏幕坐标，需要减去 entry 的 top
-                // 但我们在 render 中已经缓存了按钮的屏幕 X 坐标
-                // 这里用缓存的 X 坐标和固定的 Y 偏移来判断
 
-                // 由于 render 时已缓存按钮 X 坐标，直接用 mouseX 判断
                 if (isInButton(mouseX, selectBtnX, selectBtnW)) {
                     selectPlaylist(name);
                 } else if (isInButton(mouseX, playBtnX, playBtnW)) {
