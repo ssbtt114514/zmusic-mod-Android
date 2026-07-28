@@ -1,5 +1,5 @@
 ext {
-    modDescription = "Powerful Music System"
+    modDescription = "Music Player"
 }
 
 def ensureValidZip(File file) {
@@ -35,7 +35,7 @@ def repairLegacyForgeToolCache() {
 repairLegacyForgeToolCache()
 
 def isForgeProject(Project p) {
-    return p.name ==~ /zmusic-forge-\d+.*/
+    return p.name ==~ /amusic-forge-\d+.*/
 }
 
 allprojects {
@@ -75,12 +75,12 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
 
-    group = "me.zhenxin"
-    // 模组版本号：优先从 -Pzmusic.version 读取（CI 发布时由 workflow 输入传入），否则回退到默认
-    version = project.hasProperty('zmusic.version') ? project.getProperty('zmusic.version') : '3.7.1'
+    group = "me.ssbtt"
+    // 模组版本号：优先从 -Pamusic.version 读取（CI 发布时由 workflow 输入传入），否则回退到默认
+    version = project.hasProperty('amusic.version') ? project.getProperty('amusic.version') : '3.1'
 
-    // 产物命名：zmusic-forge-1.20.1 -> zmusic-android-forge-1.20.1
-    base.archivesName = project.name.replace("zmusic-", "zmusic-android-")
+    // 产物命名：amusic-forge-1.20.1 -> amusic-android-forge-1.20.1
+    base.archivesName = project.name.replace("amusic-", "amusic-android-")
 
     pluginManager.withPlugin("net.minecraftforge.gradle") {
         repositories {
@@ -98,8 +98,8 @@ subprojects {
     jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        if (project.name != "zmusic-core") {
-            from(project(":zmusic-core").sourceSets.main.output)
+        if (project.name != "amusic-core") {
+            from(project(":amusic-core").sourceSets.main.output)
             // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
             from {
                 configurations.runtimeClasspath.collect {
@@ -115,12 +115,12 @@ subprojects {
         if (isForgeProject(project)) {
             manifest {
                 attributes([
-                        "Specification-Title"     : "zmusic",
-                        "Specification-Vendor"    : "ZhenXin",
+                        "Specification-Title"     : "amusic",
+                        "Specification-Vendor"    : "ssbtt",
                         "Specification-Version"   : "1",
-                        "Implementation-Title"    : "ZMusic",
+                        "Implementation-Title"    : "AMusic",
                         "Implementation-Version"  : project.version,
-                        "Implementation-Vendor"   : "ZhenXin",
+                        "Implementation-Vendor"   : "ssbtt",
                         "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
                 ])
             }
@@ -132,7 +132,7 @@ subprojects {
         inputs.property "description", rootProject.modDescription
 
         if (isForgeProject(project)) {
-            from(project(":zmusic-core").sourceSets.main.resources) {
+            from(project(":amusic-core").sourceSets.main.resources) {
                 include("icon.png")
             }
         }

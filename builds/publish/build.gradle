@@ -16,7 +16,7 @@ def requirePublishEnv = { String name ->
 
 def publishApiRequest = { String method, String url, Map<String, String> headers = [:], Closure bodyWriter = null ->
     def requestBuilder = java.net.http.HttpRequest.newBuilder(java.net.URI.create(url))
-    requestBuilder.header('User-Agent', 'ZMusic-Gradle-Publish')
+    requestBuilder.header('User-Agent', 'AMusic-Gradle-Publish')
     headers.each { key, value ->
         requestBuilder.header(key, value)
     }
@@ -142,7 +142,7 @@ def curseForgeGameVersionId = { List versions, List versionTypes, String version
 
 tasks.register('publishMarketplaceFile') {
     group = 'publishing'
-    description = 'Publishes or dry-runs one built ZMusic jar on Modrinth and CurseForge.'
+    description = 'Publishes or dry-runs one built AMusic jar on Modrinth and CurseForge.'
 
     doLast {
         def filePath = requirePublishEnv('FILE_PATH')
@@ -155,7 +155,7 @@ tasks.register('publishMarketplaceFile') {
         }
 
         def fileName = file.name
-        def releaseName = System.getenv('RELEASE_NAME') ?: "ZMusic ${releaseVersion} ${modLoader} ${mcVersion}"
+        def releaseName = System.getenv('RELEASE_NAME') ?: "AMusic ${releaseVersion} ${modLoader} ${mcVersion}"
         def changelog = System.getenv('CHANGELOG') ?: ''
         def modrinthApiBaseUrl = System.getenv('MODRINTH_API_BASE_URL') ?: 'https://api.modrinth.com/v2'
         def curseForgeApiBaseUrl = System.getenv('CURSEFORGE_API_BASE_URL') ?: 'https://minecraft.curseforge.com'
@@ -218,7 +218,7 @@ tasks.register('publishMarketplaceFile') {
                     println(prettyPublishJson(metadataJson))
                 } else {
                     publishMarketplaceLog("Publishing Modrinth: ${releaseName} (${modLoader} ${minecraftVersions.join(' ')})")
-                    def boundary = "----ZMusicGradle${System.nanoTime()}"
+                    def boundary = "----AMusicGradle${System.nanoTime()}"
                     response = publishApiRequest(
                             'POST',
                             "${modrinthApiBaseUrl.replaceAll('/+$', '')}/version",
@@ -281,7 +281,7 @@ tasks.register('publishMarketplaceFile') {
                 println(prettyPublishJson(metadataJson))
             } else {
                 publishMarketplaceLog("Publishing CurseForge: ${releaseName} (${loaderName} ${minecraftVersions.join(' ')})")
-                def boundary = "----ZMusicGradle${System.nanoTime()}"
+                def boundary = "----AMusicGradle${System.nanoTime()}"
                 response = publishApiRequest(
                         'POST',
                         "${curseForgeApiBaseUrl.replaceAll('/+$', '')}/api/projects/${projectId}/upload-file",
@@ -459,7 +459,7 @@ tasks.register('publishReleaseMirrors') {
                     }
 
                     publishMarketplaceLog("Uploading Codeberg asset: ${file.name}")
-                    def boundary = "----ZMusicGradle${System.nanoTime()}"
+                    def boundary = "----AMusicGradle${System.nanoTime()}"
                     response = publishApiRequest(
                             'POST',
                             "${codebergApiBaseUrl.replaceAll('/+$', '')}${basePath}/releases/${encodePublishUri(releaseId)}/assets?name=${encodePublishUri(file.name)}",

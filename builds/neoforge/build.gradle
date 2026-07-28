@@ -7,7 +7,7 @@ ext {
 }
 
 def isNeoForgeProject(Project p) {
-    return p.name ==~ /zmusic-neoforge-\d+.*/
+    return p.name ==~ /amusic-neoforge-\d+.*/
 }
 
 allprojects {
@@ -43,12 +43,12 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
 
-    group = "me.zhenxin"
-    // 模组版本号：优先从 -Pzmusic.version 读取（CI 发布时由 workflow 输入传入），否则回退到默认
-    version = project.hasProperty('zmusic.version') ? project.getProperty('zmusic.version') : '3.7.1'
+    group = "me.ssbtt"
+    // 模组版本号：优先从 -Pamusic.version 读取（CI 发布时由 workflow 输入传入），否则回退到默认
+    version = project.hasProperty('amusic.version') ? project.getProperty('amusic.version') : '3.1'
 
-    // 产物命名：zmusic-neoforge-1.21.1 -> zmusic-android-neoforge-1.21.1
-    base.archivesName = project.name.replace("zmusic-", "zmusic-android-")
+    // 产物命名：amusic-neoforge-1.21.1 -> amusic-android-neoforge-1.21.1
+    base.archivesName = project.name.replace("amusic-", "amusic-android-")
 
     dependencies {
         compileOnly("org.projectlombok:lombok:1.18.46")
@@ -58,8 +58,8 @@ subprojects {
     jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        if (project.name != "zmusic-core") {
-            from(project(":zmusic-core").sourceSets.main.output)
+        if (project.name != "amusic-core") {
+            from(project(":amusic-core").sourceSets.main.output)
             // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
             from {
                 configurations.runtimeClasspath.collect {
@@ -78,7 +78,7 @@ subprojects {
         inputs.property "description", rootProject.modDescription
 
         if (isNeoForgeProject(project)) {
-            from(project(":zmusic-core").sourceSets.main.resources) {
+            from(project(":amusic-core").sourceSets.main.resources) {
                 include("icon.png")
             }
         }

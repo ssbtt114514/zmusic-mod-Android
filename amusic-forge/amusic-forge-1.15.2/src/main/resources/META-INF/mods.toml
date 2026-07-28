@@ -1,0 +1,24 @@
+﻿modLoader = "javafml"
+loaderVersion = "[31,)"
+license = "GPL-3.0-only"
+issueTrackerURL = "https://github.com/starhui-dev/amusic-mod/issues"
+[[mods]]
+modId = "amusic"
+version = "${version}"
+displayName = "AMusic"
+logoFile = "icon.png"
+description = "${description}"
+displayURL = ""
+authors = "ZhenXin"
+[[dependencies.amusic]]
+modId = "forge"
+mandatory = true
+versionRange = "[31,)"
+ordering = "NONE"
+side = "CLIENT"
+[[dependencies.amusic]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.15,1.16)"
+ordering = "NONE"
+side = "CLIENT"

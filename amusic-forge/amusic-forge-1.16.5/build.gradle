@@ -1,0 +1,22 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '7.0.31'
+    id 'net.minecraftforge.renamer' version '1.1.3'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+minecraft {
+    mappings channel: 'official', version: '1.16.5'
+}
+
+dependencies {
+    implementation minecraft.dependency('net.minecraftforge:forge:1.16.5-36.2.34')
+    implementation project(":amusic-core")
+}
+
+jar {
+    dependsOn(":amusic-core:jar")
+}

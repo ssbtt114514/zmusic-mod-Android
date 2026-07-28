@@ -1,14 +1,14 @@
 <div align="center">
 
-# ZMusic Android Mod
+# AMusic Android Mod
 
 ![][version]
 ![][java]
 ![][license]
 ![][platforms]
 
-**基于 [starhui-dev/zmusic-mod](https://github.com/starhui-dev/zmusic-mod) 的 Android 适配分支**
-**An Android adaptation fork of [starhui-dev/zmusic-mod](https://github.com/starhui-dev/zmusic-mod)**
+**基于 [starhui-dev/amusic-mod](https://github.com/starhui-dev/amusic-mod) 的 Android 适配分支**
+**An Android adaptation fork of [starhui-dev/amusic-mod](https://github.com/starhui-dev/amusic-mod)**
 
 为 Minecraft Android 启动器（FCL、PojavLauncher 等）提供纯 Java 音频播放能力，无需原生 so 库即可在 Android 上正常播放音乐。
 
@@ -16,11 +16,11 @@ Provides pure-Java audio playback for Minecraft Android launchers (FCL, PojavLau
 
 </div>
 
-## 与原版 ZMusic 的区别 / Differences from Original ZMusic
+## 与原版 AMusic 的区别 / Differences from Original AMusic
 
-| 特性 / Feature | 原版 ZMusic / Original | 本分支（Android Mod） / This Fork |
+| 特性 / Feature | 原版 AMusic / Original | 本分支（Android Mod） / This Fork |
 |------|------------|----------------------|
-| 播放后端 / Playback backend | JNI native（libzmusic.so） | 纯 Java / Pure Java（JLayer + OpenAL） |
+| 播放后端 / Playback backend | JNI native（libamusic.so） | 纯 Java / Pure Java（JLayer + OpenAL） |
 | Android 支持 / Android support | 依赖 native 库，需交叉编译 / Requires native lib, cross-compile needed | 开箱即用，jar 自包含 / Out of the box, self-contained jar |
 | MP3 解码 / MP3 decoder | miniaudio（C 库 / C library） | JLayer（纯 Java / Pure Java） |
 | 音频输出 / Audio output | miniaudio OpenSL ES | LWJGL OpenAL（MC 自带 / bundled with MC） |
@@ -61,7 +61,7 @@ Go to [Releases](../../releases/latest), download the jar for your version, and 
                         PacketEvent.onPlay(url)
                               │
                               ▼
-                        ZMusicPlayer.playAsync(url)
+                        AMusicPlayer.playAsync(url)
                               │
                               ▼
                         后端选择 / Backend selection (createBackend)
@@ -113,17 +113,17 @@ Native Android environments use the `MediaPlayer` backend; otherwise the `JLayer
 ### 构建指定版本 / Build a Specific Version
 
 ```shell
-git clone https://github.com/ssbtt114514/zmusic-mod-Android
-cd zmusic-mod-Android
+git clone https://github.com/ssbtt114514/amusic-mod-Android
+cd amusic-mod-Android
 
 # 构建 Fabric 1.20.1 / Build Fabric 1.20.1
-./gradlew --project-dir builds/fabric -Pzmusic.project=zmusic-fabric-1.20.1 build
+./gradlew --project-dir builds/fabric -Pamusic.project=amusic-fabric-1.20.1 build
 
 # 构建 Forge 1.20.1 / Build Forge 1.20.1
-./gradlew --project-dir builds/forge -Pzmusic.project=zmusic-forge-1.20.1 build
+./gradlew --project-dir builds/forge -Pamusic.project=amusic-forge-1.20.1 build
 
 # 构建 NeoForge 1.21.1 / Build NeoForge 1.21.1
-./gradlew --project-dir builds/neoforge -Pzmusic.project=zmusic-neoforge-1.21.1 build
+./gradlew --project-dir builds/neoforge -Pamusic.project=amusic-neoforge-1.21.1 build
 ```
 
 ### 构建全部版本 / Build All Versions
@@ -142,9 +142,9 @@ Build artifacts are located in each subproject's `build/libs/` directory.
 
 ## 调试 / Debugging
 
-模组输出详细日志到 Minecraft 的 `logs/latest.log`，所有日志带 `ZMusic` 前缀，便于定位问题：
+模组输出详细日志到 Minecraft 的 `logs/latest.log`，所有日志带 `AMusic` 前缀，便于定位问题：
 
-The mod writes detailed logs to Minecraft's `logs/latest.log`, all prefixed with `ZMusic` for easy troubleshooting:
+The mod writes detailed logs to Minecraft's `logs/latest.log`, all prefixed with `AMusic` for easy troubleshooting:
 
 - **平台检测 / Platform detection**：VM 名称、tmpdir、user.dir、android.os.Build 检测结果 / VM name, tmpdir, user.dir, android.os.Build lookup result
 - **网络包 / Packet**：收到消息的原始内容、URL 解析、线程名 / raw message content, URL parsing, thread name
@@ -152,9 +152,9 @@ The mod writes detailed logs to Minecraft's `logs/latest.log`, all prefixed with
 - **解码播放 / Decode & playback**：MP3 采样率/通道数、每帧 PCM 样本数、OpenAL 状态 / MP3 sample rate/channels, per-frame PCM sample count, OpenAL state
 - **状态回调 / State callbacks**：状态变化（含可读名称）、错误、播放完成 / state changes (with readable names), errors, playback completion
 
-Android 原生环境也可通过 `adb logcat -s ZMusic` 查看 native 层日志。
+Android 原生环境也可通过 `adb logcat -s AMusic` 查看 native 层日志。
 
-On native Android you can also view native-layer logs via `adb logcat -s ZMusic`.
+On native Android you can also view native-layer logs via `adb logcat -s AMusic`.
 
 ## 反馈 / Feedback
 
@@ -167,7 +167,7 @@ On native Android you can also view native-layer logs via `adb logcat -s ZMusic`
 This project is open-sourced under the [GPL-3.0](LICENSE) license.
 
 ```text
-ZMusic
+AMusic
 Copyright (C) 2023 RealHeart
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## 鸣谢 / Acknowledgements
 
-* [starhui-dev/zmusic-mod](https://github.com/starhui-dev/zmusic-mod) - 原版 ZMusic 模组 / Original ZMusic mod
+* [starhui-dev/amusic-mod](https://github.com/starhui-dev/amusic-mod) - 原版 AMusic 模组 / Original AMusic mod
 * [JetBrains](https://www.jetbrains.com/zh-cn/)
 * [FabricMC](https://fabricmc.net/)
 * [JLayer](https://www.javazoom.net/javalayer/javalayer.html) - 纯 Java MP3 解码器 / Pure-Java MP3 decoder
@@ -194,6 +194,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [java]: https://img.shields.io/badge/java-8%2B-blue?style=for-the-badge
 
-[license]: https://img.shields.io/github/license/ssbtt114514/zmusic-mod-Android?style=for-the-badge
+[license]: https://img.shields.io/github/license/ssbtt114514/amusic-mod-Android?style=for-the-badge
 
 [platforms]: https://img.shields.io/badge/platforms-Forge%20%7C%20Fabric%20%7C%20NeoForge-brightgreen?style=for-the-badge

@@ -81,7 +81,7 @@ jobs:
           path: release-notes.md
 
   build:
-    name: ZMusic ${{ matrix.loader }} ${{ matrix.target-version }}
+    name: AMusic ${{ matrix.loader }} ${{ matrix.target-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -89,149 +89,149 @@ jobs:
         include:
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-26.2
+            project: amusic-fabric-26.2
             target-version: "26.2"
-            artifact-path: zmusic-fabric/zmusic-fabric-26.2/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-26.2/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-26.1.2
+            project: amusic-fabric-26.1.2
             target-version: 26.1.2
-            artifact-path: zmusic-fabric/zmusic-fabric-26.1.2/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-26.1.2/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.21.11
+            project: amusic-fabric-1.21.11
             target-version: 1.21.11
-            artifact-path: zmusic-fabric/zmusic-fabric-1.21.11/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.21.11/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.21.5
+            project: amusic-fabric-1.21.5
             target-version: 1.21.5
-            artifact-path: zmusic-fabric/zmusic-fabric-1.21.5/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.21.5/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.20.6
+            project: amusic-fabric-1.20.6
             target-version: 1.20.6
-            artifact-path: zmusic-fabric/zmusic-fabric-1.20.6/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.20.6/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.20.4
+            project: amusic-fabric-1.20.4
             target-version: 1.20.4
-            artifact-path: zmusic-fabric/zmusic-fabric-1.20.4/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.20.4/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.20.1
+            project: amusic-fabric-1.20.1
             target-version: 1.20.1
-            artifact-path: zmusic-fabric/zmusic-fabric-1.20.1/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.20.1/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.19.4
+            project: amusic-fabric-1.19.4
             target-version: 1.19.4
-            artifact-path: zmusic-fabric/zmusic-fabric-1.19.4/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.19.4/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.19.2
+            project: amusic-fabric-1.19.2
             target-version: 1.19.2
-            artifact-path: zmusic-fabric/zmusic-fabric-1.19.2/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.19.2/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.18.2
+            project: amusic-fabric-1.18.2
             target-version: 1.18.2
-            artifact-path: zmusic-fabric/zmusic-fabric-1.18.2/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.18.2/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.17.1
+            project: amusic-fabric-1.17.1
             target-version: 1.17.1
-            artifact-path: zmusic-fabric/zmusic-fabric-1.17.1/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.17.1/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.16.5
+            project: amusic-fabric-1.16.5
             target-version: 1.16.5
-            artifact-path: zmusic-fabric/zmusic-fabric-1.16.5/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.16.5/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.15.2
+            project: amusic-fabric-1.15.2
             target-version: 1.15.2
-            artifact-path: zmusic-fabric/zmusic-fabric-1.15.2/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.15.2/build/libs/**.jar
           - loader: Fabric
             build-dir: builds/fabric
-            project: zmusic-fabric-1.14.4
+            project: amusic-fabric-1.14.4
             target-version: 1.14.4
-            artifact-path: zmusic-fabric/zmusic-fabric-1.14.4/build/libs/**.jar
+            artifact-path: amusic-fabric/amusic-fabric-1.14.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.20.4
+            project: amusic-forge-1.20.4
             target-version: 1.20.4
-            artifact-path: zmusic-forge/zmusic-forge-1.20.4/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.20.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.20.1
+            project: amusic-forge-1.20.1
             target-version: 1.20.1
-            artifact-path: zmusic-forge/zmusic-forge-1.20.1/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.20.1/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.19.4
+            project: amusic-forge-1.19.4
             target-version: 1.19.4
-            artifact-path: zmusic-forge/zmusic-forge-1.19.4/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.19.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.19.2
+            project: amusic-forge-1.19.2
             target-version: 1.19.2
-            artifact-path: zmusic-forge/zmusic-forge-1.19.2/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.19.2/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.18.2
+            project: amusic-forge-1.18.2
             target-version: 1.18.2
-            artifact-path: zmusic-forge/zmusic-forge-1.18.2/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.18.2/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.17.1
+            project: amusic-forge-1.17.1
             target-version: 1.17.1
-            artifact-path: zmusic-forge/zmusic-forge-1.17.1/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.17.1/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.16.5
+            project: amusic-forge-1.16.5
             target-version: 1.16.5
-            artifact-path: zmusic-forge/zmusic-forge-1.16.5/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.16.5/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.15.2
+            project: amusic-forge-1.15.2
             target-version: 1.15.2
-            artifact-path: zmusic-forge/zmusic-forge-1.15.2/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.15.2/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.14.4
+            project: amusic-forge-1.14.4
             target-version: 1.14.4
-            artifact-path: zmusic-forge/zmusic-forge-1.14.4/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.14.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
-            project: zmusic-forge-1.12.2
+            project: amusic-forge-1.12.2
             target-version: 1.12.2
-            artifact-path: zmusic-forge/zmusic-forge-1.12.2/build/libs/**.jar
+            artifact-path: amusic-forge/amusic-forge-1.12.2/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
-            project: zmusic-neoforge-26.2
+            project: amusic-neoforge-26.2
             target-version: "26.2"
-            artifact-path: zmusic-neoforge/zmusic-neoforge-26.2/build/libs/**.jar
+            artifact-path: amusic-neoforge/amusic-neoforge-26.2/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
-            project: zmusic-neoforge-26.1.2
+            project: amusic-neoforge-26.1.2
             target-version: 26.1.2
-            artifact-path: zmusic-neoforge/zmusic-neoforge-26.1.2/build/libs/**.jar
+            artifact-path: amusic-neoforge/amusic-neoforge-26.1.2/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
-            project: zmusic-neoforge-1.21.1
+            project: amusic-neoforge-1.21.1
             target-version: 1.21.1
-            artifact-path: zmusic-neoforge/zmusic-neoforge-1.21.1/build/libs/**.jar
+            artifact-path: amusic-neoforge/amusic-neoforge-1.21.1/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
-            project: zmusic-neoforge-1.20.6
+            project: amusic-neoforge-1.20.6
             target-version: 1.20.6
-            artifact-path: zmusic-neoforge/zmusic-neoforge-1.20.6/build/libs/**.jar
+            artifact-path: amusic-neoforge/amusic-neoforge-1.20.6/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
-            project: zmusic-neoforge-1.20.4
+            project: amusic-neoforge-1.20.4
             target-version: 1.20.4
-            artifact-path: zmusic-neoforge/zmusic-neoforge-1.20.4/build/libs/**.jar
+            artifact-path: amusic-neoforge/amusic-neoforge-1.20.4/build/libs/**.jar
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -242,17 +242,17 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            .gradle/zmusic-player
+            .gradle/amusic-player
             builds/forge/.gradle/mavenizer
           key: ${{ runner.os }}-gradle-${{ matrix.project }}-${{ hashFiles('**/*.gradle', '**/gradle-wrapper.properties', 'mise.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.project }}-
             ${{ runner.os }}-gradle-
       - name: Warm Forge 1.12.2 classpath
-        if: matrix.project == 'zmusic-forge-1.12.2'
+        if: matrix.project == 'amusic-forge-1.12.2'
         run: |
           ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:dependencies" --configuration compileClasspath --no-daemon \
-            -Pzmusic.project="${{ matrix.project }}" \
+            -Pamusic.project="${{ matrix.project }}" \
             -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"
       - name: Build ${{ matrix.loader }} ${{ matrix.target-version }}
         run: |
@@ -261,8 +261,8 @@ jobs:
           for attempt in 1 2 3; do
             echo "::group::Build attempt $attempt"
             if ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
-              -Pzmusic.project="${{ matrix.project }}" \
-              -Pzmusic.version="${{ inputs.version }}" \
+              -Pamusic.project="${{ matrix.project }}" \
+              -Pamusic.version="${{ inputs.version }}" \
               -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
               echo "::endgroup::"
               exit 0
@@ -277,7 +277,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ZMusic ${{ matrix.loader }} ${{ matrix.target-version }}
+          name: AMusic ${{ matrix.loader }} ${{ matrix.target-version }}
           path: ${{ matrix.artifact-path }}
 
   marketplace-dry-run:
@@ -295,147 +295,147 @@ jobs:
             mod-loader: fabric
             target-version: "26.2"
             supported-versions: "26.2"
-            artifact-name: ZMusic Fabric 26.2
+            artifact-name: AMusic Fabric 26.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 26.1.2
             supported-versions: 26.1 26.1.1 26.1.2
-            artifact-name: ZMusic Fabric 26.1.2
+            artifact-name: AMusic Fabric 26.1.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.21.11
             supported-versions: 1.21.6 1.21.7 1.21.8 1.21.9 1.21.10 1.21.11
-            artifact-name: ZMusic Fabric 1.21.11
+            artifact-name: AMusic Fabric 1.21.11
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.21.5
             supported-versions: 1.21 1.21.1 1.21.2 1.21.3 1.21.4 1.21.5
-            artifact-name: ZMusic Fabric 1.21.5
+            artifact-name: AMusic Fabric 1.21.5
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.6
             supported-versions: 1.20.5 1.20.6
-            artifact-name: ZMusic Fabric 1.20.6
+            artifact-name: AMusic Fabric 1.20.6
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.4
             supported-versions: 1.20.2 1.20.3 1.20.4
-            artifact-name: ZMusic Fabric 1.20.4
+            artifact-name: AMusic Fabric 1.20.4
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Fabric 1.20.1
+            artifact-name: AMusic Fabric 1.20.1
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.19.4
             supported-versions: 1.19.4
-            artifact-name: ZMusic Fabric 1.19.4
+            artifact-name: AMusic Fabric 1.19.4
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.19.2
             supported-versions: 1.19.2
-            artifact-name: ZMusic Fabric 1.19.2
+            artifact-name: AMusic Fabric 1.19.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.18.2
             supported-versions: 1.18.2
-            artifact-name: ZMusic Fabric 1.18.2
+            artifact-name: AMusic Fabric 1.18.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.17.1
             supported-versions: 1.17 1.17.1
-            artifact-name: ZMusic Fabric 1.17.1
+            artifact-name: AMusic Fabric 1.17.1
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.16.5
             supported-versions: 1.16 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: ZMusic Fabric 1.16.5
+            artifact-name: AMusic Fabric 1.16.5
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.15.2
             supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: ZMusic Fabric 1.15.2
+            artifact-name: AMusic Fabric 1.15.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.14.4
             supported-versions: 1.14.3 1.14.4
-            artifact-name: ZMusic Fabric 1.14.4
+            artifact-name: AMusic Fabric 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.4
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Forge 1.20.4
+            artifact-name: AMusic Forge 1.20.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Forge 1.20.1
+            artifact-name: AMusic Forge 1.20.1
           - loader: Forge
             mod-loader: forge
             target-version: 1.19.4
             supported-versions: 1.19.4
-            artifact-name: ZMusic Forge 1.19.4
+            artifact-name: AMusic Forge 1.19.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.19.2
             supported-versions: 1.19.2
-            artifact-name: ZMusic Forge 1.19.2
+            artifact-name: AMusic Forge 1.19.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.18.2
             supported-versions: 1.18 1.18.1 1.18.2
-            artifact-name: ZMusic Forge 1.18.2
+            artifact-name: AMusic Forge 1.18.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.17.1
             supported-versions: 1.17.1
-            artifact-name: ZMusic Forge 1.17.1
+            artifact-name: AMusic Forge 1.17.1
           - loader: Forge
             mod-loader: forge
             target-version: 1.16.5
             supported-versions: 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: ZMusic Forge 1.16.5
+            artifact-name: AMusic Forge 1.16.5
           - loader: Forge
             mod-loader: forge
             target-version: 1.15.2
             supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: ZMusic Forge 1.15.2
+            artifact-name: AMusic Forge 1.15.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.14.4
             supported-versions: 1.14.4
-            artifact-name: ZMusic Forge 1.14.4
+            artifact-name: AMusic Forge 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.12.2
             supported-versions: 1.12.2
-            artifact-name: ZMusic Forge 1.12.2
+            artifact-name: AMusic Forge 1.12.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: "26.2"
             supported-versions: "26.2"
-            artifact-name: ZMusic NeoForge 26.2
+            artifact-name: AMusic NeoForge 26.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 26.1.2
             supported-versions: 26.1 26.1.1 26.1.2
-            artifact-name: ZMusic NeoForge 26.1.2
+            artifact-name: AMusic NeoForge 26.1.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.21.1
             supported-versions: 1.21.1
-            artifact-name: ZMusic NeoForge 1.21.1
+            artifact-name: AMusic NeoForge 1.21.1
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.20.6
             supported-versions: 1.20.5 1.20.6
-            artifact-name: ZMusic NeoForge 1.20.6
+            artifact-name: AMusic NeoForge 1.20.6
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.20.4
             supported-versions: 1.20.2 1.20.3 1.20.4
-            artifact-name: ZMusic NeoForge 1.20.4
+            artifact-name: AMusic NeoForge 1.20.4
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -456,7 +456,7 @@ jobs:
           MC_VERSION: ${{ matrix.target-version }}
           MC_VERSIONS: ${{ matrix.supported-versions }}
           RELEASE_VERSION: ${{ github.ref_name }}
-          RELEASE_NAME: ZMusic ${{ github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
+          RELEASE_NAME: AMusic ${{ github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
@@ -497,10 +497,10 @@ jobs:
         env:
           RELEASE_VERSION: ${{ github.ref_name }}
           RELEASE_TAG: ${{ github.ref_name }}
-          RELEASE_NAME: ZMusic ${{ github.ref_name }}
+          RELEASE_NAME: AMusic ${{ github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          CODEBERG_REPO: starhui-dev/zmusic-mod
-          CNB_REPO: starhui-dev/zmusic-mod
+          CODEBERG_REPO: starhui-dev/amusic-mod
+          CNB_REPO: starhui-dev/amusic-mod
           DRY_RUN: true
         run: |
           RELEASE_BODY="$(cat release-notes/release-notes.md)" \
@@ -545,7 +545,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
-          name: ZMusic Android ${{ steps.tag.outputs.version }}
+          name: AMusic Android ${{ steps.tag.outputs.version }}
           body_path: release-notes/release-notes.md
           files: artifacts/**/*.jar
 
@@ -565,147 +565,147 @@ jobs:
             mod-loader: fabric
             target-version: "26.2"
             supported-versions: "26.2"
-            artifact-name: ZMusic Fabric 26.2
+            artifact-name: AMusic Fabric 26.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 26.1.2
             supported-versions: 26.1 26.1.1 26.1.2
-            artifact-name: ZMusic Fabric 26.1.2
+            artifact-name: AMusic Fabric 26.1.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.21.11
             supported-versions: 1.21.6 1.21.7 1.21.8 1.21.9 1.21.10 1.21.11
-            artifact-name: ZMusic Fabric 1.21.11
+            artifact-name: AMusic Fabric 1.21.11
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.21.5
             supported-versions: 1.21 1.21.1 1.21.2 1.21.3 1.21.4 1.21.5
-            artifact-name: ZMusic Fabric 1.21.5
+            artifact-name: AMusic Fabric 1.21.5
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.6
             supported-versions: 1.20.5 1.20.6
-            artifact-name: ZMusic Fabric 1.20.6
+            artifact-name: AMusic Fabric 1.20.6
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.4
             supported-versions: 1.20.2 1.20.3 1.20.4
-            artifact-name: ZMusic Fabric 1.20.4
+            artifact-name: AMusic Fabric 1.20.4
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Fabric 1.20.1
+            artifact-name: AMusic Fabric 1.20.1
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.19.4
             supported-versions: 1.19.4
-            artifact-name: ZMusic Fabric 1.19.4
+            artifact-name: AMusic Fabric 1.19.4
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.19.2
             supported-versions: 1.19.2
-            artifact-name: ZMusic Fabric 1.19.2
+            artifact-name: AMusic Fabric 1.19.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.18.2
             supported-versions: 1.18.2
-            artifact-name: ZMusic Fabric 1.18.2
+            artifact-name: AMusic Fabric 1.18.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.17.1
             supported-versions: 1.17 1.17.1
-            artifact-name: ZMusic Fabric 1.17.1
+            artifact-name: AMusic Fabric 1.17.1
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.16.5
             supported-versions: 1.16 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: ZMusic Fabric 1.16.5
+            artifact-name: AMusic Fabric 1.16.5
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.15.2
             supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: ZMusic Fabric 1.15.2
+            artifact-name: AMusic Fabric 1.15.2
           - loader: Fabric
             mod-loader: fabric
             target-version: 1.14.4
             supported-versions: 1.14.3 1.14.4
-            artifact-name: ZMusic Fabric 1.14.4
+            artifact-name: AMusic Fabric 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.4
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Forge 1.20.4
+            artifact-name: AMusic Forge 1.20.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
-            artifact-name: ZMusic Forge 1.20.1
+            artifact-name: AMusic Forge 1.20.1
           - loader: Forge
             mod-loader: forge
             target-version: 1.19.4
             supported-versions: 1.19.4
-            artifact-name: ZMusic Forge 1.19.4
+            artifact-name: AMusic Forge 1.19.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.19.2
             supported-versions: 1.19.2
-            artifact-name: ZMusic Forge 1.19.2
+            artifact-name: AMusic Forge 1.19.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.18.2
             supported-versions: 1.18 1.18.1 1.18.2
-            artifact-name: ZMusic Forge 1.18.2
+            artifact-name: AMusic Forge 1.18.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.17.1
             supported-versions: 1.17.1
-            artifact-name: ZMusic Forge 1.17.1
+            artifact-name: AMusic Forge 1.17.1
           - loader: Forge
             mod-loader: forge
             target-version: 1.16.5
             supported-versions: 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: ZMusic Forge 1.16.5
+            artifact-name: AMusic Forge 1.16.5
           - loader: Forge
             mod-loader: forge
             target-version: 1.15.2
             supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: ZMusic Forge 1.15.2
+            artifact-name: AMusic Forge 1.15.2
           - loader: Forge
             mod-loader: forge
             target-version: 1.14.4
             supported-versions: 1.14.4
-            artifact-name: ZMusic Forge 1.14.4
+            artifact-name: AMusic Forge 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.12.2
             supported-versions: 1.12.2
-            artifact-name: ZMusic Forge 1.12.2
+            artifact-name: AMusic Forge 1.12.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: "26.2"
             supported-versions: "26.2"
-            artifact-name: ZMusic NeoForge 26.2
+            artifact-name: AMusic NeoForge 26.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 26.1.2
             supported-versions: 26.1 26.1.1 26.1.2
-            artifact-name: ZMusic NeoForge 26.1.2
+            artifact-name: AMusic NeoForge 26.1.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.21.1
             supported-versions: 1.21.1
-            artifact-name: ZMusic NeoForge 1.21.1
+            artifact-name: AMusic NeoForge 1.21.1
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.20.6
             supported-versions: 1.20.5 1.20.6
-            artifact-name: ZMusic NeoForge 1.20.6
+            artifact-name: AMusic NeoForge 1.20.6
           - loader: NeoForge
             mod-loader: neoforge
             target-version: 1.20.4
             supported-versions: 1.20.2 1.20.3 1.20.4
-            artifact-name: ZMusic NeoForge 1.20.4
+            artifact-name: AMusic NeoForge 1.20.4
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -726,7 +726,7 @@ jobs:
           MC_VERSION: ${{ matrix.target-version }}
           MC_VERSIONS: ${{ matrix.supported-versions }}
           RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
-          RELEASE_NAME: ZMusic Android ${{ inputs.version || github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
+          RELEASE_NAME: AMusic Android ${{ inputs.version || github.ref_name }} ${{ matrix.loader }} ${{ matrix.target-version }}
           MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
@@ -768,12 +768,12 @@ jobs:
         env:
           RELEASE_VERSION: ${{ inputs.version || github.ref_name }}
           RELEASE_TAG: v${{ inputs.version || github.ref_name }}
-          RELEASE_NAME: ZMusic Android ${{ inputs.version || github.ref_name }}
+          RELEASE_NAME: AMusic Android ${{ inputs.version || github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
           CNB_TOKEN: ${{ secrets.CNB_TOKEN }}
-          CODEBERG_REPO: starhui-dev/zmusic-mod
-          CNB_REPO: starhui-dev/zmusic-mod
+          CODEBERG_REPO: starhui-dev/amusic-mod
+          CNB_REPO: starhui-dev/amusic-mod
           DRY_RUN: false
         run: |
           RELEASE_BODY="$(cat release-notes/release-notes.md)" \

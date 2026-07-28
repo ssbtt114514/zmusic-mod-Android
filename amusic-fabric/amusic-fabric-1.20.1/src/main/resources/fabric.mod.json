@@ -1,0 +1,34 @@
+﻿{
+  "schemaVersion": 1,
+  "id": "amusic",
+  "version": "${version}",
+  "name": "AMusic",
+  "description": "${description}",
+  "authors": [
+    "ZhenXin"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/starhui-dev/amusic-mod",
+    "issues": "https://github.com/starhui-dev/amusic-mod/issues",
+    "discord": "https://discord.gg/twQgJNufYn"
+  },
+  "license": "GPL-3.0",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.ssbtt.amusic.AMusicMod"
+    ]
+  },
+  "mixins": [
+    "amusic.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric-api": "*",
+    "minecraft": ">=1.20 <1.20.2",
+    "java": ">=17",
+    "cloth-config": "*"
+  },
+  "icon": "icon.png"
+}

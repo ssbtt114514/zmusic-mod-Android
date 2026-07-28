@@ -2,7 +2,7 @@
 
 ## v3.7.1
 
-- 将模组运行时切换到原生 `zmusic-player`。
+- 将模组运行时切换到原生 `amusic-player`。
 - 新增 Minecraft 26.1、26.1.1、26.1.2 支持，由 26.1.2 构建覆盖。
 - 将 Fabric、Forge、NeoForge 拆分为独立 Gradle 构建组，并使用矩阵构建减少稳定版构建时间。
 - 新增 Forge 1.20.4 构建。
@@ -19,7 +19,7 @@
 
 English:
 
-- Switched the mod runtime to the native `zmusic-player`.
+- Switched the mod runtime to the native `amusic-player`.
 - Added Minecraft 26.1, 26.1.1, and 26.1.2 support through the 26.1.2 builds.
 - Split Fabric, Forge, and NeoForge into dedicated Gradle build groups with matrix builds for faster stable releases.
 - Added Forge 1.20.4 build support.

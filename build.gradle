@@ -20,7 +20,7 @@ ext {
 }
 
 def isLeafPlatformProject(Project p) {
-    return p.name ==~ /zmusic-(fabric|forge|neoforge)-\d+.*/
+    return p.name ==~ /amusic-(fabric|forge|neoforge)-\d+.*/
 }
 
 allprojects {
@@ -48,8 +48,8 @@ allprojects {
 subprojects {
     apply plugin: 'java-library'
 
-    group = "me.zhenxin"
-    version = "1.1"
+    group = "me.ssbtt"
+    version = project.hasProperty('amusic.version') ? project.getProperty('amusic.version') : '3.1'
 
     dependencies {
         compileOnly("org.projectlombok:lombok:1.18.46")
@@ -62,8 +62,8 @@ subprojects {
         from {
             //noinspection GroovyMissingReturnStatement
             configurations.runtimeClasspath.collect {
-                if (project.name != "zmusic-core") {
-                    if (it.name.contains("zmusic-core")) {
+                if (project.name != "amusic-core") {
+                    if (it.name.contains("amusic-core")) {
                         it.isDirectory() ? it : zipTree(it)
                     }
                     // 打包 JLayer（纯 Java MP3 解码器）到最终 jar 中
@@ -82,7 +82,7 @@ subprojects {
         inputs.property "description", rootProject.modDescription
 
         if (isLeafPlatformProject(project)) {
-            from(project(":zmusic-core").sourceSets.main.resources) {
+            from(project(":amusic-core").sourceSets.main.resources) {
                 include("icon.png")
             }
         }

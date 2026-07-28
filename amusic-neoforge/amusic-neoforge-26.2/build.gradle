@@ -1,0 +1,73 @@
+plugins {
+    id 'net.neoforged.gradle.userdev' version '7.1.38'
+}
+
+// 模组文件名改为 AMusic
+base {
+    archivesName = "AMusic"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+// Cloth Config API 仓库（官方 maven）
+repositories {
+    maven {
+        name = "Shedaniel"
+        url = "https://maven.shedaniel.me/"
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:26.2.0.28-beta"
+
+    implementation project(":amusic-core")
+
+    // Cloth Config API (NeoForge 26.2)
+    // TODO: 26.2 (MC 1.21.6+) 可能需要 cloth-config 18.x 或更高版本，如 15.0.140 不可用请调整为对应版本
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:15.0.140"
+}
+
+tasks.configureEach {
+    if (name == "neoFormSetup") {
+        doFirst {
+            def userdevJar = configurations.detachedConfiguration(
+                    dependencies.create("net.neoforged:neoforge:26.2.0.28-beta:userdev@jar")
+            ).singleFile
+            def expandedCache = layout.buildDirectory.dir("tmp/.cache/expanded").get().asFile
+            if (!expandedCache.exists()) {
+                return
+            }
+
+            expandedCache.eachDirMatch(~/zip_.*/) { expandedZip ->
+                def configFile = new File(expandedZip, "config.json")
+                def patchesDir = new File(expandedZip, "patches")
+                def patchBundle = new File(expandedZip, "patches.lzma")
+                if (configFile.exists() && patchesDir.isDirectory() && !patchBundle.exists()) {
+                    copy {
+                        from(zipTree(userdevJar)) {
+                            include("patches.lzma")
+                        }
+                        into(expandedZip)
+                    }
+                }
+            }
+        }
+    }
+}
+
+jar {
+    dependsOn(":amusic-core:jar")
+    // 把 amusic-core 模块的编译输出打包进最终 jar，否则运行时找不到 core 类
+    from project(":amusic-core").sourceSets.main.output
+    // 重复资源（如 icon.png）保留 neoforge 模块自己的版本
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'MixinConfigs': 'amusic.mixins.json'
+    }
+}

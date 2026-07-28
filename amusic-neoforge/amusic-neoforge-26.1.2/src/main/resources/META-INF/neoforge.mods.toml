@@ -1,0 +1,39 @@
+﻿modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "GPL-3.0-only"
+issueTrackerURL = "https://github.com/starhui-dev/amusic-mod/issues"
+
+[[mods]]
+modId = "amusic"
+version = "${version}"
+displayName = "AMusic"
+logoFile = "icon.png"
+description = "${description}"
+displayURL = ""
+authors = "ZhenXin"
+
+# Mod 列表「Config」按钮指向主类的 createConfigScreen 方法
+[[mods.configScreen]]
+entrypoint = "createConfigScreen"
+
+[[dependencies.amusic]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26.1,26.2)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.amusic]]
+modId = "minecraft"
+type = "required"
+versionRange = "[26.1,26.2)"
+ordering = "NONE"
+side = "CLIENT"
+
+# Cloth Config API：设置界面依赖，optional 避免未安装时无法启动
+[[dependencies.amusic]]
+modId = "cloth_config"
+type = "optional"
+versionRange = "[15.0.127,)"
+ordering = "NONE"
+side = "CLIENT"

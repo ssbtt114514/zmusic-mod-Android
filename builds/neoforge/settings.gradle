@@ -21,20 +21,20 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
-rootProject.name = "zmusic-neoforge"
+rootProject.name = "amusic-neoforge"
 
-include("zmusic-core")
-project(":zmusic-core").projectDir = file("../../zmusic-core")
+include("amusic-core")
+project(":amusic-core").projectDir = file("../../amusic-core")
 
 def neoforgeProjects = [
-        "zmusic-neoforge-1.20.4",
-        "zmusic-neoforge-1.20.6",
-        "zmusic-neoforge-1.21.1",
-        "zmusic-neoforge-26.1.2",
-        "zmusic-neoforge-26.2"
+        "amusic-neoforge-1.20.4",
+        "amusic-neoforge-1.20.6",
+        "amusic-neoforge-1.21.1",
+        "amusic-neoforge-26.1.2",
+        "amusic-neoforge-26.2"
 ]
 
-def selectedProject = providers.gradleProperty("zmusic.project").orNull
+def selectedProject = providers.gradleProperty("amusic.project").orNull
 def selectedProjects = selectedProject ? [selectedProject] : neoforgeProjects
 
 selectedProjects.each { projectName ->
@@ -42,5 +42,5 @@ selectedProjects.each { projectName ->
         throw new GradleException("Unknown NeoForge project: ${projectName}")
     }
     include(projectName)
-    project(":${projectName}").projectDir = file("../../zmusic-neoforge/${projectName}")
+    project(":${projectName}").projectDir = file("../../amusic-neoforge/${projectName}")
 }
