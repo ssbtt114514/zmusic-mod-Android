@@ -194,8 +194,8 @@ public class PlaylistScreen extends Screen {
         private final int listWidth;
 
         PlaylistList(Minecraft mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
-            this.setX(10);
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
+            this.setLeftPos(10);
             this.listWidth = width;
             try {
                 java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
@@ -320,9 +320,9 @@ public class PlaylistScreen extends Screen {
         private final int listWidth;
 
         SongList(Minecraft mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
             int halfW = (PlaylistScreen.this.width - 30) / 2;
-            this.setX(20 + halfW);
+            this.setLeftPos(20 + halfW);
             this.listWidth = width;
             try {
                 java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class

@@ -1,29 +1,31 @@
 package me.ssbtt.amusic.network;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
 import java.nio.charset.StandardCharsets;
 
 /**
- * AMusic 插件消息载荷（Fabric 1.20.6+ CustomPayload API）。
+ * AMusic 插件消息载荷（Fabric 26.1 Mojmap CustomPacketPayload API）。
  *
  * <p>服务端协议为 {@code [1字节前缀] + UTF-8 文本}，文本内容交给核心层解析。</p>
  *
  * @author ssbtt
  * @since 2026-07-28
  */
-public record AMusicPayload(String message) implements CustomPayload {
+public record AMusicPayload(String message) implements CustomPacketPayload {
 
-    public static final Id<AMusicPayload> ID = new CustomPayload.Id<>(Identifier.of("amusic", "channel"));
-    public static final PacketCodec<PacketByteBuf, AMusicPayload> CODEC = PacketCodec.of(
+    public static final CustomPacketPayload.Type<AMusicPayload> TYPE =
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("amusic", "channel"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, AMusicPayload> STREAM_CODEC = StreamCodec.of(
             AMusicPayload::write,
             AMusicPayload::read
     );
 
-    private static AMusicPayload read(PacketByteBuf buf) {
+    private static AMusicPayload read(RegistryFriendlyByteBuf buf) {
         int readable = buf.readableBytes();
         if (readable <= 1) {
             buf.skipBytes(readable);
@@ -34,13 +36,13 @@ public record AMusicPayload(String message) implements CustomPayload {
         return new AMusicPayload(msg);
     }
 
-    private static void write(PacketByteBuf buf, AMusicPayload payload) {
+    private static void write(RegistryFriendlyByteBuf buf, AMusicPayload payload) {
         buf.writeByte(666);
         buf.writeCharSequence(payload.message, StandardCharsets.UTF_8);
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

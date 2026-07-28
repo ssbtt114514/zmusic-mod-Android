@@ -132,7 +132,7 @@ public class SelectPlaylistScreen extends Screen {
 
         PlaylistList() {
             super(Minecraft.getInstance(), SelectPlaylistScreen.this.width - 20,
-                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70);
+                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70, ROW_HEIGHT);
             try {
                 java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
                         .getDeclaredField("itemHeight");

@@ -18,11 +18,14 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.VanillaHudElements;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.io.File;
 
@@ -44,17 +47,17 @@ public class AMusicMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // 设置配置目录（gameDir/config）
-        File gameDir = MinecraftClient.getInstance().runDirectory;
+        File gameDir = Minecraft.getInstance().gameDirectory;
         File configDir = new File(gameDir, "config");
         AMusic.setConfigDir(configDir);
         AMusic.setSoundManager(new SoundManagerImpl());
 
         // 注册插件通道：S2C（服务端→客户端）与 C2S（客户端→服务端，歌单上传等）
-        PayloadTypeRegistry.playS2C().register(AMusicPayload.ID, AMusicPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(AMusicPayload.ID, AMusicPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(AMusicPayload.TYPE, AMusicPayload.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(AMusicPayload.TYPE, AMusicPayload.STREAM_CODEC);
 
         // 接收服务端数据包
-        ClientPlayNetworking.registerGlobalReceiver(AMusicPayload.ID, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(AMusicPayload.TYPE, (payload, context) -> {
             ClientEvent.onPacket(payload.message());
         });
 
@@ -81,10 +84,10 @@ public class AMusicMod implements ClientModInitializer {
 
         // 注册客户端 Tick：按键处理 + 音量同步
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player == null || client.world == null) {
+            if (client.player == null || client.level == null) {
                 return;
             }
-            handleKey(AMusicKeys.OPEN_SETTINGS, () -> client.setScreen(SettingsScreen.build(client.currentScreen)));
+            handleKey(AMusicKeys.OPEN_SETTINGS, () -> client.setScreen(SettingsScreen.build(client.screen)));
             handleKey(AMusicKeys.HISTORY, () -> client.setScreen(new HistoryScreen()));
             handleKey(AMusicKeys.PLAYLIST, () -> client.setScreen(new PlaylistScreen()));
             handleKey(AMusicKeys.PAUSE, CommandSender::sendPause);
@@ -104,17 +107,19 @@ public class AMusicMod implements ClientModInitializer {
             }
         });
 
-        // 注册 HUD 渲染：音量条 overlay
-        HudRenderCallback.EVENT.register((context, tickCounter) -> {
-            MinecraftClient mc = MinecraftClient.getInstance();
-            if (mc.player != null) {
-                volumeOverlay.render(context);
-            }
-        });
+        // 注册 HUD 渲染：音量条 overlay（Fabric 26.1 使用 HudElementRegistry 替代已移除的 HudRenderCallback）
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT,
+                Identifier.fromNamespaceAndPath("amusic", "volume_overlay"),
+                (graphics, tickCounter) -> {
+                    Minecraft mc = Minecraft.getInstance();
+                    if (mc.player != null) {
+                        volumeOverlay.render(graphics);
+                    }
+                });
     }
 
-    private void handleKey(KeyBinding binding, Runnable action) {
-        while (binding.wasPressed()) {
+    private void handleKey(KeyMapping binding, Runnable action) {
+        while (binding.consumeClick()) {
             action.run();
         }
     }

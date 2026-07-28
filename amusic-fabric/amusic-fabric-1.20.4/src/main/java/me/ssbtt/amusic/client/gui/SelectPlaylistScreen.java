@@ -54,7 +54,7 @@ public class SelectPlaylistScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("新建并添加"), b -> createAndAdd())
                 .dimensions(165, this.height - 50, 90, 18).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> close())
                 .dimensions(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
@@ -77,7 +77,7 @@ public class SelectPlaylistScreen extends Screen {
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         MinecraftClient.getInstance().setScreen(parent);
     }
 
@@ -134,7 +134,7 @@ public class SelectPlaylistScreen extends Screen {
 
         PlaylistList() {
             super(MinecraftClient.getInstance(), SelectPlaylistScreen.this.width - 20,
-                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70, ROW_HEIGHT);
+                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70);
             refresh();
         }
 

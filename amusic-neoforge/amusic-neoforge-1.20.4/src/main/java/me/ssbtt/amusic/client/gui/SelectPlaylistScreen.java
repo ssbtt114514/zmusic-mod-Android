@@ -80,9 +80,9 @@ public class SelectPlaylistScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        // 1.20.4: mouseScrolled 为 3 参数版本
-        return list.mouseScrolled(mouseX, mouseY, delta);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        // 1.20.4: mouseScrolled 为 4 参数版本
+        return list.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override

@@ -51,25 +51,19 @@ public class PlaylistScreen extends Screen {
 
         newPlaylistBox = new EditBox(this.font, 10, this.height - 50, halfW - 80, 18, Component.literal("新歌单名"));
         newPlaylistBox.setMaxLength(30);
-        addRenderableWidget(newPlaylistBox);
+        addButton(newPlaylistBox);
 
-        addRenderableWidget(Button.builder(Component.literal("创建"), b -> createPlaylist())
-                .bounds(10 + halfW - 70, this.height - 50, 60, 18).build());
+        addButton(new Button(10 + halfW - 70, this.height - 50, 60, 18, Component.literal("创建"), b -> createPlaylist()));
 
-        addRenderableWidget(Button.builder(Component.literal("播放全部"), b -> playAll())
-                .bounds(20 + halfW, this.height - 50, 80, 18).build());
+        addButton(new Button(20 + halfW, this.height - 50, 80, 18, Component.literal("播放全部"), b -> playAll()));
 
-        addRenderableWidget(Button.builder(Component.literal("添加当前歌曲"), b -> addCurrentSong())
-                .bounds(20 + halfW + 90, this.height - 50, 90, 18).build());
+        addButton(new Button(20 + halfW + 90, this.height - 50, 90, 18, Component.literal("添加当前歌曲"), b -> addCurrentSong()));
 
-        addRenderableWidget(Button.builder(Component.literal("停止播放"), b -> stopPlaylist())
-                .bounds(20 + halfW + 190, this.height - 50, 80, 18).build());
+        addButton(new Button(20 + halfW + 190, this.height - 50, 80, 18, Component.literal("停止播放"), b -> stopPlaylist()));
 
-        addRenderableWidget(Button.builder(Component.literal("在线歌单"), b -> openOnlinePlaylists())
-                .bounds(20 + halfW + 280, this.height - 50, 80, 18).build());
+        addButton(new Button(20 + halfW + 280, this.height - 50, 80, 18, Component.literal("在线歌单"), b -> openOnlinePlaylists()));
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
-                .bounds(this.width / 2 - 50, this.height - 24, 100, 18).build());
+        addButton(new Button(this.width / 2 - 50, this.height - 24, 100, 18, Component.translatable("gui.done"), b -> onClose()));
     }
 
     @Override

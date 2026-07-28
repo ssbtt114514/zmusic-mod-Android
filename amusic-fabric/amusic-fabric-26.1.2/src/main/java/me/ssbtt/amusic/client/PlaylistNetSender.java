@@ -5,8 +5,8 @@ import me.ssbtt.amusic.network.AMusicPayload;
 import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistShare;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 /**
  * 歌单网络请求发送器（Fabric 版本）。
@@ -36,7 +36,7 @@ public class PlaylistNetSender {
      * @param message 消息内容（含前缀标记）
      */
     private static void send(String message) {
-        ClientPlayNetworkHandler listener = MinecraftClient.getInstance().getNetworkHandler();
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
         if (listener == null) {
             log.warn("Cannot send playlist packet: not connected to server");
             return;

@@ -43,17 +43,15 @@ public class HistoryScreen extends Screen {
         list = new HistoryList(Minecraft.getInstance());
         addWidget(list);
 
-        addRenderableWidget(Button.builder(Component.literal("清除历史"), b -> {
+        addButton(new Button(10, 28, 90, 18, Component.literal("清除历史"), b -> {
             HistoryManager hm = AMusic.getHistoryManager();
             if (hm != null) {
                 hm.clear();
             }
             list.refresh();
-        }).bounds(10, 28, 90, 18).build());
+        }));
 
-        addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
-                .bounds(this.width / 2 - 100, this.height - 24, 200, 20)
-                .build());
+        addButton(new Button(this.width / 2 - 100, this.height - 24, 200, 20, Component.translatable("gui.done"), b -> onClose()));
     }
 
     @Override

@@ -2,11 +2,11 @@ package me.ssbtt.amusic.client;
 
 import lombok.extern.log4j.Log4j2;
 import me.ssbtt.amusic.event.ClientEvent;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
  * 聊天链接自动点击播放监听器（Fabric 版本）。
  *
  * <p>当玩家发送点歌命令后，服务端可能在聊天框返回包含音乐 URL 的可点击消息。
- * 本监听器在点歌后的一段时间窗口内捕获聊天消息中的 Text，使用
- * {@link Screen#handleTextClick(Style)} 完美模拟玩家点击。</p>
+ * 本监听器在点歌后的一段时间窗口内捕获聊天消息中的 Component，使用
+ * {@link Screen#handleComponentClicked(Style)} 完美模拟玩家点击。</p>
  *
  * <p>由于 Fabric 1.20.6+ 的聊天消息 API 通过 {@code ClientReceiveMessageEvents.GAME} 触发，
- * 本类提供静态 {@link #processMessage(Text)} 方法供 AMusicMod 注册回调时调用。</p>
+ * 本类提供静态 {@link #processMessage(Component)} 方法供 AMusicMod 注册回调时调用。</p>
  *
  * @author ssbtt
  * @since 2026-07-28
@@ -84,21 +84,21 @@ public class ChatLinkListener {
      *
      * <p>由 AMusicMod 在 {@code ClientReceiveMessageEvents.GAME} 回调中调用。</p>
      *
-     * @param message 聊天消息 Text
+     * @param message 聊天消息 Component
      */
-    public static void processMessage(Text message) {
+    public static void processMessage(Component message) {
         if (!isWaiting() || !isModInitiated) return;
         if (processing) return;
         if (message == null) return;
 
-        Text clickable = findClickableComponent(message);
+        Component clickable = findClickableComponent(message);
         if (clickable != null) {
             log.info("ChatLinkListener: found clickable component: {}", clickable.getString());
             pendingSince = 0L;
             isModInitiated = false;
             processing = true;
-            final Text finalClickable = clickable;
-            MinecraftClient mc = MinecraftClient.getInstance();
+            final Component finalClickable = clickable;
+            Minecraft mc = Minecraft.getInstance();
             mc.execute(() -> {
                 try {
                     handleClick(mc, finalClickable);
@@ -117,7 +117,7 @@ public class ChatLinkListener {
             isModInitiated = false;
             processing = true;
             final String finalUrl = url;
-            MinecraftClient mc = MinecraftClient.getInstance();
+            Minecraft mc = Minecraft.getInstance();
             mc.execute(() -> {
                 try {
                     ClientEvent.onPacket("[Play]" + finalUrl);
@@ -132,15 +132,15 @@ public class ChatLinkListener {
     }
 
     /**
-     * 使用 handleTextClick 处理点击事件。
+     * 使用 handleComponentClicked 处理点击事件。
      */
-    private static void handleClick(MinecraftClient mc, Text component) {
-        Screen screen = mc.currentScreen;
+    private static void handleClick(Minecraft mc, Component component) {
+        Screen screen = mc.screen;
         Style style = component.getStyle();
         if (screen != null) {
             if (style != null && style.getClickEvent() != null) {
-                log.info("ChatLinkListener: using screen.handleTextClick()");
-                screen.handleTextClick(style);
+                log.info("ChatLinkListener: using screen.handleComponentClicked()");
+                screen.handleComponentClicked(style);
             }
         } else if (style != null) {
             log.info("ChatLinkListener: no screen, manually handling clickEvent");
@@ -163,7 +163,7 @@ public class ChatLinkListener {
                     String cmd = click.getValue();
                     if (cmd != null && mc.player != null) {
                         if (cmd.startsWith("/")) cmd = cmd.substring(1);
-                        mc.player.networkHandler.sendCommand(cmd);
+                        mc.player.connection.sendCommand(cmd);
                         log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
                     }
                     break;
@@ -180,14 +180,14 @@ public class ChatLinkListener {
     /**
      * 递归搜索聊天组件树，查找第一个带 ClickEvent 的组件。
      */
-    private static Text findClickableComponent(Text component) {
+    private static Component findClickableComponent(Component component) {
         if (component == null) return null;
         Style style = component.getStyle();
         if (style != null && style.getClickEvent() != null) {
             return component;
         }
-        for (Text sibling : component.getSiblings()) {
-            Text found = findClickableComponent(sibling);
+        for (Component sibling : component.getSiblings()) {
+            Component found = findClickableComponent(sibling);
             if (found != null) return found;
         }
         return null;

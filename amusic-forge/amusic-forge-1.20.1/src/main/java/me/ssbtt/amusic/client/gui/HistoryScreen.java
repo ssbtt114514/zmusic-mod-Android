@@ -120,7 +120,7 @@ public class HistoryScreen extends Screen {
         private static final int BTN_GAP = 4;
 
         HistoryList(Minecraft mc) {
-            super(mc, HistoryScreen.this.width - 20, HistoryScreen.this.height - 80, 50, HistoryScreen.this.height - 30);
+            super(mc, HistoryScreen.this.width - 20, HistoryScreen.this.height - 80, 50, HistoryScreen.this.height - 30, ROW_HEIGHT);
             try {
                 java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
                         .getDeclaredField("itemHeight");

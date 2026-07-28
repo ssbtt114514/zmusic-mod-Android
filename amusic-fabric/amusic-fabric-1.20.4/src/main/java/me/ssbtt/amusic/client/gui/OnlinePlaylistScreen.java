@@ -58,7 +58,7 @@ public class OnlinePlaylistScreen extends Screen {
                 .dimensions(width / 2 - 5, 5, 70, 18).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("刷新"), b -> refreshList())
                 .dimensions(width / 2 + 70, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> close())
                 .dimensions(width / 2 - 40, height - 25, 80, 18).build());
 
         if (firstLoad) {
@@ -146,7 +146,7 @@ public class OnlinePlaylistScreen extends Screen {
 
         OnlineList() {
             super(MinecraftClient.getInstance(), OnlinePlaylistScreen.this.width,
-                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70, ROW_HEIGHT);
+                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70);
         }
 
         public void addEntry(PlaylistNetClient.PlaylistInfo info) {
@@ -242,7 +242,7 @@ public class OnlinePlaylistScreen extends Screen {
 
             UploadList() {
                 super(MinecraftClient.getInstance(), UploadPlaylistScreen.this.width,
-                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30, ROW_HEIGHT);
+                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30);
             }
 
             public void addEntry(String name) {

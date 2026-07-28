@@ -5,24 +5,25 @@ import me.ssbtt.amusic.AMusic;
 import me.ssbtt.amusic.history.HistoryEntry;
 import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
 /**
- * 歌单选择界面（Fabric 版本）。
+ * 歌单选择界面。
  *
  * <p>从历史记录收藏歌曲时弹出，让玩家选择要添加到的目标歌单，
  * 也可以在此界面直接新建歌单。</p>
  *
  * @author ssbtt
- * @since 2026-07-28
+ * @since 2026-07-27
  */
 @Log4j2
 public class SelectPlaylistScreen extends Screen {
@@ -32,12 +33,16 @@ public class SelectPlaylistScreen extends Screen {
     private final HistoryEntry entry;
     private final Screen parent;
     private PlaylistList list;
-    private TextFieldWidget newPlaylistBox;
+    private EditBox newPlaylistBox;
     private String statusMessage = "";
     private int statusColor = 0xFFFFFF;
 
+    /**
+     * @param entry  要收藏的歌曲
+     * @param parent 父界面（关闭后返回）
+     */
     public SelectPlaylistScreen(HistoryEntry entry, Screen parent) {
-        super(Text.literal("选择歌单"));
+        super(Component.literal("选择歌单"));
         this.entry = entry;
         this.parent = parent;
     }
@@ -45,44 +50,50 @@ public class SelectPlaylistScreen extends Screen {
     @Override
     protected void init() {
         list = new PlaylistList();
-        addSelectableChild(list);
+        addWidget(list);
 
-        newPlaylistBox = new TextFieldWidget(this.textRenderer, 10, this.height - 50, 150, 18, Text.literal("新歌单名"));
+        // 新建歌单输入框
+        newPlaylistBox = new EditBox(this.font, 10, this.height - 50, 150, 18, Component.literal("新歌单名"));
         newPlaylistBox.setMaxLength(30);
-        addDrawableChild(newPlaylistBox);
+        addRenderableWidget(newPlaylistBox);
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("新建并添加"), b -> createAndAdd())
-                .dimensions(165, this.height - 50, 90, 18).build());
+        // 创建并添加按钮
+        addRenderableWidget(Button.builder(Component.literal("新建并添加"), b -> createAndAdd())
+                .bounds(165, this.height - 50, 90, 18).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> onClose())
-                .dimensions(this.width / 2 - 100, this.height - 24, 200, 20).build());
+        // 取消按钮
+        addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> onClose())
+                .bounds(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
-        context.drawTextWithShadow(this.textRenderer, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.drawString(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
                 10, 24, 0xAAAAFF);
-        list.render(context, mouseX, mouseY, delta);
+        list.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
         if (!statusMessage.isEmpty()) {
-            context.drawCenteredTextWithShadow(this.textRenderer, statusMessage, this.width / 2, this.height - 62, statusColor);
+            graphics.drawCenteredString(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
         }
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return list.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        return list.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
     public void onClose() {
-        MinecraftClient.getInstance().setScreen(parent);
+        Minecraft.getInstance().setScreen(parent);
     }
 
+    /**
+     * 新建歌单并添加当前歌曲。
+     */
     private void createAndAdd() {
-        String name = newPlaylistBox.getText().trim();
+        String name = newPlaylistBox.getValue().trim();
         if (name.isEmpty()) {
             statusMessage = "请输入歌单名";
             statusColor = 0xFF5555;
@@ -101,9 +112,14 @@ public class SelectPlaylistScreen extends Screen {
             return;
         }
         addSongToPlaylist(name);
-        newPlaylistBox.setText("");
+        newPlaylistBox.setValue("");
     }
 
+    /**
+     * 将歌曲添加到指定歌单。
+     *
+     * @param playlistName 歌单名
+     */
     private void addSongToPlaylist(String playlistName) {
         if (entry == null) return;
         PlaylistManager pm = AMusic.getPlaylistManager();
@@ -114,6 +130,7 @@ public class SelectPlaylistScreen extends Screen {
             statusColor = 0xFF5555;
             return;
         }
+        // 去重检查
         for (HistoryEntry e : pl.getSongs()) {
             if (entry.getName() != null && entry.getName().equals(e.getName())) {
                 statusMessage = "歌曲已存在于「" + playlistName + "」";
@@ -130,11 +147,21 @@ public class SelectPlaylistScreen extends Screen {
         list.refresh();
     }
 
-    private class PlaylistList extends ElementListWidget<PlaylistList.Entry> {
+    // ---- 歌单列表 ----
+
+    private class PlaylistList extends ObjectSelectionList<PlaylistList.Entry> {
 
         PlaylistList() {
-            super(MinecraftClient.getInstance(), SelectPlaylistScreen.this.width - 20,
-                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70, ROW_HEIGHT);
+            super(Minecraft.getInstance(), SelectPlaylistScreen.this.width - 20,
+                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70);
+            try {
+                java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
+                        .getDeclaredField("itemHeight");
+                f.setAccessible(true);
+                f.setInt(this, ROW_HEIGHT);
+            } catch (Exception e) {
+                log.warn("Failed to set itemHeight", e);
+            }
             refresh();
         }
 
@@ -153,7 +180,7 @@ public class SelectPlaylistScreen extends Screen {
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final String name;
             private int addBtnX, addBtnW;
 
@@ -162,8 +189,8 @@ public class SelectPlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                MinecraftClient mc = MinecraftClient.getInstance();
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                Font font = Minecraft.getInstance().font;
                 PlaylistManager pm = AMusic.getPlaylistManager();
                 String countStr = "";
                 if (pm != null) {
@@ -172,28 +199,33 @@ public class SelectPlaylistScreen extends Screen {
                         countStr = " (" + pl.size() + "首)";
                     }
                 }
-                context.drawTextWithShadow(mc.textRenderer, name + countStr, left + 4, top + 4, 0xFFFFFF);
+                graphics.drawString(font, name + countStr, left + 4, top + 4, 0xFFFFFF);
 
+                // [添加] 按钮
                 String label = "[添加]";
-                addBtnW = mc.textRenderer.getWidth(label);
+                addBtnW = font.width(label);
                 addBtnX = left + getRowWidth() - addBtnW - 4;
-                boolean hover = mouseX >= addBtnX && mouseX <= addBtnX + addBtnW && mouseY >= top && mouseY <= top + height;
-                context.drawTextWithShadow(mc.textRenderer, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
+                boolean hover = isInButton(mouseX, addBtnX, addBtnW) && mouseY >= top && mouseY <= top + height;
+                graphics.drawString(font, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
             }
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 if (button != 0) return true;
-                if (mouseX >= addBtnX && mouseX <= addBtnX + addBtnW) {
+                if (isInButton((int) mouseX, addBtnX, addBtnW)) {
                     addSongToPlaylist(name);
                 }
                 return true;
             }
 
             @Override
-            public Text getNarration() {
-                return Text.literal(name);
+            public Component getNarration() {
+                return Component.literal(name);
             }
         }
+    }
+
+    private static boolean isInButton(double mouseX, int textStart, int textWidth) {
+        return mouseX >= textStart && mouseX <= textStart + textWidth;
     }
 }

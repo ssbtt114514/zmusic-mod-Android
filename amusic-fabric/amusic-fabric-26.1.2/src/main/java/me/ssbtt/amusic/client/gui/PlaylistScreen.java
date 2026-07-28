@@ -9,92 +9,106 @@ import me.ssbtt.amusic.playlist.PlayOrder;
 import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistPlayer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
 /**
- * 歌单界面（Fabric 版本）。
+ * 歌单界面。
  *
  * <p>左侧歌单列表，右侧选中歌单的歌曲列表，支持创建/删除/播放顺序切换/播放。</p>
  *
+ * <p>每个条目使用按钮替代鼠标左右键：左键点击按钮执行操作（选择/播放/删除等）。</p>
+ *
  * @author 真心
- * @since 2026-07-28
+ * @since 2026-07-25
  */
 @Log4j2
 public class PlaylistScreen extends Screen {
 
+    /** 行高：紧凑布局，刚好包裹两行文本 */
     private static final int ROW_HEIGHT = 22;
 
     private PlaylistList playlistList;
     private SongList songList;
-    private TextFieldWidget newPlaylistBox;
+    private EditBox newPlaylistBox;
     private String selectedPlaylist;
 
     public PlaylistScreen() {
-        super(Text.translatable("amusic.playlist.title"));
+        super(Component.translatable("amusic.playlist.title"));
     }
 
     @Override
     protected void init() {
         int halfW = (this.width - 30) / 2;
-        playlistList = new PlaylistList(MinecraftClient.getInstance(), halfW);
-        playlistList.setLeftPos(10);
-        songList = new SongList(MinecraftClient.getInstance(), halfW);
-        songList.setLeftPos(20 + halfW);
-        addSelectableChild(playlistList);
-        addSelectableChild(songList);
+        playlistList = new PlaylistList(Minecraft.getInstance(), halfW);
+        songList = new SongList(Minecraft.getInstance(), halfW);
+        addWidget(playlistList);
+        addWidget(songList);
 
-        newPlaylistBox = new TextFieldWidget(this.font, 10, this.height - 50, halfW - 80, 18, Text.literal("新歌单名"));
+        // 新建歌单输入框
+        newPlaylistBox = new EditBox(this.font, 10, this.height - 50, halfW - 80, 18, Component.literal("新歌单名"));
         newPlaylistBox.setMaxLength(30);
-        addDrawableChild(newPlaylistBox);
+        addRenderableWidget(newPlaylistBox);
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("创建"), b -> createPlaylist())
-                .dimensions(10 + halfW - 70, this.height - 50, 60, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("播放全部"), b -> playAll())
-                .dimensions(20 + halfW, this.height - 50, 80, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("添加当前歌曲"), b -> addCurrentSong())
-                .dimensions(20 + halfW + 90, this.height - 50, 90, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("停止播放"), b -> stopPlaylist())
-                .dimensions(20 + halfW + 190, this.height - 50, 80, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("在线歌单"), b -> openOnlinePlaylists())
-                .dimensions(20 + halfW + 280, this.height - 50, 80, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> onClose())
-                .dimensions(this.width / 2 - 50, this.height - 24, 100, 18).build());
+        // 创建按钮
+        addRenderableWidget(Button.builder(Component.literal("创建"), b -> createPlaylist())
+                .bounds(10 + halfW - 70, this.height - 50, 60, 18).build());
+
+        // 播放全部按钮（从第一首开始播放当前选中歌单）
+        addRenderableWidget(Button.builder(Component.literal("播放全部"), b -> playAll())
+                .bounds(20 + halfW, this.height - 50, 80, 18).build());
+
+        // 添加当前播放歌曲到歌单
+        addRenderableWidget(Button.builder(Component.literal("添加当前歌曲"), b -> addCurrentSong())
+                .bounds(20 + halfW + 90, this.height - 50, 90, 18).build());
+
+        // 停止歌单播放按钮
+        addRenderableWidget(Button.builder(Component.literal("停止播放"), b -> stopPlaylist())
+                .bounds(20 + halfW + 190, this.height - 50, 80, 18).build());
+
+        // 在线歌单按钮
+        addRenderableWidget(Button.builder(Component.literal("在线歌单"), b -> openOnlinePlaylists())
+                .bounds(20 + halfW + 280, this.height - 50, 80, 18).build());
+
+        // 关闭按钮
+        addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
+                .bounds(this.width / 2 - 50, this.height - 24, 100, 18).build());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         int halfW = (this.width - 30) / 2;
-        context.drawTextWithShadow(this.font, "歌单列表", 10, 20, 0xFFFFFF);
-        context.drawTextWithShadow(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
-        playlistList.render(context, mouseX, mouseY, delta);
-        songList.render(context, mouseX, mouseY, delta);
+        graphics.drawString(this.font, "歌单列表", 10, 20, 0xFFFFFF);
+        graphics.drawString(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
+        playlistList.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        songList.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         int halfW = (this.width - 30) / 2;
         if (mouseX < 10 + halfW) {
-            return playlistList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+            return playlistList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
-        return songList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return songList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     private void createPlaylist() {
-        String name = newPlaylistBox.getText().trim();
+        String name = newPlaylistBox.getValue().trim();
         if (name.isEmpty()) return;
         PlaylistManager pm = AMusic.getPlaylistManager();
         if (pm != null && pm.createPlaylist(name)) {
-            newPlaylistBox.setText("");
+            newPlaylistBox.setValue("");
             playlistList.refresh();
         }
     }
@@ -105,6 +119,7 @@ public class PlaylistScreen extends Screen {
     }
 
     private void playSong(HistoryEntry entry) {
+        // 从点击的歌曲开始播放整个歌单（按播放顺序自动推进）
         if (selectedPlaylist == null) {
             CommandSender.sendPlayCommand(entry.getPlatform(), entry.getName());
             return;
@@ -161,8 +176,11 @@ public class PlaylistScreen extends Screen {
         songList.refresh();
     }
 
+    /**
+     * 打开在线歌单界面。
+     */
     private void openOnlinePlaylists() {
-        MinecraftClient.getInstance().setScreen(new OnlinePlaylistScreen());
+        Minecraft.getInstance().setScreen(new OnlinePlaylistScreen());
     }
 
     private void cyclePlayOrder() {
@@ -175,6 +193,7 @@ public class PlaylistScreen extends Screen {
         int idx = pl.getPlayOrder().ordinal();
         pl.setPlayOrder(orders[(idx + 1) % orders.length]);
         pm.savePlaylist(pl);
+        // 同步更新活动歌单的播放顺序
         PlaylistPlayer pp = AMusic.getPlaylistPlayer();
         if (pp != null && pp.isActive() && pp.getActivePlaylist() != null
                 && selectedPlaylist.equals(pp.getActivePlaylist().getName())) {
@@ -182,18 +201,38 @@ public class PlaylistScreen extends Screen {
         }
     }
 
+    // ---- 工具方法 ----
+
+    /**
+     * 检查鼠标 X 坐标是否在指定文本区域内（用于按钮点击判定）。
+     *
+     * @param mouseX    鼠标 X
+     * @param textStart 文本起始 X
+     * @param textWidth 文本宽度
+     * @return true 表示鼠标在文本区域内
+     */
     private static boolean isInButton(double mouseX, int textStart, int textWidth) {
         return mouseX >= textStart && mouseX <= textStart + textWidth;
     }
 
     // ---- 歌单列表 ----
 
-    private class PlaylistList extends ElementListWidget<PlaylistList.Entry> {
+    private class PlaylistList extends ObjectSelectionList<PlaylistList.Entry> {
         private final int listWidth;
 
-        PlaylistList(MinecraftClient mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
+        PlaylistList(Minecraft mc, int width) {
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
+            this.setX(10);
             this.listWidth = width;
+            // 1.21.1 中 itemHeight 为 protected 字段，直接赋值以紧凑显示
+            try {
+                java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
+                        .getDeclaredField("itemHeight");
+                f.setAccessible(true);
+                f.setInt(this, ROW_HEIGHT);
+            } catch (Exception e) {
+                log.warn("Failed to set itemHeight, using default", e);
+            }
             refresh();
         }
 
@@ -212,8 +251,10 @@ public class PlaylistScreen extends Screen {
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final String name;
+
+            // 按钮区域缓存（每次 render 时更新）
             private int selectBtnX, selectBtnW;
             private int playBtnX, playBtnW;
             private int deleteBtnX, deleteBtnW;
@@ -223,14 +264,15 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                MinecraftClient mc = MinecraftClient.getInstance();
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                Font font = Minecraft.getInstance().font;
                 String text = name;
                 if (name.equals(selectedPlaylist)) {
                     text = "> " + name;
                 }
-                context.drawTextWithShadow(mc.textRenderer, text, left + 2, top + 2, 0xFFFFFF);
+                graphics.drawString(font, text, left + 2, top + 2, 0xFFFFFF);
 
+                // 显示歌曲数量
                 PlaylistManager pm = AMusic.getPlaylistManager();
                 String countStr = "";
                 if (pm != null) {
@@ -239,39 +281,42 @@ public class PlaylistScreen extends Screen {
                         countStr = "(" + pl.size() + "首)";
                     }
                 }
-                context.drawTextWithShadow(mc.textRenderer, countStr, left + 2 + mc.textRenderer.getWidth(text) + 4, top + 2, 0xAAAAFF);
+                graphics.drawString(font, countStr, left + 2 + font.width(text) + 4, top + 2, 0xAAAAFF);
 
+                // 按钮区域：[选择] [播放] [删除]
                 int btnY = top + 11;
                 int x = left + 2;
 
                 String selectLabel = "[选择]";
                 selectBtnX = x;
-                selectBtnW = mc.textRenderer.getWidth(selectLabel);
+                selectBtnW = font.width(selectLabel);
                 boolean hoverSelect = isInButton(mouseX, selectBtnX, selectBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                context.drawTextWithShadow(mc.textRenderer, selectLabel, x, btnY, hoverSelect ? 0xFFFF55 : 0xAAAAFF);
+                graphics.drawString(font, selectLabel, x, btnY, hoverSelect ? 0xFFFF55 : 0xAAAAFF);
                 x += selectBtnW + 4;
 
                 String playLabel = "[播放]";
                 playBtnX = x;
-                playBtnW = mc.textRenderer.getWidth(playLabel);
+                playBtnW = font.width(playLabel);
                 boolean hoverPlay = isInButton(mouseX, playBtnX, playBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                context.drawTextWithShadow(mc.textRenderer, playLabel, x, btnY, hoverPlay ? 0xFFFF55 : 0x55FF55);
+                graphics.drawString(font, playLabel, x, btnY, hoverPlay ? 0xFFFF55 : 0x55FF55);
                 x += playBtnW + 4;
 
                 String deleteLabel = "[删除]";
                 deleteBtnX = x;
-                deleteBtnW = mc.textRenderer.getWidth(deleteLabel);
+                deleteBtnW = font.width(deleteLabel);
                 boolean hoverDelete = isInButton(mouseX, deleteBtnX, deleteBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                context.drawTextWithShadow(mc.textRenderer, deleteLabel, x, btnY, hoverDelete ? 0xFFFF55 : 0xFF5555);
+                graphics.drawString(font, deleteLabel, x, btnY, hoverDelete ? 0xFFFF55 : 0xFF5555);
             }
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                // 只响应左键
                 if (button != 0) return true;
 
                 if (isInButton(mouseX, selectBtnX, selectBtnW)) {
                     selectPlaylist(name);
                 } else if (isInButton(mouseX, playBtnX, playBtnW)) {
+                    // 播放整个歌单
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     PlaylistPlayer pp = AMusic.getPlaylistPlayer();
                     if (pm != null && pp != null) {
@@ -297,20 +342,31 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public Text getNarration() {
-                return Text.literal(name);
+            public Component getNarration() {
+                return Component.literal(name);
             }
         }
     }
 
     // ---- 歌曲列表 ----
 
-    private class SongList extends ElementListWidget<SongList.Entry> {
+    private class SongList extends ObjectSelectionList<SongList.Entry> {
         private final int listWidth;
 
-        SongList(MinecraftClient mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
+        SongList(Minecraft mc, int width) {
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
+            int halfW = (PlaylistScreen.this.width - 30) / 2;
+            this.setX(20 + halfW);
             this.listWidth = width;
+            // 1.21.1 中 itemHeight 为 protected 字段，直接赋值以紧凑显示
+            try {
+                java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
+                        .getDeclaredField("itemHeight");
+                f.setAccessible(true);
+                f.setInt(this, ROW_HEIGHT);
+            } catch (Exception e) {
+                log.warn("Failed to set itemHeight, using default", e);
+            }
             refresh();
         }
 
@@ -326,16 +382,19 @@ public class PlaylistScreen extends Screen {
             if (pm == null) return;
             Playlist pl = pm.loadPlaylist(selectedPlaylist);
             if (pl == null) return;
+            // 第一项显示播放顺序
             addEntry(new Entry(null, "播放顺序: " + pl.getPlayOrder().getDisplayName(), true));
             for (HistoryEntry e : pl.getSongs()) {
                 addEntry(new Entry(e, e.getName(), false));
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final HistoryEntry data;
             private final String label;
             private final boolean isPlayOrderEntry;
+
+            // 按钮区域缓存
             private int[] btnX = new int[2];
             private int[] btnW = new int[2];
             private int orderBtnX, orderBtnW;
@@ -347,24 +406,27 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                MinecraftClient mc = MinecraftClient.getInstance();
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                Font font = Minecraft.getInstance().font;
 
                 if (isPlayOrderEntry) {
-                    context.drawTextWithShadow(mc.textRenderer, label, left + 2, top + 2, 0xFFAA00);
+                    // 播放顺序行
+                    graphics.drawString(font, label, left + 2, top + 2, 0xFFAA00);
                     String switchLabel = "[切换]";
-                    orderBtnX = left + 2 + mc.textRenderer.getWidth(label) + 6;
-                    orderBtnW = mc.textRenderer.getWidth(switchLabel);
+                    orderBtnX = left + 2 + font.width(label) + 6;
+                    orderBtnW = font.width(switchLabel);
                     boolean hover = isInButton(mouseX, orderBtnX, orderBtnW) && mouseY >= top + 1 && mouseY <= top + 11;
-                    context.drawTextWithShadow(mc.textRenderer, switchLabel, orderBtnX, top + 2, hover ? 0xFFFF55 : 0x55FF55);
+                    graphics.drawString(font, switchLabel, orderBtnX, top + 2, hover ? 0xFFFF55 : 0x55FF55);
                     return;
                 }
 
+                // 高亮当前播放歌曲
                 PlaylistPlayer pp = AMusic.getPlaylistPlayer();
                 boolean isCurrent = false;
                 if (pp != null && pp.isActive() && data != null && pp.getActivePlaylist() != null) {
                     Playlist active = pp.getActivePlaylist();
                     if (selectedPlaylist != null && selectedPlaylist.equals(active.getName())) {
+                        // index - 1 因为第一项是播放顺序行
                         int songIndex = index - 1;
                         if (songIndex == pp.getCurrentIndex()) {
                             isCurrent = true;
@@ -372,29 +434,31 @@ public class PlaylistScreen extends Screen {
                     }
                 }
                 int nameColor = isCurrent ? 0x55FF55 : 0xFFFFFF;
-                context.drawTextWithShadow(mc.textRenderer, label, left + 2, top + 2, nameColor);
+                graphics.drawString(font, label, left + 2, top + 2, nameColor);
 
+                // 按钮行：[播放] [移除]
                 int btnY = top + 11;
                 int x = left + 2;
 
+                // 平台标签
                 if (data != null && data.getPlatform() != null && !data.getPlatform().isEmpty()) {
                     String platLabel = "[" + data.getPlatform() + "]";
-                    context.drawTextWithShadow(mc.textRenderer, platLabel, x, btnY, 0x888888);
-                    x += mc.textRenderer.getWidth(platLabel) + 4;
+                    graphics.drawString(font, platLabel, x, btnY, 0x888888);
+                    x += font.width(platLabel) + 4;
                 }
 
                 String playLabel = isCurrent ? "[播放中]" : "[播放]";
                 btnX[0] = x;
-                btnW[0] = mc.textRenderer.getWidth(playLabel);
+                btnW[0] = font.width(playLabel);
                 boolean hoverPlay = isInButton(mouseX, btnX[0], btnW[0]) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                context.drawTextWithShadow(mc.textRenderer, playLabel, x, btnY, isCurrent ? 0x55FF55 : (hoverPlay ? 0xFFFF55 : 0x55FF55));
+                graphics.drawString(font, playLabel, x, btnY, isCurrent ? 0x55FF55 : (hoverPlay ? 0xFFFF55 : 0x55FF55));
                 x += btnW[0] + 4;
 
                 String removeLabel = "[移除]";
                 btnX[1] = x;
-                btnW[1] = mc.textRenderer.getWidth(removeLabel);
+                btnW[1] = font.width(removeLabel);
                 boolean hoverRemove = isInButton(mouseX, btnX[1], btnW[1]) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                context.drawTextWithShadow(mc.textRenderer, removeLabel, x, btnY, hoverRemove ? 0xFFFF55 : 0xFF5555);
+                graphics.drawString(font, removeLabel, x, btnY, hoverRemove ? 0xFFFF55 : 0xFF5555);
             }
 
             @Override
@@ -412,8 +476,10 @@ public class PlaylistScreen extends Screen {
                 if (data == null) return true;
 
                 if (isInButton(mouseX, btnX[0], btnW[0])) {
+                    // [播放]
                     playSong(data);
                 } else if (isInButton(mouseX, btnX[1], btnW[1])) {
+                    // [移除]
                     if (selectedPlaylist != null) {
                         PlaylistManager pm = AMusic.getPlaylistManager();
                         if (pm != null) {
@@ -426,8 +492,8 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public Text getNarration() {
-                return Text.literal(label);
+            public Component getNarration() {
+                return Component.literal(label);
             }
         }
     }

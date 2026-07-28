@@ -95,13 +95,13 @@ public class PlaylistScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        // 1.20.4: mouseScrolled 为 3 参数版本
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        // 1.20.4: mouseScrolled 为 4 参数版本
         int halfW = (this.width - 30) / 2;
         if (mouseX < 10 + halfW) {
-            return playlistList.mouseScrolled(mouseX, mouseY, delta);
+            return playlistList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         }
-        return songList.mouseScrolled(mouseX, mouseY, delta);
+        return songList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     private void createPlaylist() {

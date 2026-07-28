@@ -146,7 +146,7 @@ public class OnlinePlaylistScreen extends Screen {
 
         OnlineList() {
             super(Minecraft.getInstance(), OnlinePlaylistScreen.this.width,
-                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70);
+                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70, ROW_HEIGHT);
             try {
                 java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
                         .getDeclaredField("itemHeight");
@@ -251,7 +251,7 @@ public class OnlinePlaylistScreen extends Screen {
 
             UploadList() {
                 super(Minecraft.getInstance(), UploadPlaylistScreen.this.width,
-                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30);
+                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30, ROW_HEIGHT);
                 try {
                     java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
                             .getDeclaredField("itemHeight");

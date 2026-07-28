@@ -6,8 +6,8 @@ import me.ssbtt.amusic.config.AMusicConfig;
 import me.ssbtt.amusic.history.HistoryEntry;
 import me.ssbtt.amusic.history.HistoryManager;
 import me.ssbtt.amusic.playlist.PlaylistPlayer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 /**
  * 客户端命令发送工具（Fabric 版本）。
@@ -19,7 +19,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
  *   <li>暂停：{@code /zm stop}</li>
  * </ul>
  *
- * <p>实现方式：通过 {@code player.networkHandler.sendCommand} 直接发送命令到服务器，
+ * <p>实现方式：通过 {@code player.connection.sendCommand} 直接发送命令到服务器，
  * 模拟玩家在聊天框输入命令并按下回车键的效果，无需打开聊天框界面。</p>
  *
  * @author ssbtt
@@ -147,12 +147,12 @@ public final class CommandSender {
      * @param commandWithoutSlash 命令字符串（不带 / 前缀）
      */
     private static void sendCommand(String commandWithoutSlash) {
-        MinecraftClient mc = MinecraftClient.getInstance();
+        Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) {
             log.warn("Player is null, cannot send command: /{}", commandWithoutSlash);
             return;
         }
-        ClientPlayNetworkHandler connection = mc.player.networkHandler;
+        ClientPacketListener connection = mc.player.connection;
         if (connection == null) {
             log.warn("Connection is null, cannot send command: /{}", commandWithoutSlash);
             return;

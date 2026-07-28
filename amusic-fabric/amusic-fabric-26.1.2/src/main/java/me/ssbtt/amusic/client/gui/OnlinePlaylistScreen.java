@@ -6,28 +6,36 @@ import me.ssbtt.amusic.client.PlaylistNetSender;
 import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistNetClient;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
 /**
- * 在线歌单界面（Fabric 版本）。
+ * 在线歌单界面。
  *
- * <p>查看服务器公开/自己的歌单，下载服务器歌单，上传本地歌单。</p>
+ * <p>提供以下功能：</p>
+ * <ul>
+ *   <li>查看服务器上公开的歌单列表</li>
+ *   <li>查看自己上传的歌单列表</li>
+ *   <li>下载服务器上的歌单到本地</li>
+ *   <li>上传本地歌单到服务器（可选择是否公开）</li>
+ * </ul>
  *
  * @author ssbtt
- * @since 2026-07-28
+ * @since 2026-07-27
  */
 @Log4j2
 public class OnlinePlaylistScreen extends Screen {
 
     private static final int ROW_HEIGHT = 22;
 
+    /** 列表模式 */
     private enum Mode { PUBLIC, MINE }
 
     private Mode currentMode = Mode.PUBLIC;
@@ -37,41 +45,53 @@ public class OnlinePlaylistScreen extends Screen {
     private boolean firstLoad = true;
 
     public OnlinePlaylistScreen() {
-        super(Text.literal("在线歌单"));
+        super(Component.literal("在线歌单"));
     }
 
     @Override
     protected void init() {
+        // 设置网络回调
         PlaylistNetClient netClient = PlaylistNetClient.getInstance();
         netClient.setListCallback(this::onListReceived);
         netClient.setDataCallback(this::onDataReceived);
         netClient.setResultCallback(this::onResultReceived);
 
+        // 列表
         list = new OnlineList();
-        addSelectableChild(list);
+        addWidget(list);
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("公开歌单"), b -> switchMode(Mode.PUBLIC))
-                .dimensions(width / 2 - 155, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("我的歌单"), b -> switchMode(Mode.MINE))
-                .dimensions(width / 2 - 80, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("上传歌单"), b -> openUploadDialog())
-                .dimensions(width / 2 - 5, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("刷新"), b -> refreshList())
-                .dimensions(width / 2 + 70, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> onClose())
-                .dimensions(width / 2 - 40, height - 25, 80, 18).build());
+        // 模式切换按钮
+        addRenderableWidget(Button.builder(Component.literal("公开歌单"), b -> switchMode(Mode.PUBLIC))
+                .bounds(width / 2 - 155, 5, 70, 18).build());
+        addRenderableWidget(Button.builder(Component.literal("我的歌单"), b -> switchMode(Mode.MINE))
+                .bounds(width / 2 - 80, 5, 70, 18).build());
+        addRenderableWidget(Button.builder(Component.literal("上传歌单"), b -> openUploadDialog())
+                .bounds(width / 2 - 5, 5, 70, 18).build());
+        addRenderableWidget(Button.builder(Component.literal("刷新"), b -> refreshList())
+                .bounds(width / 2 + 70, 5, 70, 18).build());
 
+        // 返回按钮
+        addRenderableWidget(Button.builder(Component.literal("返回"), b -> onClose())
+                .bounds(width / 2 - 40, height - 25, 80, 18).build());
+
+        // 首次加载自动请求
         if (firstLoad) {
             firstLoad = false;
             refreshList();
         }
     }
 
+    /**
+     * 切换模式（公开/我的）。
+     */
     private void switchMode(Mode mode) {
         currentMode = mode;
         refreshList();
     }
 
+    /**
+     * 刷新列表。
+     */
     private void refreshList() {
         statusMessage = "加载中...";
         statusColor = 0xFFFF55;
@@ -83,8 +103,11 @@ public class OnlinePlaylistScreen extends Screen {
         }
     }
 
+    /**
+     * 收到歌单列表响应。
+     */
     private void onListReceived(List<PlaylistNetClient.PlaylistInfo> playlists) {
-        MinecraftClient.getInstance().execute(() -> {
+        Minecraft.getInstance().execute(() -> {
             list.clear();
             for (PlaylistNetClient.PlaylistInfo info : playlists) {
                 list.addEntry(info);
@@ -94,8 +117,11 @@ public class OnlinePlaylistScreen extends Screen {
         });
     }
 
+    /**
+     * 收到歌单数据响应（下载完成）。
+     */
     private void onDataReceived(Playlist playlist) {
-        MinecraftClient.getInstance().execute(() -> {
+        Minecraft.getInstance().execute(() -> {
             PlaylistManager pm = AMusic.getPlaylistManager();
             if (pm != null && playlist != null) {
                 if (pm.loadPlaylist(playlist.getName()) != null) {
@@ -112,13 +138,19 @@ public class OnlinePlaylistScreen extends Screen {
         });
     }
 
+    /**
+     * 收到操作结果响应。
+     */
     private void onResultReceived(String result) {
-        MinecraftClient.getInstance().execute(() -> {
+        Minecraft.getInstance().execute(() -> {
             statusMessage = result;
             statusColor = result.startsWith("success") ? 0x55FF55 : 0xFF5555;
         });
     }
 
+    /**
+     * 打开上传对话框。
+     */
     private void openUploadDialog() {
         PlaylistManager pm = AMusic.getPlaylistManager();
         if (pm == null) return;
@@ -128,25 +160,37 @@ public class OnlinePlaylistScreen extends Screen {
             statusColor = 0xFF5555;
             return;
         }
-        MinecraftClient.getInstance().setScreen(new UploadPlaylistScreen(localPlaylists, this));
+        Minecraft.getInstance().setScreen(new UploadPlaylistScreen(localPlaylists, this));
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 27, 0xFFFFFF);
-        list.render(context, mouseX, mouseY, delta);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        extractBackground(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
+        // 手动渲染列表（addWidget 不会自动渲染）
+        list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         if (!statusMessage.isEmpty()) {
-            context.drawCenteredTextWithShadow(this.textRenderer, statusMessage, this.width / 2, height - 45, statusColor);
+            graphics.drawCenteredString(this.font, statusMessage, this.width / 2, height - 45, statusColor);
         }
     }
 
-    private class OnlineList extends ElementListWidget<OnlineList.Entry> {
+    /**
+     * 在线歌单列表。
+     */
+    private class OnlineList extends ObjectSelectionList<OnlineList.Entry> {
 
         OnlineList() {
-            super(MinecraftClient.getInstance(), OnlinePlaylistScreen.this.width,
-                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70, ROW_HEIGHT);
+            super(Minecraft.getInstance(), OnlinePlaylistScreen.this.width,
+                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70);
+            try {
+                java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
+                        .getDeclaredField("itemHeight");
+                f.setAccessible(true);
+                f.setInt(this, ROW_HEIGHT);
+            } catch (Exception e) {
+                log.warn("Failed to set itemHeight", e);
+            }
         }
 
         public void addEntry(PlaylistNetClient.PlaylistInfo info) {
@@ -162,7 +206,7 @@ public class OnlinePlaylistScreen extends Screen {
             return width - 20;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final PlaylistNetClient.PlaylistInfo info;
             private int downloadBtnX, downloadBtnW;
 
@@ -171,23 +215,23 @@ public class OnlinePlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                MinecraftClient mc = MinecraftClient.getInstance();
-                context.drawTextWithShadow(mc.textRenderer, info.name, left + 2, top + 2, 0xFFFFFF);
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                Font font = Minecraft.getInstance().font;
+                graphics.drawString(font, info.name, left + 2, top + 2, 0xFFFFFF);
                 String meta = "作者: " + (info.author != null ? info.author : "?") + " | " + info.songCount + "首";
-                context.drawTextWithShadow(mc.textRenderer, meta, left + 2, top + 11, 0xAAAAFF);
+                graphics.drawString(font, meta, left + 2, top + 11, 0xAAAAFF);
 
                 String dlLabel = "[下载]";
-                downloadBtnX = left + width - mc.textRenderer.getWidth(dlLabel) - 4;
-                downloadBtnW = mc.textRenderer.getWidth(dlLabel);
-                boolean hoverDl = mouseX >= downloadBtnX && mouseX <= downloadBtnX + downloadBtnW && mouseY >= top && mouseY <= top + height;
-                context.drawTextWithShadow(mc.textRenderer, dlLabel, downloadBtnX, top + 7, hoverDl ? 0xFFFF55 : 0x55FF55);
+                downloadBtnX = left + width - font.width(dlLabel) - 4;
+                downloadBtnW = font.width(dlLabel);
+                boolean hoverDl = isInButton(mouseX, downloadBtnX, downloadBtnW) && mouseY >= top && mouseY <= top + height;
+                graphics.drawString(font, dlLabel, downloadBtnX, top + 7, hoverDl ? 0xFFFF55 : 0x55FF55);
             }
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 if (button != 0) return true;
-                if (mouseX >= downloadBtnX && mouseX <= downloadBtnX + downloadBtnW) {
+                if (isInButton((int) mouseX, downloadBtnX, downloadBtnW)) {
                     statusMessage = "下载中: " + info.name + "...";
                     statusColor = 0xFFFF55;
                     PlaylistNetSender.downloadPlaylist(info.id);
@@ -197,8 +241,12 @@ public class OnlinePlaylistScreen extends Screen {
             }
 
             @Override
-            public Text getNarration() {
-                return Text.literal(info != null ? info.name : "");
+            public Component getNarration() {
+                return Component.literal(info != null ? info.name : "");
+            }
+
+            private boolean isInButton(int mouseX, int btnX, int btnW) {
+                return mouseX >= btnX && mouseX <= btnX + btnW;
             }
         }
     }
@@ -212,7 +260,7 @@ public class OnlinePlaylistScreen extends Screen {
         private UploadList list;
 
         public UploadPlaylistScreen(List<String> localPlaylists, Screen parent) {
-            super(Text.literal("上传歌单"));
+            super(Component.literal("上传歌单"));
             this.localPlaylists = localPlaylists;
             this.parent = parent;
         }
@@ -223,26 +271,35 @@ public class OnlinePlaylistScreen extends Screen {
             for (String name : localPlaylists) {
                 list.addEntry(name);
             }
-            addSelectableChild(list);
+            addWidget(list);
 
-            addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> {
-                MinecraftClient.getInstance().setScreen(parent);
-            }).dimensions(width / 2 - 40, height - 25, 80, 18).build());
+            addRenderableWidget(Button.builder(Component.literal("返回"), b -> {
+                Minecraft.getInstance().setScreen(parent);
+            }).bounds(width / 2 - 40, height - 25, 80, 18).build());
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            renderBackground(context, mouseX, mouseY, delta);
-            super.render(context, mouseX, mouseY, delta);
-            context.drawCenteredTextWithShadow(this.textRenderer, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
-            list.render(context, mouseX, mouseY, delta);
+        public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            extractBackground(graphics, mouseX, mouseY, partialTick);
+            super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+            graphics.drawCenteredString(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
+            // 手动渲染列表（addWidget 不会自动渲染）
+            list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         }
 
-        private class UploadList extends ElementListWidget<UploadList.Entry> {
+        private class UploadList extends ObjectSelectionList<UploadList.Entry> {
 
             UploadList() {
-                super(MinecraftClient.getInstance(), UploadPlaylistScreen.this.width,
-                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30, ROW_HEIGHT);
+                super(Minecraft.getInstance(), UploadPlaylistScreen.this.width,
+                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30);
+                try {
+                    java.lang.reflect.Field f = net.minecraft.client.gui.components.AbstractSelectionList.class
+                            .getDeclaredField("itemHeight");
+                    f.setAccessible(true);
+                    f.setInt(this, ROW_HEIGHT);
+                } catch (Exception e) {
+                    log.warn("Failed to set itemHeight", e);
+                }
             }
 
             public void addEntry(String name) {
@@ -254,7 +311,7 @@ public class OnlinePlaylistScreen extends Screen {
                 return width - 20;
             }
 
-            private class Entry extends ElementListWidget.Entry<Entry> {
+            private class Entry extends ObjectSelectionList.Entry<Entry> {
                 private final String name;
                 private int uploadBtnX, uploadBtnW;
                 private int uploadPrivateBtnX, uploadPrivateBtnW;
@@ -264,24 +321,24 @@ public class OnlinePlaylistScreen extends Screen {
                 }
 
                 @Override
-                public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                    MinecraftClient mc = MinecraftClient.getInstance();
+                public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                    Font font = Minecraft.getInstance().font;
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     Playlist pl = pm != null ? pm.loadPlaylist(name) : null;
                     int count = pl != null ? pl.size() : 0;
-                    context.drawTextWithShadow(mc.textRenderer, name + " (" + count + "首)", left + 2, top + 2, 0xFFFFFF);
+                    graphics.drawString(font, name + " (" + count + "首)", left + 2, top + 2, 0xFFFFFF);
 
                     String pubLabel = "[公开上传]";
                     uploadBtnX = left + 2;
-                    uploadBtnW = mc.textRenderer.getWidth(pubLabel);
-                    boolean hoverPub = mouseX >= uploadBtnX && mouseX <= uploadBtnX + uploadBtnW && mouseY >= top + 10 && mouseY <= top + 22;
-                    context.drawTextWithShadow(mc.textRenderer, pubLabel, uploadBtnX, top + 11, hoverPub ? 0xFFFF55 : 0x55FF55);
+                    uploadBtnW = font.width(pubLabel);
+                    boolean hoverPub = isInButton(mouseX, uploadBtnX, uploadBtnW) && mouseY >= top + 10 && mouseY <= top + 22;
+                    graphics.drawString(font, pubLabel, uploadBtnX, top + 11, hoverPub ? 0xFFFF55 : 0x55FF55);
 
                     String privLabel = "[私有上传]";
                     uploadPrivateBtnX = uploadBtnX + uploadBtnW + 8;
-                    uploadPrivateBtnW = mc.textRenderer.getWidth(privLabel);
-                    boolean hoverPriv = mouseX >= uploadPrivateBtnX && mouseX <= uploadPrivateBtnX + uploadPrivateBtnW && mouseY >= top + 10 && mouseY <= top + 22;
-                    context.drawTextWithShadow(mc.textRenderer, privLabel, uploadPrivateBtnX, top + 11, hoverPriv ? 0xFFFF55 : 0xFFAA00);
+                    uploadPrivateBtnW = font.width(privLabel);
+                    boolean hoverPriv = isInButton(mouseX, uploadPrivateBtnX, uploadPrivateBtnW) && mouseY >= top + 10 && mouseY <= top + 22;
+                    graphics.drawString(font, privLabel, uploadPrivateBtnX, top + 11, hoverPriv ? 0xFFFF55 : 0xFFAA00);
                 }
 
                 @Override
@@ -292,31 +349,35 @@ public class OnlinePlaylistScreen extends Screen {
                     Playlist pl = pm.loadPlaylist(name);
                     if (pl == null) return true;
 
-                    if (mouseX >= uploadBtnX && mouseX <= uploadBtnX + uploadBtnW) {
+                    if (isInButton((int) mouseX, uploadBtnX, uploadBtnW)) {
                         pl.setPublic(true);
-                        MinecraftClient mc = MinecraftClient.getInstance();
+                        Minecraft mc = Minecraft.getInstance();
                         if (mc.player != null) {
                             pl.setAuthor(mc.player.getName().getString());
                         }
                         PlaylistNetSender.uploadPlaylist(pl);
                         log.info("Uploading playlist '{}' as public", name);
-                        MinecraftClient.getInstance().setScreen(parent);
-                    } else if (mouseX >= uploadPrivateBtnX && mouseX <= uploadPrivateBtnX + uploadPrivateBtnW) {
+                        Minecraft.getInstance().setScreen(parent);
+                    } else if (isInButton((int) mouseX, uploadPrivateBtnX, uploadPrivateBtnW)) {
                         pl.setPublic(false);
-                        MinecraftClient mc = MinecraftClient.getInstance();
+                        Minecraft mc = Minecraft.getInstance();
                         if (mc.player != null) {
                             pl.setAuthor(mc.player.getName().getString());
                         }
                         PlaylistNetSender.uploadPlaylist(pl);
                         log.info("Uploading playlist '{}' as private", name);
-                        MinecraftClient.getInstance().setScreen(parent);
+                        Minecraft.getInstance().setScreen(parent);
                     }
                     return true;
                 }
 
                 @Override
-                public Text getNarration() {
-                    return Text.literal(name);
+                public Component getNarration() {
+                    return Component.literal(name);
+                }
+
+                private boolean isInButton(int mouseX, int btnX, int btnW) {
+                    return mouseX >= btnX && mouseX <= btnX + btnW;
                 }
             }
         }
