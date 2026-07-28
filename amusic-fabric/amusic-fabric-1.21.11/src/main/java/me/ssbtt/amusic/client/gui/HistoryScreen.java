@@ -196,8 +196,8 @@ public class HistoryScreen extends Screen {
                 int x1 = x2 - btnW - gap;
                 int btnY = top + 3;
 
-                int mx = (int) click.comp_4798();
-                int my = (int) click.comp_4799();
+                int mx = (int) click.x();
+                int my = (int) click.y();
                 if (my >= btnY && my <= btnY + 10) {
                     if (mx >= x1 && mx <= x1 + btnW) {
                         playEntry(data);

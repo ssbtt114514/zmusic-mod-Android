@@ -66,8 +66,8 @@ public class VolumeOverlayPositionScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(this.font, this.title, this.width / 2, 14, 0xFFFFFF);
-        graphics.centeredText(this.font, "拖动绿色条到目标位置，点击「保存」", this.width / 2, 26, 0xAAAAFF);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 0xFFFFFF);
+        graphics.drawCenteredString(this.font, "拖动绿色条到目标位置，点击「保存」", this.width / 2, 26, 0xAAAAFF);
 
         // 模拟音量条（绿色填充表示可拖动）
         int barY2 = barY + 2;
@@ -75,7 +75,7 @@ public class VolumeOverlayPositionScreen extends Screen {
         graphics.fill(barX - 4, barY - 4, barX + BAR_WIDTH + 4, barY + BAR_HEIGHT + 4, 0xB0000000);
         graphics.fill(barX + 2, barY2, barX + BAR_WIDTH - 2, barY2 + BAR_HEIGHT - 4, 0xFF333333);
         graphics.fill(barX + 2, barY2, barX + 2 + barFilled, barY2 + BAR_HEIGHT - 4, 0xFF55FF55);
-        graphics.centeredText(this.font, "音量 70% (可拖动)", this.width / 2, barY + BAR_HEIGHT - 12, 0xFFFFFFFF);
+        graphics.drawCenteredString(this.font, "音量 70% (可拖动)", this.width / 2, barY + BAR_HEIGHT - 12, 0xFFFFFFFF);
     }
 
     @Override

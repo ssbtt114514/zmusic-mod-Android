@@ -271,7 +271,7 @@ public class PlaylistScreen extends Screen {
             @Override
             public boolean mouseClicked(Click click, boolean doubleClick) {
                 if (click.button() != 0) return true;
-                double mouseX = click.comp_4798();
+                double mouseX = click.x();
 
                 if (isInButton(mouseX, selectBtnX, selectBtnW)) {
                     selectPlaylist(name);
@@ -409,7 +409,7 @@ public class PlaylistScreen extends Screen {
             @Override
             public boolean mouseClicked(Click click, boolean doubleClick) {
                 if (click.button() != 0) return true;
-                double mouseX = click.comp_4798();
+                double mouseX = click.x();
 
                 if (isPlayOrderEntry) {
                     if (isInButton(mouseX, orderBtnX, orderBtnW)) {

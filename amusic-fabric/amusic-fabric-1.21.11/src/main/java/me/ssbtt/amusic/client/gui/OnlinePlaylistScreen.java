@@ -191,7 +191,7 @@ public class OnlinePlaylistScreen extends Screen {
             @Override
             public boolean mouseClicked(Click click, boolean doubleClick) {
                 if (click.button() != 0) return true;
-                double mouseX = click.comp_4798();
+                double mouseX = click.x();
                 if (mouseX >= downloadBtnX && mouseX <= downloadBtnX + downloadBtnW) {
                     statusMessage = "下载中: " + info.name + "...";
                     statusColor = 0xFFFF55;
@@ -293,7 +293,7 @@ public class OnlinePlaylistScreen extends Screen {
                 @Override
                 public boolean mouseClicked(Click click, boolean doubleClick) {
                     if (click.button() != 0) return true;
-                    double mouseX = click.comp_4798();
+                    double mouseX = click.x();
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     if (pm == null) return true;
                     Playlist pl = pm.loadPlaylist(name);

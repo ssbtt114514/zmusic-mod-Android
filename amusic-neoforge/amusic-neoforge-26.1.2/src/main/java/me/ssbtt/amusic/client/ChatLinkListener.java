@@ -164,11 +164,11 @@ public class ChatLinkListener {
      * 当无 Screen 打开时，回退到直接处理 clickEvent。</p>
      */
     private void handleClick(Minecraft mc, Component component) {
-        Screen screen = mc.gui.screen;
+        Screen screen = mc.screen;
         Style style = component.getStyle();
         if (screen != null) {
             // 有 Screen 打开：使用 handleComponentClicked 完美复刻玩家点击
-            // 注意：1.21.1 中 handleComponentClicked 接受 Style 参数
+            // 26.x 中 handleComponentClicked 接受 Style 参数
             if (style != null && style.getClickEvent() != null) {
                 log.info("ChatLinkListener: using screen.handleComponentClicked()");
                 screen.handleComponentClicked(style);
@@ -179,35 +179,31 @@ public class ChatLinkListener {
             ClickEvent click = style.getClickEvent();
             if (click == null) return;
 
-            switch (click.getAction()) {
-                case OPEN_URL:
-                    // URL 作为音乐链接直接播放
-                    String url = click.getValue();
-                    if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
-                        try {
-                            ClientEvent.onPacket("[Play]" + url);
-                            log.info("ChatLinkListener: OPEN_URL auto-play: {}", url);
-                        } catch (Throwable t) {
-                            log.error("ChatLinkListener: OPEN_URL play failed: {}", t.getMessage(), t);
-                        }
+            // 26.x: ClickEvent 为 sealed interface，使用 instanceof 模式匹配
+            if (click instanceof ClickEvent.OpenUrl openUrl) {
+                // URL 作为音乐链接直接播放
+                String url = openUrl.uri().toString();
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    try {
+                        ClientEvent.onPacket("[Play]" + url);
+                        log.info("ChatLinkListener: OPEN_URL auto-play: {}", url);
+                    } catch (Throwable t) {
+                        log.error("ChatLinkListener: OPEN_URL play failed: {}", t.getMessage(), t);
                     }
-                    break;
-                case RUN_COMMAND:
-                    // 模拟发送命令
-                    String cmd = click.getValue();
-                    if (cmd != null && mc.player != null) {
-                        if (cmd.startsWith("/")) cmd = cmd.substring(1);
-                        mc.player.connection.sendCommand(cmd);
-                        log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
-                    }
-                    break;
-                case SUGGEST_COMMAND:
-                    // 填充聊天框（需打开聊天界面）
-                    log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
-                    break;
-                default:
-                    log.info("ChatLinkListener: unhandled click action: {}", click.getAction());
-                    break;
+                }
+            } else if (click instanceof ClickEvent.RunCommand runCommand) {
+                // 模拟发送命令
+                String cmd = runCommand.command();
+                if (cmd != null && mc.player != null) {
+                    if (cmd.startsWith("/")) cmd = cmd.substring(1);
+                    mc.player.connection.sendCommand(cmd);
+                    log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
+                }
+            } else if (click instanceof ClickEvent.SuggestCommand suggestCommand) {
+                // 填充聊天框（需打开聊天界面）
+                log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", suggestCommand.command());
+            } else {
+                log.info("ChatLinkListener: unhandled click event: {}", click);
             }
         }
     }

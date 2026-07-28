@@ -69,13 +69,13 @@ public class SelectPlaylistScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
-        graphics.text(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.drawString(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
                 10, 24, 0xAAAAFF);
         list.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
         if (!statusMessage.isEmpty()) {
-            graphics.centeredText(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
+            graphics.drawCenteredString(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
         }
     }
 
@@ -201,14 +201,14 @@ public class SelectPlaylistScreen extends Screen {
                         countStr = " (" + pl.size() + "首)";
                     }
                 }
-                graphics.text(font, name + countStr, left + 4, top + 4, 0xFFFFFF);
+                graphics.drawString(font, name + countStr, left + 4, top + 4, 0xFFFFFF);
 
                 // [添加] 按钮
                 String label = "[添加]";
                 addBtnW = font.width(label);
                 addBtnX = left + getRowWidth() - addBtnW - 4;
                 boolean hover = isInButton(mouseX, addBtnX, addBtnW) && mouseY >= top && mouseY <= top + ROW_HEIGHT;
-                graphics.text(font, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
+                graphics.drawString(font, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
             }
 
             @Override

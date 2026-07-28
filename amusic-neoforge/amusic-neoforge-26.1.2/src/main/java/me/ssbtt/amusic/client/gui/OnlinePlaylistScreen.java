@@ -167,11 +167,11 @@ public class OnlinePlaylistScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         extractBackground(graphics, mouseX, mouseY, partialTick);
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
         // 手动渲染列表（addWidget 不会自动渲染）
         list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         if (!statusMessage.isEmpty()) {
-            graphics.centeredText(this.font, statusMessage, this.width / 2, height - 45, statusColor);
+            graphics.drawCenteredString(this.font, statusMessage, this.width / 2, height - 45, statusColor);
         }
     }
 
@@ -219,15 +219,15 @@ public class OnlinePlaylistScreen extends Screen {
                 int top = getY();
                 int left = getX();
                 Font font = Minecraft.getInstance().font;
-                graphics.text(font, info.name, left + 2, top + 2, 0xFFFFFF);
+                graphics.drawString(font, info.name, left + 2, top + 2, 0xFFFFFF);
                 String meta = "作者: " + (info.author != null ? info.author : "?") + " | " + info.songCount + "首";
-                graphics.text(font, meta, left + 2, top + 11, 0xAAAAFF);
+                graphics.drawString(font, meta, left + 2, top + 11, 0xAAAAFF);
 
                 String dlLabel = "[下载]";
                 downloadBtnX = left + getRowWidth() - font.width(dlLabel) - 4;
                 downloadBtnW = font.width(dlLabel);
                 boolean hoverDl = isInButton(mouseX, downloadBtnX, downloadBtnW) && mouseY >= top && mouseY <= top + ROW_HEIGHT;
-                graphics.text(font, dlLabel, downloadBtnX, top + 7, hoverDl ? 0xFFFF55 : 0x55FF55);
+                graphics.drawString(font, dlLabel, downloadBtnX, top + 7, hoverDl ? 0xFFFF55 : 0x55FF55);
             }
 
             @Override
@@ -284,7 +284,7 @@ public class OnlinePlaylistScreen extends Screen {
         public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
             extractBackground(graphics, mouseX, mouseY, partialTick);
             super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-            graphics.centeredText(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
+            graphics.drawCenteredString(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             // 手动渲染列表（addWidget 不会自动渲染）
             list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         }
@@ -330,19 +330,19 @@ public class OnlinePlaylistScreen extends Screen {
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     Playlist pl = pm != null ? pm.loadPlaylist(name) : null;
                     int count = pl != null ? pl.size() : 0;
-                    graphics.text(font, name + " (" + count + "首)", left + 2, top + 2, 0xFFFFFF);
+                    graphics.drawString(font, name + " (" + count + "首)", left + 2, top + 2, 0xFFFFFF);
 
                     String pubLabel = "[公开上传]";
                     uploadBtnX = left + 2;
                     uploadBtnW = font.width(pubLabel);
                     boolean hoverPub = isInButton(mouseX, uploadBtnX, uploadBtnW) && mouseY >= top + 10 && mouseY <= top + 22;
-                    graphics.text(font, pubLabel, uploadBtnX, top + 11, hoverPub ? 0xFFFF55 : 0x55FF55);
+                    graphics.drawString(font, pubLabel, uploadBtnX, top + 11, hoverPub ? 0xFFFF55 : 0x55FF55);
 
                     String privLabel = "[私有上传]";
                     uploadPrivateBtnX = uploadBtnX + uploadBtnW + 8;
                     uploadPrivateBtnW = font.width(privLabel);
                     boolean hoverPriv = isInButton(mouseX, uploadPrivateBtnX, uploadPrivateBtnW) && mouseY >= top + 10 && mouseY <= top + 22;
-                    graphics.text(font, privLabel, uploadPrivateBtnX, top + 11, hoverPriv ? 0xFFFF55 : 0xFFAA00);
+                    graphics.drawString(font, privLabel, uploadPrivateBtnX, top + 11, hoverPriv ? 0xFFFF55 : 0xFFAA00);
                 }
 
                 @Override

@@ -188,7 +188,7 @@ public class SelectPlaylistScreen extends Screen {
             @Override
             public boolean mouseClicked(Click click, boolean doubleClick) {
                 if (click.button() != 0) return true;
-                double mouseX = click.comp_4798();
+                double mouseX = click.x();
                 if (mouseX >= addBtnX && mouseX <= addBtnX + addBtnW) {
                     addSongToPlaylist(name);
                 }

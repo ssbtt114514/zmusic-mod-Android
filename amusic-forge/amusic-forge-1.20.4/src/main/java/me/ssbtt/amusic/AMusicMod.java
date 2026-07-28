@@ -56,7 +56,14 @@ public class AMusicMod {
                 .networkProtocolVersion(1)
                 .optional()
                 .simpleChannel();
+        // 注册 PLAY_TO_CLIENT（服务端→客户端）方向
         CHANNEL.messageBuilder(String.class, 666, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(this::enc)
+                .decoder(this::dec)
+                .consumerMainThread(this::proc)
+                .add();
+        // 注册 PLAY_TO_SERVER（客户端→服务端）方向，供 PlaylistNetSender.sendToServer 使用
+        CHANNEL.messageBuilder(String.class, 667, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(this::enc)
                 .decoder(this::dec)
                 .consumerMainThread(this::proc)

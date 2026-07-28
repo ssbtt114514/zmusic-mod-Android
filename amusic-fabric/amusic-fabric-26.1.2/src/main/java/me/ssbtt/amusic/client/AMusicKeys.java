@@ -21,7 +21,7 @@ public final class AMusicKeys {
             "key.amusic.open_settings",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F6,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 音量增大 */
@@ -29,7 +29,7 @@ public final class AMusicKeys {
             "key.amusic.volume_up",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_PAGE_UP,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 音量减小 */
@@ -37,7 +37,7 @@ public final class AMusicKeys {
             "key.amusic.volume_down",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_PAGE_DOWN,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 静音/取消静音 */
@@ -45,7 +45,7 @@ public final class AMusicKeys {
             "key.amusic.mute_toggle",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 上一首 */
@@ -53,7 +53,7 @@ public final class AMusicKeys {
             "key.amusic.previous",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 下一首 */
@@ -61,7 +61,7 @@ public final class AMusicKeys {
             "key.amusic.next",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 暂停（发送 /zm stop） */
@@ -69,7 +69,7 @@ public final class AMusicKeys {
             "key.amusic.pause",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 查看历史记录 */
@@ -77,7 +77,7 @@ public final class AMusicKeys {
             "key.amusic.history",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F7,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 查看歌单 */
@@ -85,7 +85,7 @@ public final class AMusicKeys {
             "key.amusic.playlist",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F9,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     /** 调整音量条位置（打开拖动界面） */
@@ -93,7 +93,7 @@ public final class AMusicKeys {
             "key.amusic.volume_position",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F10,
-            "key.categories.amusic"
+            KeyMapping.Category.MISC
     );
 
     private AMusicKeys() {

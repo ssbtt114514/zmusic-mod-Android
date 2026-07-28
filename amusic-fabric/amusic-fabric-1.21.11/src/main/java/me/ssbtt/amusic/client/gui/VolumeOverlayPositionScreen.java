@@ -74,8 +74,8 @@ public class VolumeOverlayPositionScreen extends Screen {
     @Override
     public boolean mouseClicked(Click click, boolean doubleClick) {
         if (click.button() == 0) {
-            double mouseX = click.comp_4798();
-            double mouseY = click.comp_4799();
+            double mouseX = click.x();
+            double mouseY = click.y();
             if (mouseX >= barX - 4 && mouseX <= barX + BAR_WIDTH + 4
                     && mouseY >= barY - 4 && mouseY <= barY + BAR_HEIGHT + 4) {
                 dragging = true;
@@ -88,8 +88,8 @@ public class VolumeOverlayPositionScreen extends Screen {
     @Override
     public boolean mouseDragged(Click click, double dragX, double dragY) {
         if (dragging && click.button() == 0) {
-            double mouseX = click.comp_4798();
-            double mouseY = click.comp_4799();
+            double mouseX = click.x();
+            double mouseY = click.y();
             barX = (int) mouseX - BAR_WIDTH / 2;
             barY = (int) mouseY - BAR_HEIGHT / 2;
             if (barX < 0) barX = 0;

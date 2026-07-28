@@ -62,7 +62,7 @@ public class HistoryScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         list.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
@@ -193,7 +193,7 @@ public class HistoryScreen extends Screen {
                 if (data.getPlatform() != null && !data.getPlatform().isEmpty()) {
                     text = text + " [" + data.getPlatform() + "]";
                 }
-                graphics.text(mc.font, text, left + 4, top + 3, 0xFFFFFF);
+                graphics.drawString(mc.font, text, left + 4, top + 3, 0xFFFFFF);
 
                 // 右侧三个按钮：▶ 播放  ↓ 下载  ★ 收藏
                 int btnW = BTN_W;
@@ -211,7 +211,7 @@ public class HistoryScreen extends Screen {
             private void drawTextButton(GuiGraphicsExtractor graphics, Minecraft mc, String label, int x, int y, int w, int mouseX, int mouseY) {
                 boolean hover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + 10;
                 int color = hover ? 0xFFFF55 : 0xAAAAFF;
-                graphics.text(mc.font, label, x + 2, y + 1, color);
+                graphics.drawString(mc.font, label, x + 2, y + 1, color);
             }
 
             @Override

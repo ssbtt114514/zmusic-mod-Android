@@ -149,7 +149,7 @@ public class ChatLinkListener {
 
         // 1.21.5+: ClickEvent 是 sealed interface，各子类型为 record，需用 instanceof 模式匹配
         if (click instanceof ClickEvent.OpenUrl openUrl) {
-            String url = openUrl.comp_3505() == null ? null : openUrl.comp_3505().toString();
+            String url = openUrl.uri() == null ? null : openUrl.uri().toString();
             if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
                 try {
                     ClientEvent.onPacket("[Play]" + url);
@@ -159,16 +159,16 @@ public class ChatLinkListener {
                 }
             }
         } else if (click instanceof ClickEvent.RunCommand runCmd) {
-            String cmd = runCmd.comp_3506();
+            String cmd = runCmd.command();
             if (cmd != null && mc.player != null) {
                 if (cmd.startsWith("/")) cmd = cmd.substring(1);
                 mc.player.networkHandler.sendChatCommand(cmd);
                 log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
             }
         } else if (click instanceof ClickEvent.SuggestCommand suggestCmd) {
-            log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", suggestCmd.comp_3507());
+            log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", suggestCmd.command());
         } else {
-            log.info("ChatLinkListener: unhandled click action: {}", click.getAction());
+            log.info("ChatLinkListener: unhandled click event: {}", click);
         }
     }
 
