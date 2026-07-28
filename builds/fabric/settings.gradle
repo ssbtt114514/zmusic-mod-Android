@@ -15,13 +15,6 @@ include("amusic-core")
 project(":amusic-core").projectDir = file("../../amusic-core")
 
 def fabricProjects = [
-        "amusic-fabric-1.14.4",
-        "amusic-fabric-1.15.2",
-        "amusic-fabric-1.16.5",
-        "amusic-fabric-1.17.1",
-        "amusic-fabric-1.18.2",
-        "amusic-fabric-1.19.2",
-        "amusic-fabric-1.19.4",
         "amusic-fabric-1.20.1",
         "amusic-fabric-1.20.4",
         "amusic-fabric-1.20.6",

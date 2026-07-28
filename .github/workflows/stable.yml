@@ -122,41 +122,6 @@ jobs:
             project: amusic-fabric-1.20.1
             target-version: 1.20.1
             artifact-path: amusic-fabric/amusic-fabric-1.20.1/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.19.4
-            target-version: 1.19.4
-            artifact-path: amusic-fabric/amusic-fabric-1.19.4/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.19.2
-            target-version: 1.19.2
-            artifact-path: amusic-fabric/amusic-fabric-1.19.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.18.2
-            target-version: 1.18.2
-            artifact-path: amusic-fabric/amusic-fabric-1.18.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.17.1
-            target-version: 1.17.1
-            artifact-path: amusic-fabric/amusic-fabric-1.17.1/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.16.5
-            target-version: 1.16.5
-            artifact-path: amusic-fabric/amusic-fabric-1.16.5/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.15.2
-            target-version: 1.15.2
-            artifact-path: amusic-fabric/amusic-fabric-1.15.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.14.4
-            target-version: 1.14.4
-            artifact-path: amusic-fabric/amusic-fabric-1.14.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
             project: amusic-forge-1.20.4
@@ -167,46 +132,6 @@ jobs:
             project: amusic-forge-1.20.1
             target-version: 1.20.1
             artifact-path: amusic-forge/amusic-forge-1.20.1/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.19.4
-            target-version: 1.19.4
-            artifact-path: amusic-forge/amusic-forge-1.19.4/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.19.2
-            target-version: 1.19.2
-            artifact-path: amusic-forge/amusic-forge-1.19.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.18.2
-            target-version: 1.18.2
-            artifact-path: amusic-forge/amusic-forge-1.18.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.17.1
-            target-version: 1.17.1
-            artifact-path: amusic-forge/amusic-forge-1.17.1/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.16.5
-            target-version: 1.16.5
-            artifact-path: amusic-forge/amusic-forge-1.16.5/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.15.2
-            target-version: 1.15.2
-            artifact-path: amusic-forge/amusic-forge-1.15.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.14.4
-            target-version: 1.14.4
-            artifact-path: amusic-forge/amusic-forge-1.14.4/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.12.2
-            target-version: 1.12.2
-            artifact-path: amusic-forge/amusic-forge-1.12.2/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
             project: amusic-neoforge-26.2
@@ -248,12 +173,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.project }}-
             ${{ runner.os }}-gradle-
-      - name: Warm Forge 1.12.2 classpath
-        if: matrix.project == 'amusic-forge-1.12.2'
-        run: |
-          ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:dependencies" --configuration compileClasspath --no-daemon \
-            -Pamusic.project="${{ matrix.project }}" \
-            -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"
       - name: Build ${{ matrix.loader }} ${{ matrix.target-version }}
         run: |
           # 最多重试 3 次，应对 CI 中 maven 仓库偶发读取超时
@@ -263,7 +182,7 @@ jobs:
             if ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
               -Pamusic.project="${{ matrix.project }}" \
               -Pamusic.version="${{ inputs.version }}" \
-              -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
+              -Porg.gradle.java.installations.paths="$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
               echo "::endgroup::"
               exit 0
             fi
@@ -326,41 +245,6 @@ jobs:
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
             artifact-name: AMusic Fabric 1.20.1
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.19.4
-            supported-versions: 1.19.4
-            artifact-name: AMusic Fabric 1.19.4
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.19.2
-            supported-versions: 1.19.2
-            artifact-name: AMusic Fabric 1.19.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.18.2
-            supported-versions: 1.18.2
-            artifact-name: AMusic Fabric 1.18.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.17.1
-            supported-versions: 1.17 1.17.1
-            artifact-name: AMusic Fabric 1.17.1
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.16.5
-            supported-versions: 1.16 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: AMusic Fabric 1.16.5
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.15.2
-            supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: AMusic Fabric 1.15.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.14.4
-            supported-versions: 1.14.3 1.14.4
-            artifact-name: AMusic Fabric 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.4
@@ -371,46 +255,6 @@ jobs:
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
             artifact-name: AMusic Forge 1.20.1
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.19.4
-            supported-versions: 1.19.4
-            artifact-name: AMusic Forge 1.19.4
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.19.2
-            supported-versions: 1.19.2
-            artifact-name: AMusic Forge 1.19.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.18.2
-            supported-versions: 1.18 1.18.1 1.18.2
-            artifact-name: AMusic Forge 1.18.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.17.1
-            supported-versions: 1.17.1
-            artifact-name: AMusic Forge 1.17.1
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.16.5
-            supported-versions: 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: AMusic Forge 1.16.5
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.15.2
-            supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: AMusic Forge 1.15.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.14.4
-            supported-versions: 1.14.4
-            artifact-name: AMusic Forge 1.14.4
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.12.2
-            supported-versions: 1.12.2
-            artifact-name: AMusic Forge 1.12.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: "26.2"
@@ -596,41 +440,6 @@ jobs:
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
             artifact-name: AMusic Fabric 1.20.1
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.19.4
-            supported-versions: 1.19.4
-            artifact-name: AMusic Fabric 1.19.4
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.19.2
-            supported-versions: 1.19.2
-            artifact-name: AMusic Fabric 1.19.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.18.2
-            supported-versions: 1.18.2
-            artifact-name: AMusic Fabric 1.18.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.17.1
-            supported-versions: 1.17 1.17.1
-            artifact-name: AMusic Fabric 1.17.1
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.16.5
-            supported-versions: 1.16 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: AMusic Fabric 1.16.5
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.15.2
-            supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: AMusic Fabric 1.15.2
-          - loader: Fabric
-            mod-loader: fabric
-            target-version: 1.14.4
-            supported-versions: 1.14.3 1.14.4
-            artifact-name: AMusic Fabric 1.14.4
           - loader: Forge
             mod-loader: forge
             target-version: 1.20.4
@@ -641,46 +450,6 @@ jobs:
             target-version: 1.20.1
             supported-versions: 1.20 1.20.1
             artifact-name: AMusic Forge 1.20.1
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.19.4
-            supported-versions: 1.19.4
-            artifact-name: AMusic Forge 1.19.4
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.19.2
-            supported-versions: 1.19.2
-            artifact-name: AMusic Forge 1.19.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.18.2
-            supported-versions: 1.18 1.18.1 1.18.2
-            artifact-name: AMusic Forge 1.18.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.17.1
-            supported-versions: 1.17.1
-            artifact-name: AMusic Forge 1.17.1
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.16.5
-            supported-versions: 1.16.1 1.16.2 1.16.3 1.16.4 1.16.5
-            artifact-name: AMusic Forge 1.16.5
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.15.2
-            supported-versions: 1.15 1.15.1 1.15.2
-            artifact-name: AMusic Forge 1.15.2
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.14.4
-            supported-versions: 1.14.4
-            artifact-name: AMusic Forge 1.14.4
-          - loader: Forge
-            mod-loader: forge
-            target-version: 1.12.2
-            supported-versions: 1.12.2
-            artifact-name: AMusic Forge 1.12.2
           - loader: NeoForge
             mod-loader: neoforge
             target-version: "26.2"

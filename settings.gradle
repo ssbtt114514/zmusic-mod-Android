@@ -27,13 +27,6 @@ include(
         "amusic-neoforge:amusic-neoforge-1.21.1"
 )
 include(
-        "amusic-fabric:amusic-fabric-1.14.4",
-        "amusic-fabric:amusic-fabric-1.15.2",
-        "amusic-fabric:amusic-fabric-1.16.5",
-        "amusic-fabric:amusic-fabric-1.17.1",
-        "amusic-fabric:amusic-fabric-1.18.2",
-        "amusic-fabric:amusic-fabric-1.19.2",
-        "amusic-fabric:amusic-fabric-1.19.4",
         "amusic-fabric:amusic-fabric-1.20.1",
         "amusic-fabric:amusic-fabric-1.20.4",
         "amusic-fabric:amusic-fabric-1.20.6",

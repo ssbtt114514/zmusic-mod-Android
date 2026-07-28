@@ -31,15 +31,15 @@ Provides pure-Java audio playback for Minecraft Android launchers (FCL, PojavLau
 
 ## 支持版本 / Supported Versions
 
-全版本覆盖（1.12.2 ~ 26.2），共 29 个构建目标：
+覆盖 1.20.1 ~ 26.2，共 14 个构建目标：
 
-Full version coverage (1.12.2 ~ 26.2), 29 build targets in total:
+Coverage from 1.20.1 to 26.2, 14 build targets in total:
 
-### Forge（10 个版本 / 10 versions）
-`1.12.2` `1.14.4` `1.15.2` `1.16.5` `1.17.1` `1.18.2` `1.19.2` `1.19.4` `1.20.1` `1.20.4`
+### Forge（2 个版本 / 2 versions）
+`1.20.1` `1.20.4`
 
-### Fabric（14 个版本 / 14 versions）
-`1.14.4` `1.15.2` `1.16.5` `1.17.1` `1.18.2` `1.19.2` `1.19.4` `1.20.1` `1.20.4` `1.20.6` `1.21.5` `1.21.11` `26.1.2` `26.2`
+### Fabric（7 个版本 / 7 versions）
+`1.20.1` `1.20.4` `1.20.6` `1.21.5` `1.21.11` `26.1.2` `26.2`
 
 ### NeoForge（5 个版本 / 5 versions）
 `1.20.4` `1.20.6` `1.21.1` `26.1.2` `26.2`

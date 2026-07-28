@@ -1,6 +1,0 @@
-package me.ssbtt.amusic.client.gui;
-
-// TODO: 此版本的GUI尚未适配Fabric Yarn映射
-public class PlaylistScreen extends net.minecraft.client.gui.screen.Screen {
-    public PlaylistScreen() { super(net.minecraft.text.Text.literal("")); }
-}

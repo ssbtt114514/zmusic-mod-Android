@@ -59,41 +59,6 @@ jobs:
             project: amusic-fabric-1.20.1
             mc-version: 1.20.1
             artifact-path: amusic-fabric/amusic-fabric-1.20.1/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.19.4
-            mc-version: 1.19.4
-            artifact-path: amusic-fabric/amusic-fabric-1.19.4/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.19.2
-            mc-version: 1.19.2
-            artifact-path: amusic-fabric/amusic-fabric-1.19.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.18.2
-            mc-version: 1.18.2
-            artifact-path: amusic-fabric/amusic-fabric-1.18.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.17.1
-            mc-version: 1.17.1
-            artifact-path: amusic-fabric/amusic-fabric-1.17.1/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.16.5
-            mc-version: 1.16.5
-            artifact-path: amusic-fabric/amusic-fabric-1.16.5/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.15.2
-            mc-version: 1.15.2
-            artifact-path: amusic-fabric/amusic-fabric-1.15.2/build/libs/**.jar
-          - loader: Fabric
-            build-dir: builds/fabric
-            project: amusic-fabric-1.14.4
-            mc-version: 1.14.4
-            artifact-path: amusic-fabric/amusic-fabric-1.14.4/build/libs/**.jar
           - loader: Forge
             build-dir: builds/forge
             project: amusic-forge-1.20.4
@@ -104,46 +69,6 @@ jobs:
             project: amusic-forge-1.20.1
             mc-version: 1.20.1
             artifact-path: amusic-forge/amusic-forge-1.20.1/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.19.4
-            mc-version: 1.19.4
-            artifact-path: amusic-forge/amusic-forge-1.19.4/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.19.2
-            mc-version: 1.19.2
-            artifact-path: amusic-forge/amusic-forge-1.19.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.18.2
-            mc-version: 1.18.2
-            artifact-path: amusic-forge/amusic-forge-1.18.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.17.1
-            mc-version: 1.17.1
-            artifact-path: amusic-forge/amusic-forge-1.17.1/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.16.5
-            mc-version: 1.16.5
-            artifact-path: amusic-forge/amusic-forge-1.16.5/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.15.2
-            mc-version: 1.15.2
-            artifact-path: amusic-forge/amusic-forge-1.15.2/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.14.4
-            mc-version: 1.14.4
-            artifact-path: amusic-forge/amusic-forge-1.14.4/build/libs/**.jar
-          - loader: Forge
-            build-dir: builds/forge
-            project: amusic-forge-1.12.2
-            mc-version: 1.12.2
-            artifact-path: amusic-forge/amusic-forge-1.12.2/build/libs/**.jar
           - loader: NeoForge
             build-dir: builds/neoforge
             project: amusic-neoforge-26.2
@@ -185,12 +110,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.project }}-
             ${{ runner.os }}-gradle-
-      - name: Warm Forge 1.12.2 classpath
-        if: matrix.project == 'amusic-forge-1.12.2'
-        run: |
-          ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:dependencies" --configuration compileClasspath --no-daemon \
-            -Pamusic.project="${{ matrix.project }}" \
-            -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"
       - name: Build ${{ matrix.loader }} ${{ matrix.mc-version }}
         run: |
           # 最多重试 3 次，应对 CI 中 maven 仓库偶发读取超时
@@ -198,7 +117,7 @@ jobs:
             echo "::group::Build attempt $attempt"
             if ./gradlew --project-dir "${{ matrix.build-dir }}" ":${{ matrix.project }}:build" --no-daemon \
               -Pamusic.project="${{ matrix.project }}" \
-              -Porg.gradle.java.installations.paths="$(mise where java@temurin-8),$(mise where java@temurin-16),$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
+              -Porg.gradle.java.installations.paths="$(mise where java@temurin-17),$(mise where java@temurin-21),$(mise where java@temurin-25)"; then
               echo "::endgroup::"
               exit 0
             fi

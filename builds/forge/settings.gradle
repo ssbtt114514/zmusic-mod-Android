@@ -27,14 +27,6 @@ include("amusic-core")
 project(":amusic-core").projectDir = file("../../amusic-core")
 
 def forgeProjects = [
-        "amusic-forge-1.12.2",
-        "amusic-forge-1.14.4",
-        "amusic-forge-1.15.2",
-        "amusic-forge-1.16.5",
-        "amusic-forge-1.17.1",
-        "amusic-forge-1.18.2",
-        "amusic-forge-1.19.2",
-        "amusic-forge-1.19.4",
         "amusic-forge-1.20.1",
         "amusic-forge-1.20.4"
 ]
