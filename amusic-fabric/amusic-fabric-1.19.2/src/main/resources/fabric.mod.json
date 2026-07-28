@@ -1,4 +1,4 @@
-﻿{
+{
   "schemaVersion": 1,
   "id": "amusic",
   "version": "${version}",
@@ -16,7 +16,7 @@
   "license": "GPL-3.0",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "me.ssbtt.amusic.AMusicMod"
     ]
   },

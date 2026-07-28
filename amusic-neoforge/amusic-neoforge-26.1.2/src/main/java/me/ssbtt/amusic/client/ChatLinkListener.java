@@ -164,7 +164,7 @@ public class ChatLinkListener {
      * 当无 Screen 打开时，回退到直接处理 clickEvent。</p>
      */
     private void handleClick(Minecraft mc, Component component) {
-        Screen screen = mc.screen;
+        Screen screen = mc.gui.screen;
         Style style = component.getStyle();
         if (screen != null) {
             // 有 Screen 打开：使用 handleComponentClicked 完美复刻玩家点击

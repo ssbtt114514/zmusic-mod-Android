@@ -157,7 +157,7 @@ public final class CommandSender {
             log.warn("Connection is null, cannot send command: /{}", commandWithoutSlash);
             return;
         }
-        connection.sendCommand(commandWithoutSlash);
+        connection.sendChatMessage(commandWithoutSlash);
         log.info("Sent command (simulated Enter): /{}", commandWithoutSlash);
     }
 }

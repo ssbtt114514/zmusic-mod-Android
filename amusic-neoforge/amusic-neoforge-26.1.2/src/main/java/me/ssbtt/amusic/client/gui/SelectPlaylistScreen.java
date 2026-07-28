@@ -69,13 +69,13 @@ public class SelectPlaylistScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
-        graphics.drawString(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
+        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.text(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
                 10, 24, 0xAAAAFF);
         list.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
         if (!statusMessage.isEmpty()) {
-            graphics.drawCenteredString(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
+            graphics.centeredText(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
         }
     }
 
@@ -86,7 +86,7 @@ public class SelectPlaylistScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(parent);
+        Minecraft.getInstance().gui.setScreen(parent);
     }
 
     /**
@@ -189,7 +189,9 @@ public class SelectPlaylistScreen extends Screen {
             }
 
             @Override
-            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                int top = getY();
+                int left = getX();
                 Font font = Minecraft.getInstance().font;
                 PlaylistManager pm = AMusic.getPlaylistManager();
                 String countStr = "";
@@ -199,14 +201,14 @@ public class SelectPlaylistScreen extends Screen {
                         countStr = " (" + pl.size() + "首)";
                     }
                 }
-                graphics.drawString(font, name + countStr, left + 4, top + 4, 0xFFFFFF);
+                graphics.text(font, name + countStr, left + 4, top + 4, 0xFFFFFF);
 
                 // [添加] 按钮
                 String label = "[添加]";
                 addBtnW = font.width(label);
                 addBtnX = left + getRowWidth() - addBtnW - 4;
-                boolean hover = isInButton(mouseX, addBtnX, addBtnW) && mouseY >= top && mouseY <= top + height;
-                graphics.drawString(font, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
+                boolean hover = isInButton(mouseX, addBtnX, addBtnW) && mouseY >= top && mouseY <= top + ROW_HEIGHT;
+                graphics.text(font, label, addBtnX, top + 4, hover ? 0xFFFF55 : 0x55FF55);
             }
 
             @Override

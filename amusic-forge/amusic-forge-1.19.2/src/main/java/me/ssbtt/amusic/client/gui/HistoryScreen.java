@@ -42,7 +42,7 @@ public class HistoryScreen extends Screen {
         list = new HistoryList(Minecraft.getInstance());
         addWidget(list);
 
-        addButton(new Button(10, 28, 90, 18, Component.literal("清除历史"), b -> {
+        addRenderableWidget(new Button(10, 28, 90, 18, Component.literal("清除历史"), b -> {
             HistoryManager hm = AMusic.getHistoryManager();
             if (hm != null) {
                 hm.clear();
@@ -50,7 +50,7 @@ public class HistoryScreen extends Screen {
             list.refresh();
         }));
 
-        addButton(new Button(this.width / 2 - 100, this.height - 24, 200, 20, Component.translatable("gui.done"), b -> onClose()));
+        addRenderableWidget(new Button(this.width / 2 - 100, this.height - 24, 200, 20, Component.translatable("gui.done"), b -> onClose()));
     }
 
     @Override

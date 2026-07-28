@@ -48,11 +48,11 @@ public class SelectPlaylistScreen extends Screen {
 
         newPlaylistBox = new EditBox(this.font, 10, this.height - 50, 150, 18, Component.literal("新歌单名"));
         newPlaylistBox.setMaxLength(30);
-        addButton(newPlaylistBox);
+        addRenderableWidget(newPlaylistBox);
 
-        addButton(new Button(165, this.height - 50, 90, 18, Component.literal("新建并添加"), b -> createAndAdd()));
+        addRenderableWidget(Button.builder(Component.literal("新建并添加"), b -> createAndAdd()).bounds(165, this.height - 50, 90, 18).build());
 
-        addButton(new Button(this.width / 2 - 100, this.height - 24, 200, 20, Component.translatable("gui.cancel"), b -> onClose()));
+        addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), b -> onClose()).bounds(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
     @Override

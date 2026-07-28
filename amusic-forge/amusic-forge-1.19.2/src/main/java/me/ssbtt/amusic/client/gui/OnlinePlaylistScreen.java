@@ -50,12 +50,12 @@ public class OnlinePlaylistScreen extends Screen {
         list = new OnlineList();
         addWidget(list);
 
-        addButton(new Button(width / 2 - 155, 5, 70, 18, Component.literal("公开歌单"), b -> switchMode(Mode.PUBLIC)));
-        addButton(new Button(width / 2 - 80, 5, 70, 18, Component.literal("我的歌单"), b -> switchMode(Mode.MINE)));
-        addButton(new Button(width / 2 - 5, 5, 70, 18, Component.literal("上传歌单"), b -> openUploadDialog()));
-        addButton(new Button(width / 2 + 70, 5, 70, 18, Component.literal("刷新"), b -> refreshList()));
+        addRenderableWidget(new Button(width / 2 - 155, 5, 70, 18, Component.literal("公开歌单"), b -> switchMode(Mode.PUBLIC)));
+        addRenderableWidget(new Button(width / 2 - 80, 5, 70, 18, Component.literal("我的歌单"), b -> switchMode(Mode.MINE)));
+        addRenderableWidget(new Button(width / 2 - 5, 5, 70, 18, Component.literal("上传歌单"), b -> openUploadDialog()));
+        addRenderableWidget(new Button(width / 2 + 70, 5, 70, 18, Component.literal("刷新"), b -> refreshList()));
 
-        addButton(new Button(width / 2 - 40, height - 25, 80, 18, Component.literal("返回"), b -> onClose()));
+        addRenderableWidget(new Button(width / 2 - 40, height - 25, 80, 18, Component.literal("返回"), b -> onClose()));
 
         if (firstLoad) {
             firstLoad = false;
@@ -222,7 +222,7 @@ public class OnlinePlaylistScreen extends Screen {
             }
             addWidget(list);
 
-            addButton(new Button(width / 2 - 40, height - 25, 80, 18, Component.literal("返回"), b -> {
+            addRenderableWidget(new Button(width / 2 - 40, height - 25, 80, 18, Component.literal("返回"), b -> {
                 Minecraft.getInstance().setScreen(parent);
             }));
         }

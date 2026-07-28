@@ -43,14 +43,14 @@ public class VolumeOverlayPositionScreen extends Screen {
             barY = this.height - 40;
         }
 
-        addButton(new Button(10, 10, 100, 20, Component.literal("重置到默认"), b -> {
+        addRenderableWidget(new Button(10, 10, 100, 20, Component.literal("重置到默认"), b -> {
             barX = (this.width - BAR_WIDTH) / 2;
             barY = this.height - 40;
         }));
 
-        addButton(new Button(this.width / 2 - 110, this.height - 28, 100, 20, Component.literal("保存"), b -> save()));
+        addRenderableWidget(new Button(this.width / 2 - 110, this.height - 28, 100, 20, Component.literal("保存"), b -> save()));
 
-        addButton(new Button(this.width / 2 + 10, this.height - 28, 100, 20, Component.translatable("gui.cancel"), b -> onClose()));
+        addRenderableWidget(new Button(this.width / 2 + 10, this.height - 28, 100, 20, Component.translatable("gui.cancel"), b -> onClose()));
     }
 
     @Override

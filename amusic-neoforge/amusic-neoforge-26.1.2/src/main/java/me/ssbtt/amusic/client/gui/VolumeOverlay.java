@@ -91,6 +91,6 @@ public class VolumeOverlay {
         // 音量百分比文本
         int pct = (int) (displayedVolume * 100);
         String text = displayedMuted ? "已静音" : "音量 " + pct + "%";
-        graphics.drawCenteredString(mc.font, text, screenWidth / 2, y + barHeight - 12, 0xFFFFFFFF);
+        graphics.centeredText(mc.font, text, screenWidth / 2, y + barHeight - 12, 0xFFFFFFFF);
     }
 }

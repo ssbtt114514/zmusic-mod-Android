@@ -18,8 +18,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -107,15 +106,13 @@ public class AMusicMod implements ClientModInitializer {
             }
         });
 
-        // 注册 HUD 渲染：音量条 overlay（Fabric 26.1 使用 HudElementRegistry 替代已移除的 HudRenderCallback）
-        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT,
-                Identifier.fromNamespaceAndPath("amusic", "volume_overlay"),
-                (graphics, tickCounter) -> {
-                    Minecraft mc = Minecraft.getInstance();
-                    if (mc.player != null) {
-                        volumeOverlay.render(graphics);
-                    }
-                });
+        // 注册 HUD 渲染：音量条 overlay
+        HudRenderCallback.EVENT.register((graphics, tickCounter) -> {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null) {
+                volumeOverlay.render(graphics);
+            }
+        });
     }
 
     private void handleKey(KeyMapping binding, Runnable action) {

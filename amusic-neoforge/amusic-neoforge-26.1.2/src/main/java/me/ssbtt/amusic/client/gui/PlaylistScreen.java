@@ -86,10 +86,10 @@ public class PlaylistScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         int halfW = (this.width - 30) / 2;
-        graphics.drawString(this.font, "歌单列表", 10, 20, 0xFFFFFF);
-        graphics.drawString(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
+        graphics.text(this.font, "歌单列表", 10, 20, 0xFFFFFF);
+        graphics.text(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
         playlistList.extractRenderState(graphics, mouseX, mouseY, partialTick);
         songList.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
@@ -180,7 +180,7 @@ public class PlaylistScreen extends Screen {
      * 打开在线歌单界面。
      */
     private void openOnlinePlaylists() {
-        Minecraft.getInstance().setScreen(new OnlinePlaylistScreen());
+        Minecraft.getInstance().gui.setScreen(new OnlinePlaylistScreen());
     }
 
     private void cyclePlayOrder() {
@@ -264,13 +264,15 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                int top = getY();
+                int left = getX();
                 Font font = Minecraft.getInstance().font;
                 String text = name;
                 if (name.equals(selectedPlaylist)) {
                     text = "> " + name;
                 }
-                graphics.drawString(font, text, left + 2, top + 2, 0xFFFFFF);
+                graphics.text(font, text, left + 2, top + 2, 0xFFFFFF);
 
                 // 显示歌曲数量
                 PlaylistManager pm = AMusic.getPlaylistManager();
@@ -281,7 +283,7 @@ public class PlaylistScreen extends Screen {
                         countStr = "(" + pl.size() + "首)";
                     }
                 }
-                graphics.drawString(font, countStr, left + 2 + font.width(text) + 4, top + 2, 0xAAAAFF);
+                graphics.text(font, countStr, left + 2 + font.width(text) + 4, top + 2, 0xAAAAFF);
 
                 // 按钮区域：[选择] [播放] [删除]
                 int btnY = top + 11;
@@ -291,21 +293,21 @@ public class PlaylistScreen extends Screen {
                 selectBtnX = x;
                 selectBtnW = font.width(selectLabel);
                 boolean hoverSelect = isInButton(mouseX, selectBtnX, selectBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                graphics.drawString(font, selectLabel, x, btnY, hoverSelect ? 0xFFFF55 : 0xAAAAFF);
+                graphics.text(font, selectLabel, x, btnY, hoverSelect ? 0xFFFF55 : 0xAAAAFF);
                 x += selectBtnW + 4;
 
                 String playLabel = "[播放]";
                 playBtnX = x;
                 playBtnW = font.width(playLabel);
                 boolean hoverPlay = isInButton(mouseX, playBtnX, playBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                graphics.drawString(font, playLabel, x, btnY, hoverPlay ? 0xFFFF55 : 0x55FF55);
+                graphics.text(font, playLabel, x, btnY, hoverPlay ? 0xFFFF55 : 0x55FF55);
                 x += playBtnW + 4;
 
                 String deleteLabel = "[删除]";
                 deleteBtnX = x;
                 deleteBtnW = font.width(deleteLabel);
                 boolean hoverDelete = isInButton(mouseX, deleteBtnX, deleteBtnW) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                graphics.drawString(font, deleteLabel, x, btnY, hoverDelete ? 0xFFFF55 : 0xFF5555);
+                graphics.text(font, deleteLabel, x, btnY, hoverDelete ? 0xFFFF55 : 0xFF5555);
             }
 
             @Override
@@ -383,9 +385,11 @@ public class PlaylistScreen extends Screen {
             Playlist pl = pm.loadPlaylist(selectedPlaylist);
             if (pl == null) return;
             // 第一项显示播放顺序
-            addEntry(new Entry(null, "播放顺序: " + pl.getPlayOrder().getDisplayName(), true));
+            addEntry(new Entry(null, "播放顺序: " + pl.getPlayOrder().getDisplayName(), true, -1));
+            int songIdx = 0;
             for (HistoryEntry e : pl.getSongs()) {
-                addEntry(new Entry(e, e.getName(), false));
+                addEntry(new Entry(e, e.getName(), false, songIdx));
+                songIdx++;
             }
         }
 
@@ -393,30 +397,34 @@ public class PlaylistScreen extends Screen {
             private final HistoryEntry data;
             private final String label;
             private final boolean isPlayOrderEntry;
+            private final int songIndex;
 
             // 按钮区域缓存
             private int[] btnX = new int[2];
             private int[] btnW = new int[2];
             private int orderBtnX, orderBtnW;
 
-            Entry(HistoryEntry data, String label, boolean isPlayOrderEntry) {
+            Entry(HistoryEntry data, String label, boolean isPlayOrderEntry, int songIndex) {
                 this.data = data;
                 this.label = label;
                 this.isPlayOrderEntry = isPlayOrderEntry;
+                this.songIndex = songIndex;
             }
 
             @Override
-            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                int top = getY();
+                int left = getX();
                 Font font = Minecraft.getInstance().font;
 
                 if (isPlayOrderEntry) {
                     // 播放顺序行
-                    graphics.drawString(font, label, left + 2, top + 2, 0xFFAA00);
+                    graphics.text(font, label, left + 2, top + 2, 0xFFAA00);
                     String switchLabel = "[切换]";
                     orderBtnX = left + 2 + font.width(label) + 6;
                     orderBtnW = font.width(switchLabel);
                     boolean hover = isInButton(mouseX, orderBtnX, orderBtnW) && mouseY >= top + 1 && mouseY <= top + 11;
-                    graphics.drawString(font, switchLabel, orderBtnX, top + 2, hover ? 0xFFFF55 : 0x55FF55);
+                    graphics.text(font, switchLabel, orderBtnX, top + 2, hover ? 0xFFFF55 : 0x55FF55);
                     return;
                 }
 
@@ -426,15 +434,13 @@ public class PlaylistScreen extends Screen {
                 if (pp != null && pp.isActive() && data != null && pp.getActivePlaylist() != null) {
                     Playlist active = pp.getActivePlaylist();
                     if (selectedPlaylist != null && selectedPlaylist.equals(active.getName())) {
-                        // index - 1 因为第一项是播放顺序行
-                        int songIndex = index - 1;
                         if (songIndex == pp.getCurrentIndex()) {
                             isCurrent = true;
                         }
                     }
                 }
                 int nameColor = isCurrent ? 0x55FF55 : 0xFFFFFF;
-                graphics.drawString(font, label, left + 2, top + 2, nameColor);
+                graphics.text(font, label, left + 2, top + 2, nameColor);
 
                 // 按钮行：[播放] [移除]
                 int btnY = top + 11;
@@ -443,7 +449,7 @@ public class PlaylistScreen extends Screen {
                 // 平台标签
                 if (data != null && data.getPlatform() != null && !data.getPlatform().isEmpty()) {
                     String platLabel = "[" + data.getPlatform() + "]";
-                    graphics.drawString(font, platLabel, x, btnY, 0x888888);
+                    graphics.text(font, platLabel, x, btnY, 0x888888);
                     x += font.width(platLabel) + 4;
                 }
 
@@ -451,14 +457,14 @@ public class PlaylistScreen extends Screen {
                 btnX[0] = x;
                 btnW[0] = font.width(playLabel);
                 boolean hoverPlay = isInButton(mouseX, btnX[0], btnW[0]) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                graphics.drawString(font, playLabel, x, btnY, isCurrent ? 0x55FF55 : (hoverPlay ? 0xFFFF55 : 0x55FF55));
+                graphics.text(font, playLabel, x, btnY, isCurrent ? 0x55FF55 : (hoverPlay ? 0xFFFF55 : 0x55FF55));
                 x += btnW[0] + 4;
 
                 String removeLabel = "[移除]";
                 btnX[1] = x;
                 btnW[1] = font.width(removeLabel);
                 boolean hoverRemove = isInButton(mouseX, btnX[1], btnW[1]) && mouseY >= btnY - 2 && mouseY <= btnY + 10;
-                graphics.drawString(font, removeLabel, x, btnY, hoverRemove ? 0xFFFF55 : 0xFF5555);
+                graphics.text(font, removeLabel, x, btnY, hoverRemove ? 0xFFFF55 : 0xFF5555);
             }
 
             @Override

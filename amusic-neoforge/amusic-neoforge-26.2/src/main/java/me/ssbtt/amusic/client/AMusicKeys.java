@@ -2,6 +2,7 @@ package me.ssbtt.amusic.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -17,6 +18,7 @@ public final class AMusicKeys {
     /** 打开设置界面 */
     public static final KeyMapping OPEN_SETTINGS = new KeyMapping(
             "key.amusic.open_settings",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F6,
             "key.categories.amusic"
@@ -25,6 +27,7 @@ public final class AMusicKeys {
     /** 音量增大 */
     public static final KeyMapping VOLUME_UP = new KeyMapping(
             "key.amusic.volume_up",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_PAGE_UP,
             "key.categories.amusic"
@@ -33,6 +36,7 @@ public final class AMusicKeys {
     /** 音量减小 */
     public static final KeyMapping VOLUME_DOWN = new KeyMapping(
             "key.amusic.volume_down",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_PAGE_DOWN,
             "key.categories.amusic"
@@ -41,6 +45,7 @@ public final class AMusicKeys {
     /** 静音/取消静音 */
     public static final KeyMapping MUTE_TOGGLE = new KeyMapping(
             "key.amusic.mute_toggle",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
             "key.categories.amusic"
@@ -49,6 +54,7 @@ public final class AMusicKeys {
     /** 上一首 */
     public static final KeyMapping PREVIOUS = new KeyMapping(
             "key.amusic.previous",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
             "key.categories.amusic"
@@ -57,6 +63,7 @@ public final class AMusicKeys {
     /** 下一首 */
     public static final KeyMapping NEXT = new KeyMapping(
             "key.amusic.next",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
             "key.categories.amusic"
@@ -65,6 +72,7 @@ public final class AMusicKeys {
     /** 暂停（发送 /zm stop） */
     public static final KeyMapping PAUSE = new KeyMapping(
             "key.amusic.pause",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_UNKNOWN,
             "key.categories.amusic"
@@ -73,6 +81,7 @@ public final class AMusicKeys {
     /** 查看历史记录 */
     public static final KeyMapping HISTORY = new KeyMapping(
             "key.amusic.history",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F7,
             "key.categories.amusic"
@@ -81,6 +90,7 @@ public final class AMusicKeys {
     /** 查看歌单 */
     public static final KeyMapping PLAYLIST = new KeyMapping(
             "key.amusic.playlist",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F9,
             "key.categories.amusic"
@@ -89,6 +99,7 @@ public final class AMusicKeys {
     /** 调整音量条位置（打开拖动界面） */
     public static final KeyMapping VOLUME_POSITION = new KeyMapping(
             "key.amusic.volume_position",
+            KeyConflictContext.UNIVERSAL,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F10,
             "key.categories.amusic"

@@ -62,7 +62,7 @@ public class HistoryScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         list.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
@@ -94,7 +94,7 @@ public class HistoryScreen extends Screen {
      * @param entry 历史条目
      */
     private void favoriteEntry(HistoryEntry entry) {
-        Minecraft.getInstance().setScreen(new SelectPlaylistScreen(entry, this));
+        Minecraft.getInstance().gui.setScreen(new SelectPlaylistScreen(entry, this));
     }
 
     /**
@@ -178,24 +178,22 @@ public class HistoryScreen extends Screen {
 
         private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final HistoryEntry data;
-            private int lastTop;
-            private int lastLeft;
 
             Entry(HistoryEntry data) {
                 this.data = data;
             }
 
             @Override
-            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
-                this.lastTop = top;
-                this.lastLeft = left;
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                int top = getY();
+                int left = getX();
                 Minecraft mc = Minecraft.getInstance();
                 // 单行布局：左侧歌名 [平台]
                 String text = data.getName();
                 if (data.getPlatform() != null && !data.getPlatform().isEmpty()) {
                     text = text + " [" + data.getPlatform() + "]";
                 }
-                graphics.drawString(mc.font, text, left + 4, top + 3, 0xFFFFFF);
+                graphics.text(mc.font, text, left + 4, top + 3, 0xFFFFFF);
 
                 // 右侧三个按钮：▶ 播放  ↓ 下载  ★ 收藏
                 int btnW = BTN_W;
@@ -213,15 +211,15 @@ public class HistoryScreen extends Screen {
             private void drawTextButton(GuiGraphicsExtractor graphics, Minecraft mc, String label, int x, int y, int w, int mouseX, int mouseY) {
                 boolean hover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + 10;
                 int color = hover ? 0xFFFF55 : 0xAAAAFF;
-                graphics.drawString(mc.font, label, x + 2, y + 1, color);
+                graphics.text(mc.font, label, x + 2, y + 1, color);
             }
 
             @Override
             public boolean mouseClicked(double mouseX, double mouseY, int button) {
                 if (button != 0) return false;
                 playClickSound();
-                int top = this.lastTop;
-                int left = this.lastLeft;
+                int top = getY();
+                int left = getX();
                 int btnW = BTN_W;
                 int gap = BTN_GAP;
                 int totalBtnW = btnW * 3 + gap * 2;

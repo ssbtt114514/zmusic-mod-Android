@@ -69,16 +69,16 @@ public class NeoForgeEvent {
             return;
         }
         // 按键检测（仅在游戏内消费，避免在 GUI 内触发）
-        handleKeyWhile(AMusicKeys.OPEN_SETTINGS, () -> mc.setScreen(SettingsScreen.build(mc.screen)));
-        handleKeyWhile(AMusicKeys.HISTORY, () -> mc.setScreen(new HistoryScreen()));
-        handleKeyWhile(AMusicKeys.PLAYLIST, () -> mc.setScreen(new PlaylistScreen()));
+        handleKeyWhile(AMusicKeys.OPEN_SETTINGS, () -> mc.gui.setScreen(SettingsScreen.build(mc.gui.screen)));
+        handleKeyWhile(AMusicKeys.HISTORY, () -> mc.gui.setScreen(new HistoryScreen()));
+        handleKeyWhile(AMusicKeys.PLAYLIST, () -> mc.gui.setScreen(new PlaylistScreen()));
         handleKeyWhile(AMusicKeys.PAUSE, CommandSender::sendPause);
         handleKeyWhile(AMusicKeys.PREVIOUS, CommandSender::sendPrevious);
         handleKeyWhile(AMusicKeys.NEXT, CommandSender::sendNext);
         handleKeyWhile(AMusicKeys.VOLUME_UP, () -> adjustVolume(0.1f));
         handleKeyWhile(AMusicKeys.VOLUME_DOWN, () -> adjustVolume(-0.1f));
         handleKeyWhile(AMusicKeys.MUTE_TOGGLE, this::toggleMute);
-        handleKeyWhile(AMusicKeys.VOLUME_POSITION, () -> mc.setScreen(new VolumeOverlayPositionScreen()));
+        handleKeyWhile(AMusicKeys.VOLUME_POSITION, () -> mc.gui.setScreen(new VolumeOverlayPositionScreen()));
 
         // 音量同步到播放器（静音时为 0，否则取配置音量）
         AMusicConfig config = AMusic.getConfig();

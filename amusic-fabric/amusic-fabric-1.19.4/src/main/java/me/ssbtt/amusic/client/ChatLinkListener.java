@@ -163,7 +163,7 @@ public class ChatLinkListener {
                     String cmd = click.getValue();
                     if (cmd != null && mc.player != null) {
                         if (cmd.startsWith("/")) cmd = cmd.substring(1);
-                        mc.player.networkHandler.sendCommand(cmd);
+                        mc.player.networkHandler.sendChatCommand(cmd);
                         log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
                     }
                     break;

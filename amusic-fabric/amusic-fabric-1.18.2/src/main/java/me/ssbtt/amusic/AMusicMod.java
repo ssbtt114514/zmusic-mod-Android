@@ -1,8 +1,8 @@
 package me.ssbtt.amusic;
 
 import lombok.extern.log4j.Log4j2;
+import me.ssbtt.amusic.config.AMusicConfig;
 import me.ssbtt.amusic.client.AMusicKeys;
-import me.ssbtt.amusic.client.ChatLinkListener;
 import me.ssbtt.amusic.client.CommandSender;
 import me.ssbtt.amusic.client.gui.HistoryScreen;
 import me.ssbtt.amusic.client.gui.PlaylistScreen;
@@ -14,7 +14,6 @@ import me.ssbtt.amusic.manager.SoundManagerImpl;
 import me.ssbtt.amusic.playlist.PlaylistPlayer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -32,10 +31,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * Fabric 客户端 Mod 主入口（1.18.2 / 1.19.x 旧版网络 API + MatrixStack GUI）。
  *
- * <p>负责注册：插件通道（S2C/C2S）、按键绑定、聊天事件、客户端 Tick、HUD 渲染等。</p>
+ * <p>负责注册：插件通道（S2C/C2S）、按键绑定、客户端 Tick、HUD 渲染等。</p>
  *
- * <p>注意：1.18-1.19 使用旧版 Fabric 网络 API（{@code Identifier} + {@code PacketByteBuf}），
- * 且 GUI 渲染使用 {@code MatrixStack} 而非 1.20+ 的 {@code DrawContext}。</p>
+ * <p>注意：1.18.2 使用旧版 Fabric 网络 API（{@code Identifier} + {@code PacketByteBuf}），
+ * 不支持 {@code ClientReceiveMessageEvents}（1.19+ 才有），GUI 渲染使用 {@code MatrixStack}。</p>
  *
  * @author 真心
  * @since 2023/1/28 13:01
@@ -85,12 +84,8 @@ public class AMusicMod implements ClientModInitializer {
         // 注册按键绑定
         AMusicKeys.register();
 
-        // 注册聊天消息事件：捕获点歌后服务端返回的可点击链接
-        ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
-            ChatLinkListener.processMessage(message);
-        });
-
         // 注册客户端 Tick：按键处理 + 音量同步
+        // 注意：1.18.2 没有 ClientReceiveMessageEvents，聊天链接捕获功能不可用
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player == null || client.world == null) {
                 return;
