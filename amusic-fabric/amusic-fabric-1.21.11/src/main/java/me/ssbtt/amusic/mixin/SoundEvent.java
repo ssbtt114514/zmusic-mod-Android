@@ -10,17 +10,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(SoundSystem.class)
 public class SoundEvent {
-    @Inject(method = "play*", at = @At("HEAD"), cancellable = true)
-    public void play(SoundInstance soundInstance, CallbackInfoReturnable<SoundSystem.PlayResult> info) {
+    @Inject(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At("HEAD"), cancellable = true)
+    public void play(SoundInstance soundInstance, CallbackInfo info) {
         if (AMusic.getPlayer().getState() != AMusicPlayer.STATE_PLAYING || soundInstance == null) {
             return;
         }
         SoundCategory data = soundInstance.getCategory();
-        if (data == SoundCategory.RECORDS || data == SoundCategory.MUSIC) {
-            info.setReturnValue(SoundSystem.PlayResult.NOT_STARTED);
+        switch (data) {
+            case RECORDS:
+            case MUSIC:
+                info.cancel();
+                break;
+            default:
         }
     }
 }

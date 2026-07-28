@@ -1,6 +1,7 @@
 package me.ssbtt.amusic;
 
 import lombok.extern.log4j.Log4j2;
+import me.ssbtt.amusic.config.AMusicConfig;
 import me.ssbtt.amusic.client.AMusicKeys;
 import me.ssbtt.amusic.client.ChatLinkListener;
 import me.ssbtt.amusic.client.CommandSender;

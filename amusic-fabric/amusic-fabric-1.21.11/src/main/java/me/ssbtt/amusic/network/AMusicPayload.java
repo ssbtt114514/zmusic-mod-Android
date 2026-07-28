@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 public record AMusicPayload(String message) implements CustomPayload {
 
     public static final Id<AMusicPayload> ID = new CustomPayload.Id<>(Identifier.of("amusic", "channel"));
-    public static final PacketCodec<PacketByteBuf, AMusicPayload> CODEC = PacketCodec.of(
+    public static final PacketCodec<PacketByteBuf, AMusicPayload> CODEC = PacketCodec.ofStatic(
             AMusicPayload::write,
             AMusicPayload::read
     );

@@ -52,7 +52,7 @@ public class VolumeOverlayPositionScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("保存"), b -> save())
                 .dimensions(this.width / 2 - 110, this.height - 28, 100, 20).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> close())
                 .dimensions(this.width / 2 + 10, this.height - 28, 100, 20).build());
     }
 
@@ -115,6 +115,6 @@ public class VolumeOverlayPositionScreen extends Screen {
             config.save();
             log.info("Volume overlay position saved: ({}, {})", cx, cy);
         }
-        onClose();
+        close();
     }
 }

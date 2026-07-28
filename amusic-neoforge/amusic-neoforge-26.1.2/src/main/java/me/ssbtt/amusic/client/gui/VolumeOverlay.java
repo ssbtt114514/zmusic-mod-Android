@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import me.ssbtt.amusic.AMusic;
 import me.ssbtt.amusic.config.AMusicConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
@@ -46,7 +46,7 @@ public class VolumeOverlay {
         render(event.getGuiGraphics());
     }
 
-    public void render(GuiGraphics graphics) {
+    public void render(GuiGraphicsExtractor graphics) {
         if (showTime == 0) return;
         long now = System.currentTimeMillis();
         long elapsed = now - showTime;

@@ -6,8 +6,10 @@ import me.ssbtt.amusic.client.CommandSender;
 import me.ssbtt.amusic.history.HistoryEntry;
 import me.ssbtt.amusic.history.HistoryManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -52,7 +54,7 @@ public class HistoryScreen extends Screen {
             list.refresh();
         }).dimensions(10, 28, 90, 18).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
                 .dimensions(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
@@ -74,7 +76,7 @@ public class HistoryScreen extends Screen {
             hm.setCurrentByName(entry.getName());
         }
         CommandSender.sendPlayCommand(entry.getPlatform(), entry.getName());
-        onClose();
+        close();
     }
 
     private void favoriteEntry(HistoryEntry entry) {
@@ -118,14 +120,14 @@ public class HistoryScreen extends Screen {
     /**
      * 历史记录列表组件。
      */
-    private class HistoryList extends net.minecraft.client.gui.widget.ElementListWidget<HistoryList.Entry> {
+    private class HistoryList extends net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget<HistoryList.Entry> {
 
         private static final int ROW_HEIGHT = 14;
         private static final int BTN_W = 44;
         private static final int BTN_GAP = 4;
 
         HistoryList(MinecraftClient mc) {
-            super(mc, HistoryScreen.this.width - 20, HistoryScreen.this.height - 80, 50, HistoryScreen.this.height - 30, ROW_HEIGHT);
+            super(mc, HistoryScreen.this.width - 20, HistoryScreen.this.height - 80, 50, HistoryScreen.this.height - 30);
             refresh();
         }
 
@@ -144,19 +146,17 @@ public class HistoryScreen extends Screen {
             return this.width - 12;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final HistoryEntry data;
-            private int lastTop;
-            private int lastLeft;
 
             Entry(HistoryEntry data) {
                 this.data = data;
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
-                this.lastTop = top;
-                this.lastLeft = left;
+            public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                int top = getY();
+                int left = getX();
                 MinecraftClient mc = MinecraftClient.getInstance();
                 String text = data.getName();
                 if (data.getPlatform() != null && !data.getPlatform().isEmpty()) {
@@ -183,11 +183,11 @@ public class HistoryScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                if (button != 0) return false;
+            public boolean mouseClicked(Click click, boolean doubleClick) {
+                if (click.button() != 0) return false;
                 playClickSound();
-                int top = this.lastTop;
-                int left = this.lastLeft;
+                int top = getY();
+                int left = getX();
                 int btnW = BTN_W;
                 int gap = BTN_GAP;
                 int totalBtnW = btnW * 3 + gap * 2;
@@ -196,15 +196,16 @@ public class HistoryScreen extends Screen {
                 int x1 = x2 - btnW - gap;
                 int btnY = top + 3;
 
-                int x = (int) mouseX;
-                if (mouseY >= btnY && mouseY <= btnY + 10) {
-                    if (x >= x1 && x <= x1 + btnW) {
+                int mx = (int) click.comp_4798();
+                int my = (int) click.comp_4799();
+                if (my >= btnY && my <= btnY + 10) {
+                    if (mx >= x1 && mx <= x1 + btnW) {
                         playEntry(data);
                         return true;
-                    } else if (x >= x2 && x <= x2 + btnW) {
+                    } else if (mx >= x2 && mx <= x2 + btnW) {
                         downloadEntry(data);
                         return true;
-                    } else if (x >= x3 && x <= x3 + btnW) {
+                    } else if (mx >= x3 && mx <= x3 + btnW) {
                         favoriteEntry(data);
                         return true;
                     }
@@ -216,7 +217,7 @@ public class HistoryScreen extends Screen {
             private void playClickSound() {
                 MinecraftClient mc = MinecraftClient.getInstance();
                 if (mc.player != null) {
-                    mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
+                    mc.player.playSound(SoundEvents.UI_BUTTON_CLICK.comp_349(), 1.0F, 1.0F);
                 }
             }
 

@@ -83,12 +83,12 @@ public class PlaylistScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         int halfW = (this.width - 30) / 2;
         if (mouseX < 10 + halfW) {
-            return playlistList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            return playlistList.mouseScrolled(mouseX, mouseY, delta);
         }
-        return songList.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        return songList.mouseScrolled(mouseX, mouseY, delta);
     }
 
     private void createPlaylist() {

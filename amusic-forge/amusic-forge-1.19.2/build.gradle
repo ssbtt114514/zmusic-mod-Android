@@ -21,7 +21,7 @@ dependencies {
     implementation minecraft.dependency('net.minecraftforge:forge:1.19.2-43.2.0')
     implementation project(":amusic-core")
     // Cloth Config API：用于 SettingsScreen 配置界面
-    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.3.115")
+    implementation("me.shedaniel.cloth:cloth-config-forge:8.3.115")
 }
 
 jar {

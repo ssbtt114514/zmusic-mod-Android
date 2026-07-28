@@ -6,10 +6,11 @@ import me.ssbtt.amusic.history.HistoryEntry;
 import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
@@ -54,7 +55,7 @@ public class SelectPlaylistScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("新建并添加"), b -> createAndAdd())
                 .dimensions(165, this.height - 50, 90, 18).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> close())
                 .dimensions(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
@@ -77,7 +78,7 @@ public class SelectPlaylistScreen extends Screen {
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         MinecraftClient.getInstance().setScreen(parent);
     }
 
@@ -130,11 +131,11 @@ public class SelectPlaylistScreen extends Screen {
         list.refresh();
     }
 
-    private class PlaylistList extends ElementListWidget<PlaylistList.Entry> {
+    private class PlaylistList extends AlwaysSelectedEntryListWidget<PlaylistList.Entry> {
 
         PlaylistList() {
             super(MinecraftClient.getInstance(), SelectPlaylistScreen.this.width - 20,
-                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70, ROW_HEIGHT);
+                    SelectPlaylistScreen.this.height - 100, 40, SelectPlaylistScreen.this.height - 70);
             refresh();
         }
 
@@ -153,7 +154,7 @@ public class SelectPlaylistScreen extends Screen {
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final String name;
             private int addBtnX, addBtnW;
 
@@ -162,7 +163,10 @@ public class SelectPlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
+            public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                int top = getY();
+                int left = getX();
+                int height = getHeight();
                 MinecraftClient mc = MinecraftClient.getInstance();
                 PlaylistManager pm = AMusic.getPlaylistManager();
                 String countStr = "";
@@ -182,8 +186,9 @@ public class SelectPlaylistScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                if (button != 0) return true;
+            public boolean mouseClicked(Click click, boolean doubleClick) {
+                if (click.button() != 0) return true;
+                double mouseX = click.comp_4798();
                 if (mouseX >= addBtnX && mouseX <= addBtnX + addBtnW) {
                     addSongToPlaylist(name);
                 }

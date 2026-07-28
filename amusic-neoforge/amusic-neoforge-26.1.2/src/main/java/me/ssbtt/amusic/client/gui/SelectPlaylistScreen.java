@@ -7,7 +7,7 @@ import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -67,12 +67,12 @@ public class SelectPlaylistScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         graphics.drawString(this.font, "选择要将「" + (entry != null ? entry.getName() : "") + "」添加到的歌单",
                 10, 24, 0xAAAAFF);
-        list.render(graphics, mouseX, mouseY, partialTick);
+        list.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
         if (!statusMessage.isEmpty()) {
             graphics.drawCenteredString(this.font, statusMessage, this.width / 2, this.height - 62, statusColor);
@@ -189,7 +189,7 @@ public class SelectPlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                 Font font = Minecraft.getInstance().font;
                 PlaylistManager pm = AMusic.getPlaylistManager();
                 String countStr = "";

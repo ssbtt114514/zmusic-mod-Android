@@ -10,7 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -142,7 +142,7 @@ public class OnlinePlaylistScreen extends Screen {
         }
     }
 
-    private class OnlineList extends ElementListWidget<OnlineList.Entry> {
+    private class OnlineList extends AlwaysSelectedEntryListWidget<OnlineList.Entry> {
 
         OnlineList() {
             super(MinecraftClient.getInstance(), OnlinePlaylistScreen.this.width,
@@ -162,7 +162,7 @@ public class OnlinePlaylistScreen extends Screen {
             return width - 20;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final PlaylistNetClient.PlaylistInfo info;
             private int downloadBtnX, downloadBtnW;
 
@@ -238,7 +238,7 @@ public class OnlinePlaylistScreen extends Screen {
             list.render(context, mouseX, mouseY, delta);
         }
 
-        private class UploadList extends ElementListWidget<UploadList.Entry> {
+        private class UploadList extends AlwaysSelectedEntryListWidget<UploadList.Entry> {
 
             UploadList() {
                 super(MinecraftClient.getInstance(), UploadPlaylistScreen.this.width,
@@ -254,7 +254,7 @@ public class OnlinePlaylistScreen extends Screen {
                 return width - 20;
             }
 
-            private class Entry extends ElementListWidget.Entry<Entry> {
+            private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
                 private final String name;
                 private int uploadBtnX, uploadBtnW;
                 private int uploadPrivateBtnX, uploadPrivateBtnW;

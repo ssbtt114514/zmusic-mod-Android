@@ -6,7 +6,7 @@ import me.ssbtt.amusic.client.CommandSender;
 import me.ssbtt.amusic.history.HistoryEntry;
 import me.ssbtt.amusic.history.HistoryManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
@@ -60,10 +60,10 @@ public class HistoryScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
-        list.render(graphics, mouseX, mouseY, partialTick);
+        list.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class HistoryScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                 this.lastTop = top;
                 this.lastLeft = left;
                 Minecraft mc = Minecraft.getInstance();
@@ -210,7 +210,7 @@ public class HistoryScreen extends Screen {
                 drawTextButton(graphics, mc, "★ 收藏", x3, btnY, btnW, mouseX, mouseY);
             }
 
-            private void drawTextButton(GuiGraphics graphics, Minecraft mc, String label, int x, int y, int w, int mouseX, int mouseY) {
+            private void drawTextButton(GuiGraphicsExtractor graphics, Minecraft mc, String label, int x, int y, int w, int mouseX, int mouseY) {
                 boolean hover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + 10;
                 int color = hover ? 0xFFFF55 : 0xAAAAFF;
                 graphics.drawString(mc.font, label, x + 2, y + 1, color);

@@ -103,7 +103,7 @@ public class SettingsScreen {
         try {
             return binding.getBoundKeyLocalizedText().getString();
         } catch (Throwable t) {
-            return binding.getTranslationKey();
+            return binding.getId();
         }
     }
 }

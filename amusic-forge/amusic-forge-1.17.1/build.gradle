@@ -12,9 +12,16 @@ minecraft {
     mappings channel: 'official', version: '1.17.1'
 }
 
+repositories {
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+}
+
 dependencies {
     implementation minecraft.dependency('net.minecraftforge:forge:1.17.1-37.1.1')
     implementation project(":amusic-core")
+    // Cloth Config API：用于 SettingsScreen 配置界面
+    implementation("me.shedaniel.cloth:cloth-config-forge:5.3.95")
 }
 
 jar {

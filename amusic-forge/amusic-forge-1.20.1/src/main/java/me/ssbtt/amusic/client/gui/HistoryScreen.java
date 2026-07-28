@@ -62,8 +62,8 @@ public class HistoryScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        return list.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        return list.mouseScrolled(mouseX, mouseY, delta);
     }
 
     private void playEntry(HistoryEntry entry) {

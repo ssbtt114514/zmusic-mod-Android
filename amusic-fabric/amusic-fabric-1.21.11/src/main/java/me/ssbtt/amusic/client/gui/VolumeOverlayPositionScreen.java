@@ -3,6 +3,7 @@ package me.ssbtt.amusic.client.gui;
 import lombok.extern.log4j.Log4j2;
 import me.ssbtt.amusic.AMusic;
 import me.ssbtt.amusic.config.AMusicConfig;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -52,7 +53,7 @@ public class VolumeOverlayPositionScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("保存"), b -> save())
                 .dimensions(this.width / 2 - 110, this.height - 28, 100, 20).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), b -> close())
                 .dimensions(this.width / 2 + 10, this.height - 28, 100, 20).build());
     }
 
@@ -71,20 +72,24 @@ public class VolumeOverlayPositionScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
+    public boolean mouseClicked(Click click, boolean doubleClick) {
+        if (click.button() == 0) {
+            double mouseX = click.comp_4798();
+            double mouseY = click.comp_4799();
             if (mouseX >= barX - 4 && mouseX <= barX + BAR_WIDTH + 4
                     && mouseY >= barY - 4 && mouseY <= barY + BAR_HEIGHT + 4) {
                 dragging = true;
                 return true;
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubleClick);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (dragging && button == 0) {
+    public boolean mouseDragged(Click click, double dragX, double dragY) {
+        if (dragging && click.button() == 0) {
+            double mouseX = click.comp_4798();
+            double mouseY = click.comp_4799();
             barX = (int) mouseX - BAR_WIDTH / 2;
             barY = (int) mouseY - BAR_HEIGHT / 2;
             if (barX < 0) barX = 0;
@@ -93,16 +98,16 @@ public class VolumeOverlayPositionScreen extends Screen {
             if (barY + BAR_HEIGHT > this.height - 35) barY = this.height - 35 - BAR_HEIGHT;
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(click, dragX, dragY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0 && dragging) {
+    public boolean mouseReleased(Click click) {
+        if (click.button() == 0 && dragging) {
             dragging = false;
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     private void save() {
@@ -115,6 +120,6 @@ public class VolumeOverlayPositionScreen extends Screen {
             config.save();
             log.info("Volume overlay position saved: ({}, {})", cx, cy);
         }
-        onClose();
+        close();
     }
 }

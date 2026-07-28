@@ -10,7 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class OnlinePlaylistScreen extends Screen {
                 .dimensions(width / 2 - 5, 5, 70, 18).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("刷新"), b -> refreshList())
                 .dimensions(width / 2 + 70, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> close())
                 .dimensions(width / 2 - 40, height - 25, 80, 18).build());
 
         if (firstLoad) {
@@ -133,7 +133,7 @@ public class OnlinePlaylistScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 27, 0xFFFFFF);
         list.render(context, mouseX, mouseY, delta);
@@ -142,7 +142,7 @@ public class OnlinePlaylistScreen extends Screen {
         }
     }
 
-    private class OnlineList extends ElementListWidget<OnlineList.Entry> {
+    private class OnlineList extends AlwaysSelectedEntryListWidget<OnlineList.Entry> {
 
         OnlineList() {
             super(MinecraftClient.getInstance(), OnlinePlaylistScreen.this.width,
@@ -162,7 +162,7 @@ public class OnlinePlaylistScreen extends Screen {
             return width - 20;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final PlaylistNetClient.PlaylistInfo info;
             private int downloadBtnX, downloadBtnW;
 
@@ -232,13 +232,13 @@ public class OnlinePlaylistScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            renderBackground(context, mouseX, mouseY, delta);
+            renderBackground(context);
             super.render(context, mouseX, mouseY, delta);
             context.drawCenteredTextWithShadow(this.textRenderer, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             list.render(context, mouseX, mouseY, delta);
         }
 
-        private class UploadList extends ElementListWidget<UploadList.Entry> {
+        private class UploadList extends AlwaysSelectedEntryListWidget<UploadList.Entry> {
 
             UploadList() {
                 super(MinecraftClient.getInstance(), UploadPlaylistScreen.this.width,
@@ -254,7 +254,7 @@ public class OnlinePlaylistScreen extends Screen {
                 return width - 20;
             }
 
-            private class Entry extends ElementListWidget.Entry<Entry> {
+            private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
                 private final String name;
                 private int uploadBtnX, uploadBtnW;
                 private int uploadPrivateBtnX, uploadPrivateBtnW;

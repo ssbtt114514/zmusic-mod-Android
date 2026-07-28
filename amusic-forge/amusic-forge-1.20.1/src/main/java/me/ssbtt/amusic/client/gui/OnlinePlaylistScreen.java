@@ -133,7 +133,7 @@ public class OnlinePlaylistScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics, mouseX, mouseY, partialTick);
+        renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
         list.render(graphics, mouseX, mouseY, partialTick);
@@ -241,7 +241,7 @@ public class OnlinePlaylistScreen extends Screen {
 
         @Override
         public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            renderBackground(graphics, mouseX, mouseY, partialTick);
+            renderBackground(graphics);
             super.render(graphics, mouseX, mouseY, partialTick);
             graphics.drawCenteredString(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             list.render(graphics, mouseX, mouseY, partialTick);

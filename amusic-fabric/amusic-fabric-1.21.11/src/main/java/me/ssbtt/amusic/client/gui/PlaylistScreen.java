@@ -10,10 +10,11 @@ import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistPlayer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
@@ -45,13 +46,13 @@ public class PlaylistScreen extends Screen {
     protected void init() {
         int halfW = (this.width - 30) / 2;
         playlistList = new PlaylistList(MinecraftClient.getInstance(), halfW);
-        playlistList.setLeftPos(10);
+        playlistList.setX(10);
         songList = new SongList(MinecraftClient.getInstance(), halfW);
-        songList.setLeftPos(20 + halfW);
+        songList.setX(20 + halfW);
         addSelectableChild(playlistList);
         addSelectableChild(songList);
 
-        newPlaylistBox = new TextFieldWidget(this.font, 10, this.height - 50, halfW - 80, 18, Text.literal("新歌单名"));
+        newPlaylistBox = new TextFieldWidget(this.textRenderer, 10, this.height - 50, halfW - 80, 18, Text.literal("新歌单名"));
         newPlaylistBox.setMaxLength(30);
         addDrawableChild(newPlaylistBox);
 
@@ -65,17 +66,17 @@ public class PlaylistScreen extends Screen {
                 .dimensions(20 + halfW + 190, this.height - 50, 80, 18).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("在线歌单"), b -> openOnlinePlaylists())
                 .dimensions(20 + halfW + 280, this.height - 50, 80, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
                 .dimensions(this.width / 2 - 50, this.height - 24, 100, 18).build());
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
         int halfW = (this.width - 30) / 2;
-        context.drawTextWithShadow(this.font, "歌单列表", 10, 20, 0xFFFFFF);
-        context.drawTextWithShadow(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, "歌单列表", 10, 20, 0xFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
         playlistList.render(context, mouseX, mouseY, delta);
         songList.render(context, mouseX, mouseY, delta);
     }
@@ -129,7 +130,7 @@ public class PlaylistScreen extends Screen {
             }
         }
         pp.start(pl, idx);
-        onClose();
+        close();
     }
 
     private void playAll() {
@@ -140,7 +141,7 @@ public class PlaylistScreen extends Screen {
         Playlist pl = pm.loadPlaylist(selectedPlaylist);
         if (pl == null || pl.size() == 0) return;
         pp.start(pl, 0);
-        onClose();
+        close();
     }
 
     private void stopPlaylist() {
@@ -188,11 +189,11 @@ public class PlaylistScreen extends Screen {
 
     // ---- 歌单列表 ----
 
-    private class PlaylistList extends ElementListWidget<PlaylistList.Entry> {
+    private class PlaylistList extends AlwaysSelectedEntryListWidget<PlaylistList.Entry> {
         private final int listWidth;
 
         PlaylistList(MinecraftClient mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
             this.listWidth = width;
             refresh();
         }
@@ -212,7 +213,7 @@ public class PlaylistScreen extends Screen {
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final String name;
             private int selectBtnX, selectBtnW;
             private int playBtnX, playBtnW;
@@ -223,7 +224,9 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
+            public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                int top = getY();
+                int left = getX();
                 MinecraftClient mc = MinecraftClient.getInstance();
                 String text = name;
                 if (name.equals(selectedPlaylist)) {
@@ -266,8 +269,9 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                if (button != 0) return true;
+            public boolean mouseClicked(Click click, boolean doubleClick) {
+                if (click.button() != 0) return true;
+                double mouseX = click.comp_4798();
 
                 if (isInButton(mouseX, selectBtnX, selectBtnW)) {
                     selectPlaylist(name);
@@ -279,7 +283,7 @@ public class PlaylistScreen extends Screen {
                         if (pl != null && pl.size() > 0) {
                             selectPlaylist(name);
                             pp.start(pl, 0);
-                            onClose();
+                            close();
                         }
                     }
                 } else if (isInButton(mouseX, deleteBtnX, deleteBtnW)) {
@@ -305,11 +309,11 @@ public class PlaylistScreen extends Screen {
 
     // ---- 歌曲列表 ----
 
-    private class SongList extends ElementListWidget<SongList.Entry> {
+    private class SongList extends AlwaysSelectedEntryListWidget<SongList.Entry> {
         private final int listWidth;
 
         SongList(MinecraftClient mc, int width) {
-            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55, ROW_HEIGHT);
+            super(mc, width, PlaylistScreen.this.height - 80, 30, PlaylistScreen.this.height - 55);
             this.listWidth = width;
             refresh();
         }
@@ -326,28 +330,33 @@ public class PlaylistScreen extends Screen {
             if (pm == null) return;
             Playlist pl = pm.loadPlaylist(selectedPlaylist);
             if (pl == null) return;
-            addEntry(new Entry(null, "播放顺序: " + pl.getPlayOrder().getDisplayName(), true));
+            int idx = 0;
+            addEntry(new Entry(null, "播放顺序: " + pl.getPlayOrder().getDisplayName(), true, idx++));
             for (HistoryEntry e : pl.getSongs()) {
-                addEntry(new Entry(e, e.getName(), false));
+                addEntry(new Entry(e, e.getName(), false, idx++));
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final HistoryEntry data;
             private final String label;
             private final boolean isPlayOrderEntry;
+            private final int entryIndex;
             private int[] btnX = new int[2];
             private int[] btnW = new int[2];
             private int orderBtnX, orderBtnW;
 
-            Entry(HistoryEntry data, String label, boolean isPlayOrderEntry) {
+            Entry(HistoryEntry data, String label, boolean isPlayOrderEntry, int entryIndex) {
                 this.data = data;
                 this.label = label;
                 this.isPlayOrderEntry = isPlayOrderEntry;
+                this.entryIndex = entryIndex;
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
+            public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                int top = getY();
+                int left = getX();
                 MinecraftClient mc = MinecraftClient.getInstance();
 
                 if (isPlayOrderEntry) {
@@ -365,7 +374,7 @@ public class PlaylistScreen extends Screen {
                 if (pp != null && pp.isActive() && data != null && pp.getActivePlaylist() != null) {
                     Playlist active = pp.getActivePlaylist();
                     if (selectedPlaylist != null && selectedPlaylist.equals(active.getName())) {
-                        int songIndex = index - 1;
+                        int songIndex = entryIndex - 1;
                         if (songIndex == pp.getCurrentIndex()) {
                             isCurrent = true;
                         }
@@ -398,8 +407,9 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                if (button != 0) return true;
+            public boolean mouseClicked(Click click, boolean doubleClick) {
+                if (click.button() != 0) return true;
+                double mouseX = click.comp_4798();
 
                 if (isPlayOrderEntry) {
                     if (isInButton(mouseX, orderBtnX, orderBtnW)) {

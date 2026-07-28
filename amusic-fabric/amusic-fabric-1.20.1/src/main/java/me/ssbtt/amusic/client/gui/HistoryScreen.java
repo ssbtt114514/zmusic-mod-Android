@@ -8,6 +8,7 @@ import me.ssbtt.amusic.history.HistoryManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -52,7 +53,7 @@ public class HistoryScreen extends Screen {
             list.refresh();
         }).dimensions(10, 28, 90, 18).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), b -> close())
                 .dimensions(this.width / 2 - 100, this.height - 24, 200, 20).build());
     }
 
@@ -64,8 +65,8 @@ public class HistoryScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return list.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        return list.mouseScrolled(mouseX, mouseY, amount);
     }
 
     private void playEntry(HistoryEntry entry) {
@@ -74,7 +75,7 @@ public class HistoryScreen extends Screen {
             hm.setCurrentByName(entry.getName());
         }
         CommandSender.sendPlayCommand(entry.getPlatform(), entry.getName());
-        onClose();
+        close();
     }
 
     private void favoriteEntry(HistoryEntry entry) {
@@ -118,7 +119,7 @@ public class HistoryScreen extends Screen {
     /**
      * 历史记录列表组件。
      */
-    private class HistoryList extends net.minecraft.client.gui.widget.ElementListWidget<HistoryList.Entry> {
+    private class HistoryList extends net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget<HistoryList.Entry> {
 
         private static final int ROW_HEIGHT = 14;
         private static final int BTN_W = 44;
@@ -144,7 +145,7 @@ public class HistoryScreen extends Screen {
             return this.width - 12;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final HistoryEntry data;
             private int lastTop;
             private int lastLeft;

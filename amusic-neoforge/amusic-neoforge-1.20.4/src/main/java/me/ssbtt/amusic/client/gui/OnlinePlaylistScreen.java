@@ -165,8 +165,8 @@ public class OnlinePlaylistScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // 1.20.4: renderBackground 只接受 GuiGraphics 一个参数
-        renderBackground(graphics);
+        // 1.20.4: renderBackground 需要 4 个参数
+        renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
         // 手动渲染列表（addWidget 不会自动渲染）
@@ -281,8 +281,8 @@ public class OnlinePlaylistScreen extends Screen {
 
         @Override
         public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            // 1.20.4: renderBackground 只接受 GuiGraphics 一个参数
-            renderBackground(graphics);
+            // 1.20.4: renderBackground 需要 4 个参数
+            renderBackground(graphics, mouseX, mouseY, partialTick);
             super.render(graphics, mouseX, mouseY, partialTick);
             graphics.drawCenteredString(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             // 手动渲染列表（addWidget 不会自动渲染）

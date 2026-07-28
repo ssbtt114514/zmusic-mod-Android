@@ -1,0 +1,48 @@
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:152: 错误: 找不到符号
+                    String url = click.getValue();
+                                      ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:163: 错误: 找不到符号
+                    String cmd = click.getValue();
+                                      ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:171: 错误: 找不到符号
+                    log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
+                                                                                               ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+3 个错误
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':amusic-fabric-1.21.5:compileJava' (registered by plugin class 'org.gradle.api.plugins.JavaBasePlugin').
+> Compilation failed; see the compiler output below.
+  注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+  注: 某些输入文件使用或覆盖了已过时的 API。
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:152: 错误: 找不到符号
+                      String url = click.getValue();
+                                        ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:163: 错误: 找不到符号
+                      String cmd = click.getValue();
+                                        ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.5\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:171: 错误: 找不到符号
+                      log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
+                                                                                                 ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  3 个错误
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 16s

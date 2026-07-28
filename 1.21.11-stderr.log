@@ -1,0 +1,312 @@
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:24: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:32: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:40: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:48: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:56: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:64: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:72: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:80: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:88: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:96: 错误: 不兼容的类型: String无法转换为Category
+            "key.categories.amusic"
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:143: 错误: 找不到符号
+                screen.handleTextClick(style);
+                      ^
+  符号:   方法 handleTextClick(Style)
+  位置: 类型为Screen的变量 screen
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:152: 错误: 找不到符号
+                    String url = click.getValue();
+                                      ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:163: 错误: 找不到符号
+                    String cmd = click.getValue();
+                                      ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:166: 错误: 找不到符号
+                        mc.player.networkHandler.sendCommand(cmd);
+                                                ^
+  符号:   方法 sendCommand(String)
+  位置: 类型为ClientPlayNetworkHandler的变量 networkHandler
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:171: 错误: 找不到符号
+                    log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
+                                                                                               ^
+  符号:   方法 getValue()
+  位置: 类型为ClickEvent的变量 click
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\CommandSender.java:160: 错误: 找不到符号
+        connection.sendCommand(commandWithoutSlash);
+                  ^
+  符号:   方法 sendCommand(String)
+  位置: 类型为ClientPlayNetworkHandler的变量 connection
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:148: 错误: me.ssbtt.amusic.client.gui.HistoryScreen.HistoryList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:157: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:186: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:165: 错误: me.ssbtt.amusic.client.gui.OnlinePlaylistScreen.OnlineList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:173: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:187: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:257: 错误: me.ssbtt.amusic.client.gui.OnlinePlaylistScreen.UploadPlaylistScreen.UploadList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+            private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                    ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:266: 错误: 方法不会覆盖或实现超类型的方法
+                @Override
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:287: 错误: 方法不会覆盖或实现超类型的方法
+                @Override
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:215: 错误: me.ssbtt.amusic.client.gui.PlaylistScreen.PlaylistList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:225: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:268: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:335: 错误: me.ssbtt.amusic.client.gui.PlaylistScreen.SongList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:349: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:400: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:156: 错误: me.ssbtt.amusic.client.gui.SelectPlaylistScreen.PlaylistList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:164: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:184: 错误: 方法不会覆盖或实现超类型的方法
+            @Override
+            ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SettingsScreen.java:106: 错误: 找不到符号
+            return binding.getTranslationKey();
+                          ^
+  符号:   方法 getTranslationKey()
+  位置: 类型为KeyBinding的变量 binding
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:73: 错误: 方法不会覆盖或实现超类型的方法
+    @Override
+    ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:82: 错误: 无法将接口 ParentElement中的方法 mouseClicked应用到给定类型;
+        return super.mouseClicked(mouseX, mouseY, button);
+                    ^
+  需要: Click,boolean
+  找到:    double,double,int
+  原因: 实际参数列表和形式参数列表长度不同
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:85: 错误: 方法不会覆盖或实现超类型的方法
+    @Override
+    ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:96: 错误: 无法将接口 ParentElement中的方法 mouseDragged应用到给定类型;
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+                    ^
+  需要: Click,double,double
+  找到:    double,double,int,double,double
+  原因: 实际参数列表和形式参数列表长度不同
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:99: 错误: 方法不会覆盖或实现超类型的方法
+    @Override
+    ^
+C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:105: 错误: 无法将接口 ParentElement中的方法 mouseReleased应用到给定类型;
+        return super.mouseReleased(mouseX, mouseY, button);
+                    ^
+  需要: Click
+  找到:    double,double,int
+  原因: 实际参数列表和形式参数列表长度不同
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: 某些消息已经过简化; 请使用 -Xdiags:verbose 重新编译以获得完整输出
+41 个错误
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':amusic-fabric-1.21.11:compileJava' (registered by plugin class 'org.gradle.api.plugins.JavaBasePlugin').
+> Compilation failed; see the compiler output below.
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:82: 错误: 无法将接口 ParentElement中的方法 mouseClicked应用到给定类型;
+          return super.mouseClicked(mouseX, mouseY, button);
+                      ^
+    需要: Click,boolean
+    找到:    double,double,int
+    原因: 实际参数列表和形式参数列表长度不同
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:96: 错误: 无法将接口 ParentElement中的方法 mouseDragged应用到给定类型;
+          return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+                      ^
+    需要: Click,double,double
+    找到:    double,double,int,double,double
+    原因: 实际参数列表和形式参数列表长度不同
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:105: 错误: 无法将接口 ParentElement中的方法 mouseReleased应用到给定类型;
+          return super.mouseReleased(mouseX, mouseY, button);
+                      ^
+    需要: Click
+    找到:    double,double,int
+    原因: 实际参数列表和形式参数列表长度不同
+  注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:148: 错误: me.ssbtt.amusic.client.gui.HistoryScreen.HistoryList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+          private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:165: 错误: me.ssbtt.amusic.client.gui.OnlinePlaylistScreen.OnlineList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+          private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:257: 错误: me.ssbtt.amusic.client.gui.OnlinePlaylistScreen.UploadPlaylistScreen.UploadList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+              private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                      ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:215: 错误: me.ssbtt.amusic.client.gui.PlaylistScreen.PlaylistList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+          private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:335: 错误: me.ssbtt.amusic.client.gui.PlaylistScreen.SongList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+          private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:156: 错误: me.ssbtt.amusic.client.gui.SelectPlaylistScreen.PlaylistList.Entry不是抽象的, 并且未覆盖net.minecraft.client.gui.widget.EntryListWidget.Entry中的抽象方法render(DrawContext,int,int,boolean,float)
+          private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:24: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:32: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:40: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:48: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:56: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:64: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:72: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:80: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:88: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\AMusicKeys.java:96: 错误: 不兼容的类型: String无法转换为Category
+              "key.categories.amusic"
+              ^
+  注: 某些输入文件使用或覆盖了已过时的 API。
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:157: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\HistoryScreen.java:186: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:173: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:187: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:266: 错误: 方法不会覆盖或实现超类型的方法
+                  @Override
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\OnlinePlaylistScreen.java:287: 错误: 方法不会覆盖或实现超类型的方法
+                  @Override
+                  ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:225: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:268: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:349: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\PlaylistScreen.java:400: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:164: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SelectPlaylistScreen.java:184: 错误: 方法不会覆盖或实现超类型的方法
+              @Override
+              ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:73: 错误: 方法不会覆盖或实现超类型的方法
+      @Override
+      ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:85: 错误: 方法不会覆盖或实现超类型的方法
+      @Override
+      ^
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\VolumeOverlayPositionScreen.java:99: 错误: 方法不会覆盖或实现超类型的方法
+      @Override
+      ^
+  注: 某些消息已经过简化; 请使用 -Xdiags:verbose 重新编译以获得完整输出
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:143: 错误: 找不到符号
+                  screen.handleTextClick(style);
+                        ^
+    符号:   方法 handleTextClick(Style)
+    位置: 类型为Screen的变量 screen
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:152: 错误: 找不到符号
+                      String url = click.getValue();
+                                        ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:163: 错误: 找不到符号
+                      String cmd = click.getValue();
+                                        ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:166: 错误: 找不到符号
+                          mc.player.networkHandler.sendCommand(cmd);
+                                                  ^
+    符号:   方法 sendCommand(String)
+    位置: 类型为ClientPlayNetworkHandler的变量 networkHandler
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\ChatLinkListener.java:171: 错误: 找不到符号
+                      log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
+                                                                                                 ^
+    符号:   方法 getValue()
+    位置: 类型为ClickEvent的变量 click
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\CommandSender.java:160: 错误: 找不到符号
+          connection.sendCommand(commandWithoutSlash);
+                    ^
+    符号:   方法 sendCommand(String)
+    位置: 类型为ClientPlayNetworkHandler的变量 connection
+  C:\Users\19737\AppData\Roaming\TRAE SOLO CN\ModularData\ai-agent\work-mode-projects\6a61f7c02a729da96a26aa12\zmusic-mod-Android\amusic-fabric\amusic-fabric-1.21.11\src\main\java\me\ssbtt\amusic\client\gui\SettingsScreen.java:106: 错误: 找不到符号
+              return binding.getTranslationKey();
+                            ^
+    符号:   方法 getTranslationKey()
+    位置: 类型为KeyBinding的变量 binding
+  41 个错误
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 16s

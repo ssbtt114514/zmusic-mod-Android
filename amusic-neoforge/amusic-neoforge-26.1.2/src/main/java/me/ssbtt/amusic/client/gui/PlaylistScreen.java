@@ -11,7 +11,7 @@ import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.components.EditBox;
@@ -84,14 +84,14 @@ public class PlaylistScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
         int halfW = (this.width - 30) / 2;
         graphics.drawString(this.font, "歌单列表", 10, 20, 0xFFFFFF);
         graphics.drawString(this.font, "歌曲列表", 20 + halfW, 20, 0xFFFFFF);
-        playlistList.render(graphics, mouseX, mouseY, partialTick);
-        songList.render(graphics, mouseX, mouseY, partialTick);
+        playlistList.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        songList.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
@@ -264,7 +264,7 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                 Font font = Minecraft.getInstance().font;
                 String text = name;
                 if (name.equals(selectedPlaylist)) {
@@ -406,7 +406,7 @@ public class PlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                 Font font = Minecraft.getInstance().font;
 
                 if (isPlayOrderEntry) {

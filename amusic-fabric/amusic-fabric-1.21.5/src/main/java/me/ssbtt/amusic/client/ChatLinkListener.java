@@ -147,32 +147,28 @@ public class ChatLinkListener {
             ClickEvent click = style.getClickEvent();
             if (click == null) return;
 
-            switch (click.getAction()) {
-                case OPEN_URL:
-                    String url = click.getValue();
-                    if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
-                        try {
-                            ClientEvent.onPacket("[Play]" + url);
-                            log.info("ChatLinkListener: OPEN_URL auto-play: {}", url);
-                        } catch (Throwable t) {
-                            log.error("ChatLinkListener: OPEN_URL play failed: {}", t.getMessage(), t);
-                        }
+            // 1.21.5+: ClickEvent 是 sealed interface，各子类型为 record，需用 instanceof 模式匹配
+            if (click instanceof ClickEvent.OpenUrl openUrl) {
+                String url = openUrl.comp_3505() == null ? null : openUrl.comp_3505().toString();
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    try {
+                        ClientEvent.onPacket("[Play]" + url);
+                        log.info("ChatLinkListener: OPEN_URL auto-play: {}", url);
+                    } catch (Throwable t) {
+                        log.error("ChatLinkListener: OPEN_URL play failed: {}", t.getMessage(), t);
                     }
-                    break;
-                case RUN_COMMAND:
-                    String cmd = click.getValue();
-                    if (cmd != null && mc.player != null) {
-                        if (cmd.startsWith("/")) cmd = cmd.substring(1);
-                        mc.player.networkHandler.sendCommand(cmd);
-                        log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
-                    }
-                    break;
-                case SUGGEST_COMMAND:
-                    log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", click.getValue());
-                    break;
-                default:
-                    log.info("ChatLinkListener: unhandled click action: {}", click.getAction());
-                    break;
+                }
+            } else if (click instanceof ClickEvent.RunCommand runCmd) {
+                String cmd = runCmd.comp_3506();
+                if (cmd != null && mc.player != null) {
+                    if (cmd.startsWith("/")) cmd = cmd.substring(1);
+                    mc.player.networkHandler.sendCommand(cmd);
+                    log.info("ChatLinkListener: RUN_COMMAND: /{}", cmd);
+                }
+            } else if (click instanceof ClickEvent.SuggestCommand suggestCmd) {
+                log.info("ChatLinkListener: SUGGEST_COMMAND ignored (no screen): {}", suggestCmd.comp_3507());
+            } else {
+                log.info("ChatLinkListener: unhandled click action: {}", click.getAction());
             }
         }
     }

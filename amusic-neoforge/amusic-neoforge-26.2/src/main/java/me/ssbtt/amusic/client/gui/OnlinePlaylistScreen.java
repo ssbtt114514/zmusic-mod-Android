@@ -8,7 +8,7 @@ import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistNetClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
@@ -164,12 +164,12 @@ public class OnlinePlaylistScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(graphics, mouseX, mouseY, partialTick);
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        extractBackground(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 27, 0xFFFFFF);
         // 手动渲染列表（addWidget 不会自动渲染）
-        list.render(graphics, mouseX, mouseY, partialTick);
+        list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         if (!statusMessage.isEmpty()) {
             graphics.drawCenteredString(this.font, statusMessage, this.width / 2, height - 45, statusColor);
         }
@@ -215,7 +215,7 @@ public class OnlinePlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+            public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                 Font font = Minecraft.getInstance().font;
                 graphics.drawString(font, info.name, left + 2, top + 2, 0xFFFFFF);
                 String meta = "作者: " + (info.author != null ? info.author : "?") + " | " + info.songCount + "首";
@@ -279,12 +279,12 @@ public class OnlinePlaylistScreen extends Screen {
         }
 
         @Override
-        public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            renderBackground(graphics, mouseX, mouseY, partialTick);
-            super.render(graphics, mouseX, mouseY, partialTick);
+        public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+            extractBackground(graphics, mouseX, mouseY, partialTick);
+            super.extractRenderState(graphics, mouseX, mouseY, partialTick);
             graphics.drawCenteredString(this.font, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             // 手动渲染列表（addWidget 不会自动渲染）
-            list.render(graphics, mouseX, mouseY, partialTick);
+            list.extractRenderState(graphics, mouseX, mouseY, partialTick);
         }
 
         private class UploadList extends ObjectSelectionList<UploadList.Entry> {
@@ -321,7 +321,7 @@ public class OnlinePlaylistScreen extends Screen {
                 }
 
                 @Override
-                public void render(GuiGraphics graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+                public void extractRenderState(GuiGraphicsExtractor graphics, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
                     Font font = Minecraft.getInstance().font;
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     Playlist pl = pm != null ? pm.loadPlaylist(name) : null;

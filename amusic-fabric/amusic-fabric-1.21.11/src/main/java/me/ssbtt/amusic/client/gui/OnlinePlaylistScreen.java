@@ -7,10 +7,11 @@ import me.ssbtt.amusic.playlist.Playlist;
 import me.ssbtt.amusic.playlist.PlaylistManager;
 import me.ssbtt.amusic.playlist.PlaylistNetClient;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class OnlinePlaylistScreen extends Screen {
                 .dimensions(width / 2 - 5, 5, 70, 18).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("刷新"), b -> refreshList())
                 .dimensions(width / 2 + 70, 5, 70, 18).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> onClose())
+        addDrawableChild(ButtonWidget.builder(Text.literal("返回"), b -> close())
                 .dimensions(width / 2 - 40, height - 25, 80, 18).build());
 
         if (firstLoad) {
@@ -133,7 +134,6 @@ public class OnlinePlaylistScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 27, 0xFFFFFF);
         list.render(context, mouseX, mouseY, delta);
@@ -142,11 +142,11 @@ public class OnlinePlaylistScreen extends Screen {
         }
     }
 
-    private class OnlineList extends ElementListWidget<OnlineList.Entry> {
+    private class OnlineList extends AlwaysSelectedEntryListWidget<OnlineList.Entry> {
 
         OnlineList() {
             super(MinecraftClient.getInstance(), OnlinePlaylistScreen.this.width,
-                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70, ROW_HEIGHT);
+                    OnlinePlaylistScreen.this.height - 100, 30, OnlinePlaylistScreen.this.height - 70);
         }
 
         public void addEntry(PlaylistNetClient.PlaylistInfo info) {
@@ -162,7 +162,7 @@ public class OnlinePlaylistScreen extends Screen {
             return width - 20;
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final PlaylistNetClient.PlaylistInfo info;
             private int downloadBtnX, downloadBtnW;
 
@@ -171,7 +171,11 @@ public class OnlinePlaylistScreen extends Screen {
             }
 
             @Override
-            public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
+            public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                int top = getY();
+                int left = getX();
+                int height = getHeight();
+                int width = getRowWidth();
                 MinecraftClient mc = MinecraftClient.getInstance();
                 context.drawTextWithShadow(mc.textRenderer, info.name, left + 2, top + 2, 0xFFFFFF);
                 String meta = "作者: " + (info.author != null ? info.author : "?") + " | " + info.songCount + "首";
@@ -185,8 +189,9 @@ public class OnlinePlaylistScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                if (button != 0) return true;
+            public boolean mouseClicked(Click click, boolean doubleClick) {
+                if (click.button() != 0) return true;
+                double mouseX = click.comp_4798();
                 if (mouseX >= downloadBtnX && mouseX <= downloadBtnX + downloadBtnW) {
                     statusMessage = "下载中: " + info.name + "...";
                     statusColor = 0xFFFF55;
@@ -232,17 +237,16 @@ public class OnlinePlaylistScreen extends Screen {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            renderBackground(context, mouseX, mouseY, delta);
             super.render(context, mouseX, mouseY, delta);
             context.drawCenteredTextWithShadow(this.textRenderer, "选择要上传的歌单（点击歌单名上传）", this.width / 2, 10, 0xFFFFFF);
             list.render(context, mouseX, mouseY, delta);
         }
 
-        private class UploadList extends ElementListWidget<UploadList.Entry> {
+        private class UploadList extends AlwaysSelectedEntryListWidget<UploadList.Entry> {
 
             UploadList() {
                 super(MinecraftClient.getInstance(), UploadPlaylistScreen.this.width,
-                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30, ROW_HEIGHT);
+                        UploadPlaylistScreen.this.height - 60, 30, UploadPlaylistScreen.this.height - 30);
             }
 
             public void addEntry(String name) {
@@ -254,7 +258,7 @@ public class OnlinePlaylistScreen extends Screen {
                 return width - 20;
             }
 
-            private class Entry extends ElementListWidget.Entry<Entry> {
+            private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
                 private final String name;
                 private int uploadBtnX, uploadBtnW;
                 private int uploadPrivateBtnX, uploadPrivateBtnW;
@@ -264,7 +268,9 @@ public class OnlinePlaylistScreen extends Screen {
                 }
 
                 @Override
-                public void render(DrawContext context, int index, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float delta) {
+                public void render(DrawContext context, int mouseX, int mouseY, boolean hovering, float delta) {
+                    int top = getY();
+                    int left = getX();
                     MinecraftClient mc = MinecraftClient.getInstance();
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     Playlist pl = pm != null ? pm.loadPlaylist(name) : null;
@@ -285,8 +291,9 @@ public class OnlinePlaylistScreen extends Screen {
                 }
 
                 @Override
-                public boolean mouseClicked(double mouseX, double mouseY, int button) {
-                    if (button != 0) return true;
+                public boolean mouseClicked(Click click, boolean doubleClick) {
+                    if (click.button() != 0) return true;
+                    double mouseX = click.comp_4798();
                     PlaylistManager pm = AMusic.getPlaylistManager();
                     if (pm == null) return true;
                     Playlist pl = pm.loadPlaylist(name);

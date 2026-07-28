@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import me.ssbtt.amusic.AMusic;
 import me.ssbtt.amusic.config.AMusicConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -64,8 +64,8 @@ public class VolumeOverlayPositionScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 0xFFFFFF);
         graphics.drawCenteredString(this.font, "拖动绿色条到目标位置，点击「保存」", this.width / 2, 26, 0xAAAAFF);
 

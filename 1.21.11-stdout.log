@@ -1,0 +1,14 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.5.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :amusic-fabric-1.21.11
+Fabric Loom: 1.16.2
+
+> Task :amusic-core:compileJava UP-TO-DATE
+
+> Task :amusic-fabric-1.21.11:compileJava
+
+> Task :amusic-fabric-1.21.11:compileJava FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/19737/AppData/Roaming/TRAE%20SOLO%20CN/ModularData/ai-agent/work-mode-projects/6a61f7c02a729da96a26aa12/zmusic-mod-Android/builds/fabric/build/reports/problems/problems-report.html
+2 actionable tasks: 1 executed, 1 up-to-date

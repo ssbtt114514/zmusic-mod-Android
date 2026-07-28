@@ -9,7 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
@@ -130,7 +130,7 @@ public class SelectPlaylistScreen extends Screen {
         list.refresh();
     }
 
-    private class PlaylistList extends ElementListWidget<PlaylistList.Entry> {
+    private class PlaylistList extends AlwaysSelectedEntryListWidget<PlaylistList.Entry> {
 
         PlaylistList() {
             super(MinecraftClient.getInstance(), SelectPlaylistScreen.this.width - 20,
@@ -153,7 +153,7 @@ public class SelectPlaylistScreen extends Screen {
             }
         }
 
-        private class Entry extends ElementListWidget.Entry<Entry> {
+        private class Entry extends AlwaysSelectedEntryListWidget.Entry<Entry> {
             private final String name;
             private int addBtnX, addBtnW;
 
